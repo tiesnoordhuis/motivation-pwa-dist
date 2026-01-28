@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Motivation</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css">
-    <meta name="theme-color" content="#ffffff">
-    <script type="importmap">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Motivation</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <meta name="theme-color" content="#ffffff">
+  <script type="importmap">
     {
       "imports": {
         "@/": "./"
@@ -15,11 +16,28 @@
     }
     </script>
 </head>
+
 <body>
-    <div id="app">
-        <h1>Motivation</h1>
-        <p>Stay focused. Achieve goals.</p>
+  <div id="app">
+    <h1>Motivation</h1>
+    <p>Stay focused. Achieve goals.</p>
+
+    <p id="loading-indicator">Loading goals...</p>
+    <p id="error-message" class="hidden"></p>
+    <div id="goals-list" class="goals-list">
     </div>
-    <script type="module" src="main.js"></script>
+
+    <template id="goal-template">
+      <div class="goal-card">
+        <h3 class="goal-title"></h3>
+        <p class="goal-status"></p>
+        <div class="goal-meta">
+          <span class="goal-description"></span>
+        </div>
+      </div>
+    </template>
+  </div>
+  <script type="module" src="main.js"></script>
 </body>
+
 </html>

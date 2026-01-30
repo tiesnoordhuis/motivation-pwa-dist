@@ -1,4 +1,5 @@
 :root {
+  color-scheme: light dark;
   --bg-color: #ffffff;
   --text-color: #000000;
   --card-bg: #EAEAEA;
@@ -11,59 +12,200 @@
     --text-color: #ffffff;
     --card-bg: #2d2d2d;
     --card-border: #444;
+    --pill-bg: #444;
   }
+}
+
+:root {
+  --header-height: 60px;
 }
 
 #app {
   max-width: 800px;
   margin: 0 auto;
-  padding: 2rem;
-}
-
-.hidden {
-  display: none;
-}
-
-.goal-card {
-  border: 1px solid var(--card-border);
-  border-radius: 8px;
   padding: 1rem;
-  margin-bottom: 1rem;
-  background: var(--card-bg);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  /* Reduced padding for mobile */
+  position: relative;
+  /* Context for FAB if needed, though FAB is fixed */
+  padding-bottom: 80px;
+  /* Space for FAB */
 }
 
-.goal-title {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.2rem;
-}
-
-.goal-status {
-  font-size: 0.8rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  color: #666;
-  margin-bottom: 0.5rem;
-}
-
-.status-active .goal-status {
-  color: #2ecc71;
-}
-
-.status-on_hold .goal-status {
-  color: #f1c40f;
-}
-
-.status-completed .goal-status {
-  color: #3498db;
-}
-
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  margin: 0;
+/* FAB */
+.fab {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--pill-bg, #3498db);
+  /* Use a variable or distinct color */
+  color: white;
+  border: none;
+  font-size: 2rem;
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 100vh;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+  z-index: 100;
+}
+
+.fab:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+.fab:active {
+  transform: scale(0.95);
+}
+
+@media (prefers-color-scheme: dark) {
+  .fab {
+    background-color: #2980b9;
+    color: #fff;
+  }
+}
+
+/* Navigation & Components are now Web Components */
+
+/* Utility */
+.hidden {
+  display: none !important;
+}
+
+#nav-placeholder {
+  display: none;
+  /* Just in case */
+}
+
+/* Dialogs */
+.status-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.btn-status {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+  background: #eee;
+}
+
+.btn-status.status-active {
+  background-color: #e8f8f5;
+  color: #27ae60;
+}
+
+.btn-status.status-on_hold {
+  background-color: #fef9e7;
+  color: #f39c12;
+}
+
+.btn-status.status-completed {
+  background-color: #ebf5fb;
+  color: #2980b9;
+}
+
+.btn-status.status-archived {
+  background-color: #f2f4f4;
+  color: #7f8c8d;
+}
+
+@media (prefers-color-scheme: dark) {
+  .btn-status.status-active {
+    background-color: rgba(46, 204, 113, 0.2);
+  }
+
+  .btn-status.status-on_hold {
+    background-color: rgba(241, 196, 15, 0.2);
+  }
+
+  .btn-status.status-completed {
+    background-color: rgba(52, 152, 219, 0.2);
+  }
+
+  .btn-status.status-archived {
+    background-color: rgba(127, 140, 141, 0.2);
+    color: #95a5a6;
+  }
+}
+
+/* View Transitions */
+::view-transition-group(root) {
+  animation-duration: 0.5s;
+  /* Adjusted speed */
+}
+
+/* Ensure no weird blending on full slides */
+::view-transition-old(root),
+::view-transition-new(root) {
+  mix-blend-mode: normal;
+}
+
+/* Forward Animation (Drill Down) */
+::view-transition-old(root) {
+  animation: 500ms ease-in-out both slide-out-to-left;
+}
+
+::view-transition-new(root) {
+  animation: 500ms ease-in-out both slide-in-from-right;
+}
+
+/* Back Animation (Go Up) */
+.back-transition::view-transition-old(root) {
+  animation: 500ms ease-in-out both slide-out-to-right;
+}
+
+.back-transition::view-transition-new(root) {
+  animation: 500ms ease-in-out both slide-in-from-left;
+}
+
+@keyframes slide-in-from-right {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-out-to-left {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes slide-in-from-left {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-out-to-right {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
 }

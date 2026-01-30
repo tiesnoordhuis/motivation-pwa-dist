@@ -7,7 +7,8 @@
   <title>Motivation</title>
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="style.css">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)">
   <script type="importmap">
     {
       "imports": {
@@ -22,20 +23,75 @@
     <h1>Motivation</h1>
     <p>Stay focused. Achieve goals.</p>
 
-    <p id="loading-indicator">Loading goals...</p>
-    <p id="error-message" class="hidden"></p>
-    <div id="goals-list" class="goals-list">
+    <div class="actions">
+      <div id="nav-placeholder"></div>
+      <!-- Replaced by goal-header-card in DOM -->
+      <goal-header-card id="goal-header"></goal-header-card>
     </div>
 
-    <template id="goal-template">
-      <div class="goal-card">
-        <h3 class="goal-title"></h3>
-        <p class="goal-status"></p>
-        <div class="goal-meta">
-          <span class="goal-description"></span>
+    <p id="error-message" class="hidden"></p>
+    <goal-list id="goals-list"></goal-list>
+
+    <button id="create-goal-btn" class="fab" title="New Goal">+</button>
+    <div id="loading-indicator" class="hidden">Loading...</div>
+
+    <dialog id="goal-dialog">
+      <form method="dialog" id="goal-form">
+        <h2 id="dialog-title">Create Goal</h2>
+        <input type="hidden" name="id" id="goal-id">
+        <input type="hidden" name="parent_id" id="goal-parent-id">
+
+        <div class="form-group">
+          <label for="goal-title-input">Title</label>
+          <input type="text" name="title" id="goal-title-input" required>
         </div>
-      </div>
-    </template>
+
+        <div class="form-group">
+          <label for="goal-status-input">Status</label>
+          <select name="status" id="goal-status-input">
+            <option value="ACTIVE">Active</option>
+            <option value="ON_HOLD">On Hold</option>
+            <option value="COMPLETED">Completed</option>
+            <option value="ARCHIVED">Archived</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="goal-desc-input">Description</label>
+          <textarea name="description" id="goal-desc-input"></textarea>
+        </div>
+
+        <div class="dialog-actions">
+          <button value="cancel" formnovalidate>Cancel</button>
+          <button value="save" class="btn-primary">Save</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="confirm-dialog">
+      <form method="dialog">
+        <p id="confirm-message">Are you sure?</p>
+        <div class="dialog-actions">
+          <button value="cancel">Cancel</button>
+          <button value="confirm" class="btn-danger">Delete</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="status-dialog">
+      <form method="dialog" id="status-form">
+        <h2>Change Status</h2>
+        <div class="status-options">
+          <button value="ACTIVE" class="btn-status status-active">Active</button>
+          <button value="ON_HOLD" class="btn-status status-on_hold">On Hold</button>
+          <button value="COMPLETED" class="btn-status status-completed">Completed</button>
+          <button value="ARCHIVED" class="btn-status status-archived">Archived</button>
+        </div>
+        <div class="dialog-actions">
+          <button value="cancel">Cancel</button>
+        </div>
+      </form>
+    </dialog>
   </div>
   <script type="module" src="main.js"></script>
 </body>

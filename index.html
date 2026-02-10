@@ -24,15 +24,25 @@
     <p>Stay focused. Achieve goals.</p>
 
     <div class="actions">
+      <nav class="main-nav">
+        <button id="nav-goals" class="nav-btn active">Goals</button>
+        <button id="nav-agenda" class="nav-btn">Agenda</button>
+      </nav>
       <div id="nav-placeholder"></div>
       <!-- Replaced by goal-header-card in DOM -->
       <goal-header-card id="goal-header"></goal-header-card>
     </div>
 
     <p id="error-message" class="hidden"></p>
-    <goal-list id="goals-list"></goal-list>
 
-    <button id="create-goal-btn" class="fab" title="New Goal">+</button>
+    <div id="goals-view" class="view-section">
+      <goal-list id="goals-list"></goal-list>
+      <button id="create-goal-btn" class="fab" title="New Goal">+</button>
+    </div>
+
+    <div id="agenda-view" class="view-section hidden">
+      <!-- Agenda List injected here -->
+    </div>
     <div id="loading-indicator" class="hidden">Loading...</div>
 
     <dialog id="goal-dialog">

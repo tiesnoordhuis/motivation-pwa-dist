@@ -1,0 +1,103 @@
+:host {
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.goal-card {
+    border: 1px solid var(--card-border, #ddd);
+    border-radius: 8px;
+    padding: 1rem;
+    background: var(--card-bg, #fff);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.goal-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.goal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+}
+
+.goal-title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-color, #000);
+}
+
+.goal-description {
+    font-size: 0.9rem;
+    color: var(--text-color-secondary, #666);
+    margin-bottom: 0.8rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Status Pill */
+.goal-status-pill {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 12px;
+    background: #eee;
+    color: #555;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    margin-left: 10px;
+}
+
+.status-active .goal-status-pill {
+    background-color: #e8f8f5;
+    color: #27ae60;
+}
+
+.status-on_hold .goal-status-pill {
+    background-color: #fef9e7;
+    color: #f39c12;
+}
+
+.status-completed .goal-status-pill {
+    background-color: #ebf5fb;
+    color: #2980b9;
+}
+
+.status-archived .goal-status-pill {
+    background-color: #f2f4f4;
+    color: #7f8c8d;
+}
+
+/* Cubes */
+.goal-cubes-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 10px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .goal-card {
+        background: var(--card-bg, #2d2d2d);
+        border-color: var(--card-border, #444);
+    }
+
+    .goal-title {
+        color: #fff;
+    }
+
+    .goal-description {
+        color: #ccc;
+    }
+}

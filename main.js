@@ -2,9 +2,14 @@ import { GoalService } from './services/goal.service.js';
 import { GoalRenderer } from './renderers/goal.renderer.js';
 import { AgendaRenderer } from './renderers/agenda.renderer.js';
 import { registerServiceWorker } from './services/service-worker.service.js';
-import './components/goal-item.component.js';
-import './components/goal-list.component.js';
-import './components/goal-header-card.component.js';
+// Side-effect imports: register custom elements via customElements.define().
+// Renderers reference these components via `import type` (type-only casts),
+// so these are the imports that actually pull in the element definitions.
+import './components/goal/goal-item.component.js';
+import './components/goal/goal-list.component.js';
+import './components/goal/goal-header-card.component.js';
+import './components/agenda/agenda-item.component.js';
+import './components/agenda/agenda-list.component.js';
 console.log('Motivation PWA Started');
 // Service Worker Registration
 window.addEventListener('load', async () => {

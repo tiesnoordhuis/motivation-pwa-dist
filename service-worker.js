@@ -37,13 +37,6 @@ const networkFirst = async (request) => {
         headers: { "Content-Type": "text/plain" },
     });
 };
-self.addEventListener('install', (event) => {
-    console.log('[Service Worker] Install');
-    event.waitUntil(caches.open(CACHE_NAME).then((cache) => {
-        console.log('[Service Worker] Caching all: app shell and content');
-        return cache.addAll(ASSETS_TO_CACHE);
-    }));
-});
 self.addEventListener("fetch", (event) => {
     event.respondWith(networkFirst(event.request));
 });

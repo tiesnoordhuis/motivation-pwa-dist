@@ -1,0 +1,10 @@
+:host {
+    display: block;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: #777;
+    font-style: italic;
+}

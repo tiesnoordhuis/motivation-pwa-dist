@@ -21,28 +21,53 @@
 <body>
   <div id="app">
     <h1>Motivation</h1>
-    <p>Stay focused. Achieve goals.</p>
 
-    <div class="actions">
-      <nav class="main-nav">
-        <button id="nav-goals" class="nav-btn active">Goals</button>
-        <button id="nav-agenda" class="nav-btn">Agenda</button>
-      </nav>
-      <div id="nav-placeholder"></div>
-      <!-- Replaced by goal-header-card in DOM -->
-      <goal-header-card id="goal-header"></goal-header-card>
+    <!-- HOME VIEW: Section cards -->
+    <div id="home-view" class="view-section">
+      <!-- Populated by home.renderer.ts -->
     </div>
 
-    <p id="error-message" class="hidden"></p>
-
-    <div id="goals-view" class="view-section">
+    <!-- GOALS VIEW (legacy, mapped to #/goals) -->
+    <div id="goals-view" class="view-section hidden">
+      <div class="actions">
+        <goal-header-card id="goal-header"></goal-header-card>
+      </div>
+      <p id="error-message" class="hidden"></p>
       <goal-list id="goals-list"></goal-list>
       <button id="create-goal-btn" class="fab" title="New Goal">+</button>
     </div>
 
+    <!-- AGENDA VIEW (legacy, mapped to #/agenda) -->
     <div id="agenda-view" class="view-section hidden">
-      <!-- Agenda List injected here -->
+      <!-- Agenda List injected by agenda.renderer.ts -->
     </div>
+
+    <!-- SECTION VIEWS (placeholder containers for future section renderers) -->
+    <div id="health-view" class="view-section hidden">
+      <h2>🟡 Personal Health</h2>
+      <p>Coming soon — food tracking, workouts, activity monitoring.</p>
+    </div>
+
+    <div id="social-view" class="view-section hidden">
+      <h2>🟢 Social Life</h2>
+      <p>Coming soon — people tracking, interaction cadence, suggestions.</p>
+    </div>
+
+    <div id="vietnamese-view" class="view-section hidden">
+      <h2>🔴 Learning Vietnamese</h2>
+      <p>Coming soon — spaced repetition, progress tracking.</p>
+    </div>
+
+    <div id="projects-view" class="view-section hidden">
+      <h2>🔵 Software Projects</h2>
+      <p>Coming soon — scrumboard, git activity, server control.</p>
+    </div>
+
+    <div id="todo-view" class="view-section hidden">
+      <h2>📝 TODO List</h2>
+      <p>Coming soon — lightweight task management.</p>
+    </div>
+
     <div id="loading-indicator" class="hidden">Loading...</div>
 
     <dialog id="goal-dialog">

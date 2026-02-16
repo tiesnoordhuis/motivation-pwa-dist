@@ -4,6 +4,12 @@
   --text-color: #000000;
   --card-bg: #EAEAEA;
   --card-border: #ddd;
+
+  /* Section colors */
+  --color-health: #f1c40f;
+  --color-social: #2ecc71;
+  --color-vietnamese: #e74c3c;
+  --color-projects: #3498db;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -174,6 +180,40 @@
   background-color: var(--text-color);
 }
 
+/* Home Screen Section Grid */
+.section-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 400px) {
+  .section-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.todo-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--card-bg);
+  border-radius: 12px;
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  opacity: 0.8;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.todo-link:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
 
 /* View Transitions */
 /* ... existing animations ... */
@@ -243,5 +283,32 @@
 
   to {
     transform: translateX(100%);
+  }
+}
+
+/* Section card grow animation (card → fullscreen) */
+@keyframes card-grow {
+  from {
+    border-radius: 16px;
+    transform: scale(0.85);
+    opacity: 0.5;
+  }
+  to {
+    border-radius: 0;
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes card-shrink {
+  from {
+    border-radius: 0;
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    border-radius: 16px;
+    transform: scale(0.85);
+    opacity: 0.5;
   }
 }

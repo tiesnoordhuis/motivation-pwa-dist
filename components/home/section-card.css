@@ -1,0 +1,78 @@
+:host {
+    display: block;
+}
+
+.section-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border-left: 4px solid var(--section-color, #888);
+    position: relative;
+    overflow: hidden;
+}
+
+.section-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.section-card:active {
+    transform: scale(0.98);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.card-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.card-summary {
+    font-size: 0.85rem;
+    color: var(--text-color);
+    opacity: 0.7;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Color variants via CSS custom property */
+:host([color="yellow"]) .section-card {
+    --section-color: #f1c40f;
+}
+
+:host([color="green"]) .section-card {
+    --section-color: #2ecc71;
+}
+
+:host([color="red"]) .section-card {
+    --section-color: #e74c3c;
+}
+
+:host([color="blue"]) .section-card {
+    --section-color: #3498db;
+}
+
+@media (prefers-color-scheme: dark) {
+    .section-card {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .section-card:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    }
+}

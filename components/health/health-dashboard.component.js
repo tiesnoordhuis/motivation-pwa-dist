@@ -63,12 +63,6 @@ function computeStreak(activities) {
 const template = document.createElement('template');
 template.innerHTML = `
     <div class="health-dashboard">
-        <div class="section-header">
-            <button class="back-btn" id="back-btn">←</button>
-            <span class="header-icon">🟡</span>
-            <h1>Personal Health</h1>
-        </div>
-
         <div id="loading" class="loading">
             <div class="spinner"></div>
             <div>Loading health data…</div>
@@ -149,12 +143,6 @@ export class HealthDashboard extends HTMLElement {
     }
     connectedCallback() {
         const shadow = this.shadowRoot;
-        // Back button
-        shadow.getElementById('back-btn').addEventListener('click', () => {
-            this.dispatchEvent(new CustomEvent('health-navigate-back', {
-                bubbles: true, composed: true,
-            }));
-        });
         // FAB
         shadow.getElementById('fab-btn').addEventListener('click', () => {
             const dialog = shadow.getElementById('activity-dialog');

@@ -1,78 +1,77 @@
 :host {
     display: block;
+    /* Fill the grid cell height */
+    height: 100%;
 }
 
 .section-card {
-    background: var(--card-bg);
-    border-radius: 16px;
-    padding: 1.25rem;
+    background: var(--section-color, #888);
+    border-radius: 20px;
+    padding: 1.5rem 1.25rem;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    border-left: 4px solid var(--section-color, #888);
+    transition: transform 0.15s, box-shadow 0.15s;
     position: relative;
     overflow: hidden;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    /* Subtle inner shadow for depth */
+    box-shadow: inset 0 -4px 20px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.section-card::before {
+    /* Soft highlight at the top */
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, rgba(255,255,255,0.18) 0%, transparent 55%);
+    border-radius: inherit;
+    pointer-events: none;
 }
 
 .section-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: scale(1.02);
+    box-shadow: inset 0 -4px 20px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .section-card:active {
-    transform: scale(0.98);
-}
-
-.card-header {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 0.5rem;
-}
-
-.card-icon {
-    font-size: 1.5rem;
-    line-height: 1;
-    flex-shrink: 0;
+    transform: scale(0.97);
 }
 
 .card-title {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--text-color);
-    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 0.35rem;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
 }
 
 .card-summary {
-    font-size: 0.85rem;
-    color: var(--text-color);
-    opacity: 0.7;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.85);
     margin: 0;
     line-height: 1.4;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 }
 
-/* Color variants via CSS custom property */
+/* Color variants */
 :host([color="yellow"]) .section-card {
-    --section-color: #f1c40f;
+    --section-color: var(--color-health, #e6b800);
 }
 
 :host([color="green"]) .section-card {
-    --section-color: #2ecc71;
+    --section-color: var(--color-social, #27ae60);
 }
 
 :host([color="red"]) .section-card {
-    --section-color: #e74c3c;
+    --section-color: var(--color-vietnamese, #c0392b);
 }
 
 :host([color="blue"]) .section-card {
-    --section-color: #3498db;
-}
-
-@media (prefers-color-scheme: dark) {
-    .section-card {
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    }
-
-    .section-card:hover {
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-    }
+    --section-color: var(--color-projects, #2980b9);
 }

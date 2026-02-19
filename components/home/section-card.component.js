@@ -2,17 +2,42 @@ import styles from './section-card.css' with { type: 'css' };
 const template = document.createElement('template');
 template.innerHTML = `
     <div class="section-card">
-        <div class="card-header">
-            <span class="card-icon" id="icon"></span>
-            <h2 class="card-title" id="title"></h2>
-        </div>
+        <h2 class="card-title" id="title"></h2>
         <p class="card-summary" id="summary"></p>
     </div>
 `;
+/** Maps the `color` attribute value to the corresponding CSS custom property. */
+const COLOR_VAR_MAP = {
+    yellow: '--color-health',
+    green: '--color-social',
+    red: '--color-vietnamese',
+    blue: '--color-projects',
+};
 export class SectionCard extends HTMLElement {
     static get observedAttributes() {
-        return ['icon', 'title', 'summary', 'color', 'route'];
+        return ['title', 'summary', 'color', 'route'];
     }
+    handleClick = () => {
+        const route = this.getAttribute('route');
+        if (!route)
+            return;
+        const colorAttr = this.getAttribute('color') ?? '';
+        const cssVar = COLOR_VAR_MAP[colorAttr];
+        const bgColor = cssVar
+            ? getComputedStyle(document.documentElement).getPropertyValue(cssVar).trim()
+            : '#888888';
+        this.dispatchEvent(new CustomEvent('section-navigate', {
+            bubbles: true,
+            composed: true,
+            detail: {
+                route,
+                rect: this.getBoundingClientRect(),
+                bgColor,
+                title: this.getAttribute('title') ?? '',
+                summary: this.getAttribute('summary') ?? '',
+            },
+        }));
+    };
     constructor() {
         super();
         const shadow = this.attachShadow({ mode: 'open' });
@@ -21,21 +46,10 @@ export class SectionCard extends HTMLElement {
     }
     connectedCallback() {
         this.update();
-        this.addEventListener('click', () => {
-            const route = this.getAttribute('route');
-            if (route) {
-                // Set view-transition-name on the card for the grow animation
-                const card = this.shadowRoot.querySelector('.section-card');
-                if (card) {
-                    card.style.viewTransitionName = `section-${this.getAttribute('color')}`;
-                }
-                this.dispatchEvent(new CustomEvent('section-navigate', {
-                    bubbles: true,
-                    composed: true,
-                    detail: { route }
-                }));
-            }
-        });
+        this.addEventListener('click', this.handleClick);
+    }
+    disconnectedCallback() {
+        this.removeEventListener('click', this.handleClick);
     }
     attributeChangedCallback(_name, oldValue, newValue) {
         if (oldValue === newValue)
@@ -44,7 +58,6 @@ export class SectionCard extends HTMLElement {
     }
     update() {
         const shadow = this.shadowRoot;
-        shadow.getElementById('icon').textContent = this.getAttribute('icon') ?? '';
         shadow.getElementById('title').textContent = this.getAttribute('title') ?? '';
         shadow.getElementById('summary').textContent = this.getAttribute('summary') ?? 'Loading…';
     }

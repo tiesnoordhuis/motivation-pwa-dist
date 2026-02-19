@@ -10,6 +10,8 @@ export class Router {
     initialized = new Set();
     _currentRoute = '';
     _previousRoute = '';
+    /** Consumed by onHashChange to skip View Transitions for the next navigation. */
+    skipNextTransition = false;
     constructor(options) {
         this.routes = options.routes;
         this.fallback = options.fallback ?? '#/';
@@ -26,8 +28,11 @@ export class Router {
         // Navigate to the initial hash (or fallback)
         this.onHashChange();
     }
-    /** Programmatic navigation */
-    navigate(hash) {
+    /** Programmatic navigation. Pass `skipTransition: true` to bypass View Transitions. */
+    navigate(hash, options = {}) {
+        if (options.skipTransition) {
+            this.skipNextTransition = true;
+        }
         window.location.hash = hash;
         // hashchange event will fire and handle the rest
     }
@@ -66,10 +71,11 @@ export class Router {
             document.documentElement.classList.remove('back-transition');
         }
         const transition = () => this.activateRoute(route);
-        if (document.startViewTransition) {
+        if (document.startViewTransition && !this.skipNextTransition) {
             document.startViewTransition(transition);
         }
         else {
+            this.skipNextTransition = false;
             transition();
         }
     }

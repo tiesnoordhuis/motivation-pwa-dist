@@ -5,6 +5,7 @@ import { HomeRenderer } from './renderers/home.renderer.js';
 import { HealthRenderer } from './renderers/health.renderer.js';
 import { Router } from './router.js';
 import { registerServiceWorker } from './services/service-worker.service.js';
+import { initSectionTransitions } from './transitions/section-transition.js';
 // Side-effect imports: register custom elements via customElements.define().
 import './components/goal/goal-item.component.js';
 import './components/goal/goal-list.component.js';
@@ -113,10 +114,7 @@ async function initGoals() {
         goalRenderer.hideLoading();
     }
 }
-// Listen for section card navigation events
-document.addEventListener('section-navigate', (e) => {
-    const detail = e.detail;
-    router.navigate(detail.route);
-});
+// Wire section card expand/shrink transitions
+initSectionTransitions(router);
 // Start the router
 router.start();

@@ -5,11 +5,11 @@
   --card-bg: #EAEAEA;
   --card-border: #ddd;
 
-  /* Section colors */
-  --color-health: #f1c40f;
-  --color-social: #2ecc71;
-  --color-vietnamese: #e74c3c;
-  --color-projects: #3498db;
+  /* Section colors — richer, slightly deeper tones */
+  --color-health: #d4a017;
+  --color-social: #27ae60;
+  --color-vietnamese: #c0392b;
+  --color-projects: #2471a3;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -26,6 +26,17 @@
   --header-height: 60px;
 }
 
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
 #app {
   max-width: 800px;
   margin: 0 auto;
@@ -35,6 +46,21 @@
   /* Context for FAB if needed, though FAB is fixed */
   padding-bottom: 80px;
   /* Space for FAB */
+}
+
+/* When the home screen is active, #app must not constrain it */
+#app:has(#home-view:not(.hidden)) {
+  max-width: 100%;
+  padding: 0;
+  height: 100dvh;
+}
+
+/* Section pages also go edge-to-edge */
+#app:has(.section-page:not(.hidden)) {
+  max-width: 100%;
+  padding: 0;
+  padding-bottom: 0;
+  height: 100dvh;
 }
 
 /* FAB */
@@ -180,32 +206,153 @@
   background-color: var(--text-color);
 }
 
-/* Home Screen Section Grid */
-.section-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1rem;
+/* ── Section Page Layout ────────────────────────────────────── */
+/* Shared by all section detail views (social, vietnamese, projects, todo, health) */
+
+.section-page {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
-@media (max-width: 400px) {
-  .section-grid {
-    grid-template-columns: 1fr;
-  }
+.section-page__header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1rem 0.75rem;
+  /* color set per section below */
+  color: #fff;
+}
+
+.section-page__title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.25);
+}
+
+.section-back-btn {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  border-radius: 50%;
+  width: 2.4rem;
+  height: 2.4rem;
+  font-size: 1.2rem;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.section-back-btn:hover {
+  background: rgba(255,255,255,0.35);
+}
+
+.section-page__content {
+  flex: 1 1 0;
+  overflow-y: auto;
+  padding: 1rem;
+  /* Section color is the full background; text must contrast with it */
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* Per-section color fills */
+.section-page--health {
+  background: var(--color-health);
+}
+
+.section-page--social {
+  background: var(--color-social);
+}
+
+.section-page--vietnamese {
+  background: var(--color-vietnamese);
+}
+
+.section-page--projects {
+  background: var(--color-projects);
+}
+
+.section-page--todo {
+  background: #555;
+}
+
+/* ── Home Screen Full-Viewport Layout ───────────────────────── */
+
+/* The home view occupies the full viewport height */
+.home-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.home-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 1rem 0.5rem;
+}
+
+.home-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-color);
+  margin: 0;
+  opacity: 0.85;
+}
+
+/* Grid: always 2 columns, fills remaining height */
+.section-grid {
+  flex: 1 1 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  min-height: 0; /* allow shrink inside flex */
+}
+
+/* Each section-card custom element fills its cell */
+.section-grid section-card {
+  display: block;
+  height: 100%;
+}
+
+.home-footer {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem 1rem;
 }
 
 .todo-link {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1rem;
+  padding: 0.6rem 1.5rem;
   background: var(--card-bg);
-  border-radius: 12px;
+  border-radius: 999px;
   color: var(--text-color);
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  opacity: 0.8;
+  opacity: 0.75;
   transition: opacity 0.2s, transform 0.2s;
 }
 
@@ -215,100 +362,89 @@
 }
 
 
-/* View Transitions */
-/* ... existing animations ... */
-::view-transition-group(root) {
-  animation-duration: 0.5s;
-  /* Adjusted speed */
+/* ── Section card ghost (expand/shrink transition) ──────────────── */
+/* The ghost IS the animated element — position: fixed, own background.
+   top/left/width/height/border-radius are driven by WAAPI in section-transition.ts */
+.section-expand-ghost {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  /* box geometry is set inline by JS */
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  box-sizing: border-box;
+  box-shadow: inset 0 -4px 20px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
-/* Ensure no weird blending on full slides */
-::view-transition-old(root),
-::view-transition-new(root) {
-  mix-blend-mode: normal;
+.section-expand-ghost::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(255,255,255,0.18) 0%, transparent 55%);
+  pointer-events: none;
 }
 
-/* Forward Animation (Drill Down) */
+.section-expand-ghost-title {
+  position: relative;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 0.35rem;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.section-expand-ghost-summary {
+  position: relative;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+  line-height: 1.4;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+/* ── View Transitions ───────────────────────────────────────── */
+/* Section → section-page: handled by the overlay above (no VT needed).    */
+/* Remaining navigations (todo, goals, agenda) get a simple fade.           */
+/* Back to home (section → #/): subtle scale-in so the grid "appears".      */
+
 ::view-transition-old(root) {
-  animation: 500ms ease-in-out both slide-out-to-left;
+  animation: 300ms ease both vt-fade-out;
 }
 
 ::view-transition-new(root) {
-  animation: 500ms ease-in-out both slide-in-from-right;
+  animation: 300ms ease both vt-fade-in;
 }
 
-/* Back Animation (Go Up) */
 .back-transition::view-transition-old(root) {
-  animation: 500ms ease-in-out both slide-out-to-right;
+  animation: 400ms cubic-bezier(0.4, 0, 0.2, 1) both vt-fade-out;
 }
 
 .back-transition::view-transition-new(root) {
-  animation: 500ms ease-in-out both slide-in-from-left;
+  animation: 400ms cubic-bezier(0.4, 0, 0.2, 1) both vt-scale-in;
 }
 
-@keyframes slide-in-from-right {
-  from {
-    transform: translateX(100%);
-  }
-
-  to {
-    transform: translateX(0);
-  }
+@keyframes vt-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
 }
 
-@keyframes slide-out-to-left {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(-100%);
-  }
+@keyframes vt-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
-@keyframes slide-in-from-left {
-  from {
-    transform: translateX(-100%);
-  }
-
-  to {
-    transform: translateX(0);
-  }
+@keyframes vt-scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
-@keyframes slide-out-to-right {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(100%);
-  }
-}
-
-/* Section card grow animation (card → fullscreen) */
-@keyframes card-grow {
-  from {
-    border-radius: 16px;
-    transform: scale(0.85);
-    opacity: 0.5;
-  }
-  to {
-    border-radius: 0;
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes card-shrink {
-  from {
-    border-radius: 0;
-    transform: scale(1);
-    opacity: 1;
-  }
-  to {
-    border-radius: 16px;
-    transform: scale(0.85);
-    opacity: 0.5;
-  }
+/* No blending artifacts */
+::view-transition-old(root),
+::view-transition-new(root) {
+  mix-blend-mode: normal;
 }

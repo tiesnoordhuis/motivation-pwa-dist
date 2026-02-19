@@ -20,11 +20,9 @@
 
 <body>
   <div id="app">
-    <h1>Motivation</h1>
-
-    <!-- HOME VIEW: Section cards -->
-    <div id="home-view" class="view-section">
-      <!-- Populated by home.renderer.ts -->
+    <!-- HOME VIEW: Full-screen section card grid (layout owned by home.renderer.ts) -->
+    <div id="home-view" class="view-section home-screen">
+      <!-- Populated by home.renderer.ts: header / card-grid / todo-footer -->
     </div>
 
     <!-- GOALS VIEW (legacy, mapped to #/goals) -->
@@ -42,30 +40,49 @@
       <!-- Agenda List injected by agenda.renderer.ts -->
     </div>
 
-    <!-- SECTION VIEWS (placeholder containers for future section renderers) -->
-    <div id="health-view" class="view-section hidden">
-      <h2>🟡 Personal Health</h2>
-      <p>Coming soon — food tracking, workouts, activity monitoring.</p>
+    <!-- SECTION VIEWS -->
+    <!-- Health: HealthRenderer replaces inner content; the section-page wrapper stays -->
+    <div id="health-view" class="view-section section-page section-page--health hidden">
     </div>
 
-    <div id="social-view" class="view-section hidden">
-      <h2>🟢 Social Life</h2>
-      <p>Coming soon — people tracking, interaction cadence, suggestions.</p>
+    <div id="social-view" class="view-section section-page section-page--social hidden">
+      <div class="section-page__header">
+        <button class="section-back-btn" onclick="document.dispatchEvent(new CustomEvent('section-back',{bubbles:true}))" aria-label="Back">&#8592;</button>
+        <h2 class="section-page__title">Social</h2>
+      </div>
+      <div class="section-page__content">
+        <p>Coming soon — people tracking, interaction cadence, suggestions.</p>
+      </div>
     </div>
 
-    <div id="vietnamese-view" class="view-section hidden">
-      <h2>🔴 Learning Vietnamese</h2>
-      <p>Coming soon — spaced repetition, progress tracking.</p>
+    <div id="vietnamese-view" class="view-section section-page section-page--vietnamese hidden">
+      <div class="section-page__header">
+        <button class="section-back-btn" onclick="document.dispatchEvent(new CustomEvent('section-back',{bubbles:true}))" aria-label="Back">&#8592;</button>
+        <h2 class="section-page__title">Learn</h2>
+      </div>
+      <div class="section-page__content">
+        <p>Coming soon — spaced repetition, progress tracking.</p>
+      </div>
     </div>
 
-    <div id="projects-view" class="view-section hidden">
-      <h2>🔵 Software Projects</h2>
-      <p>Coming soon — scrumboard, git activity, server control.</p>
+    <div id="projects-view" class="view-section section-page section-page--projects hidden">
+      <div class="section-page__header">
+        <button class="section-back-btn" onclick="document.dispatchEvent(new CustomEvent('section-back',{bubbles:true}))" aria-label="Back">&#8592;</button>
+        <h2 class="section-page__title">Projects</h2>
+      </div>
+      <div class="section-page__content">
+        <p>Coming soon — scrumboard, git activity, server control.</p>
+      </div>
     </div>
 
-    <div id="todo-view" class="view-section hidden">
-      <h2>📝 TODO List</h2>
-      <p>Coming soon — lightweight task management.</p>
+    <div id="todo-view" class="view-section section-page section-page--todo hidden">
+      <div class="section-page__header">
+        <button class="section-back-btn" onclick="document.dispatchEvent(new CustomEvent('section-back',{bubbles:true}))" aria-label="Back">&#8592;</button>
+        <h2 class="section-page__title">TODO</h2>
+      </div>
+      <div class="section-page__content">
+        <p>Coming soon — lightweight task management.</p>
+      </div>
     </div>
 
     <div id="loading-indicator" class="hidden">Loading...</div>

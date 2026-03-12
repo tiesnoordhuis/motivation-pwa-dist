@@ -58,9 +58,11 @@ export class HomeRenderer {
             card.id = `section-card-${section.id}`;
             grid.appendChild(card);
         }
-        // TODO footer
+        // Footer: server status pill + TODO link
         const footer = document.createElement('footer');
         footer.className = 'home-footer';
+        const serverPill = document.createElement('server-status-pill');
+        footer.appendChild(serverPill);
         const todoLink = document.createElement('a');
         todoLink.href = '#/todo';
         todoLink.className = 'todo-link';

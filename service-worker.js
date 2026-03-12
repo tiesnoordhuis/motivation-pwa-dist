@@ -37,7 +37,15 @@ const networkFirst = async (request) => {
         headers: { "Content-Type": "text/plain" },
     });
 };
+const isApiRequest = (request) => {
+    const url = new URL(request.url);
+    return url.pathname.startsWith('/api/') || url.port === '3000';
+};
 self.addEventListener("fetch", (event) => {
+    if (isApiRequest(event.request)) {
+        // Never cache API requests — always go straight to the network
+        return;
+    }
     event.respondWith(networkFirst(event.request));
 });
 self.addEventListener("install", async (event) => {

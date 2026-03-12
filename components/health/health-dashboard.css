@@ -19,7 +19,7 @@
 }
 
 .stat-card {
-    background: var(--health-color-light);
+    background: var(--health-color);
     border-radius: 12px;
     padding: 1rem;
     text-align: center;
@@ -28,14 +28,13 @@
 .stat-value {
     font-size: 2rem;
     font-weight: 800;
-    color: var(--health-color-dark);
+    color: #000;
     line-height: 1.2;
 }
 
 .stat-label {
     font-size: 0.8rem;
-    color: var(--text-color, #000);
-    opacity: 0.7;
+    color: #555;
     margin-top: 0.25rem;
 }
 
@@ -245,6 +244,36 @@
     transform: scale(0.95);
 }
 
+/* FAB Menu */
+.fab-menu {
+    position: fixed;
+    bottom: 84px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 100;
+}
+
+.fab-option {
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 10px;
+    background: var(--card-bg, #fff);
+    color: var(--text-color, #000);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    white-space: nowrap;
+    text-align: left;
+    transition: transform 0.15s;
+}
+
+.fab-option:active {
+    transform: scale(0.97);
+}
+
 /* Dialog */
 .activity-dialog {
     border: none;
@@ -322,7 +351,15 @@
 
 @media (prefers-color-scheme: dark) {
     .stat-card {
-        background: rgba(241, 196, 15, 0.1);
+        background: var(--health-color);
+    }
+
+    .stat-value {
+        color: #000;
+    }
+
+    .stat-label {
+        color: rgba(0, 0, 0, 0.7);
     }
 
     .activity-icon {
@@ -333,8 +370,17 @@
         background: rgba(241, 196, 15, 0.1);
     }
 
+    .activity-item {
+        color: var(--text-color, #fff);
+    }
+
     .health-fab {
-        background: var(--health-color-dark);
-        color: #fff;
+        background: var(--health-color);
+        color: #000;
+    }
+
+    .fab-option {
+        background: var(--card-bg, #2d2d2d);
+        color: var(--text-color, #fff);
     }
 }

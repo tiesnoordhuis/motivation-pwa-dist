@@ -14,6 +14,9 @@ import './components/agenda/agenda-item.component.js';
 import './components/agenda/agenda-list.component.js';
 import './components/home/section-card.component.js';
 import './components/health/health-dashboard.component.js';
+import './components/health/barcode-scanner.component.js';
+import './components/health/food-log.component.js';
+import './components/health/nutrition-widget.component.js';
 import './components/projects/server-status-pill.component.js';
 console.log('Motivation PWA Started');
 // Service Worker Registration

@@ -1,6 +1,7 @@
 import { HealthService } from '../services/health.service.js';
 export class HealthRenderer {
     container;
+    content;
     dashboard;
     constructor() {
         this.container = document.getElementById('health-view');
@@ -24,12 +25,12 @@ export class HealthRenderer {
         header.appendChild(title);
         this.container.appendChild(header);
         // Content wrapper
-        const content = document.createElement('div');
-        content.className = 'section-page__content';
-        this.container.appendChild(content);
+        this.content = document.createElement('div');
+        this.content.className = 'section-page__content';
+        this.container.appendChild(this.content);
         this.dashboard = document.createElement('health-dashboard');
-        content.appendChild(this.dashboard);
-        // FAB save handler
+        this.content.appendChild(this.dashboard);
+        // FAB save handler (activity logging)
         this.dashboard.onSave = async (data) => {
             try {
                 await HealthService.createActivity(data);
@@ -40,6 +41,9 @@ export class HealthRenderer {
                 this.dashboard.showError('Failed to save activity.');
             }
         };
+        // FAB nutrition options
+        this.dashboard.onScanBarcode = () => this.showScannerView();
+        this.dashboard.onSearchFood = () => this.showFoodSearchView();
     }
     async init() {
         await this.loadData();
@@ -47,13 +51,23 @@ export class HealthRenderer {
     async loadData() {
         this.dashboard.showLoading();
         try {
-            // Fetch manual activities and calendar activities in parallel
-            const [manualActivities, calendarActivities] = await Promise.all([
-                HealthService.fetchActivities(),
-                HealthService.fetchCalendarActivities(14, 30),
-            ]);
             const now = new Date();
             const today = now.toISOString().split('T')[0];
+            // Calculate 7 days ago for nutrition summary
+            const weekAgo = new Date(now);
+            weekAgo.setDate(weekAgo.getDate() - 6);
+            const weekAgoStr = weekAgo.toISOString().split('T')[0];
+            // Tomorrow for summary range end
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const tomorrowStr = tomorrow.toISOString().split('T')[0];
+            // Fetch all data in parallel
+            const [manualActivities, calendarActivities, todayNutrition, nutritionSummary] = await Promise.all([
+                HealthService.fetchActivities(),
+                HealthService.fetchCalendarActivities(14, 30),
+                HealthService.fetchNutritionByDate(today),
+                HealthService.fetchNutritionSummary(weekAgoStr, tomorrowStr),
+            ]);
             // Split calendar activities into past (this week) and upcoming (future)
             const pastCalendar = calendarActivities.filter(a => a.date <= today);
             const upcomingCalendar = calendarActivities.filter(a => a.date > today);
@@ -69,6 +83,8 @@ export class HealthRenderer {
             this.dashboard.weekActivities = weekActivities;
             this.dashboard.upcomingActivities = upcomingCalendar;
             this.dashboard.allActivities = allActivities;
+            this.dashboard.todayNutrition = todayNutrition;
+            this.dashboard.weekNutritionSummary = nutritionSummary;
             this.dashboard.hideLoading();
             this.dashboard.showContent();
         }
@@ -76,6 +92,64 @@ export class HealthRenderer {
             console.error('Failed to load health data', err);
             this.dashboard.showError('Failed to load health data. Is the server running?');
         }
+    }
+    showScannerView() {
+        // Hide dashboard, show scanner + food log flow
+        this.dashboard.style.display = 'none';
+        const scanner = document.createElement('barcode-scanner');
+        const foodLog = document.createElement('food-log');
+        foodLog.style.display = 'none';
+        scanner.onBarcodeDetected = async (barcode) => {
+            scanner.style.display = 'none';
+            foodLog.style.display = '';
+            await foodLog.lookupBarcode(barcode);
+        };
+        foodLog.onLog = async (entry) => {
+            try {
+                await HealthService.createNutritionEntry({
+                    date: new Date().toISOString().split('T')[0],
+                    ...entry,
+                });
+                this.returnToDashboard();
+                await this.loadData();
+            }
+            catch (err) {
+                console.error('Failed to log nutrition', err);
+            }
+        };
+        foodLog.onBack = () => {
+            foodLog.style.display = 'none';
+            scanner.style.display = '';
+            scanner.reset();
+        };
+        this.content.appendChild(scanner);
+        this.content.appendChild(foodLog);
+    }
+    showFoodSearchView() {
+        this.dashboard.style.display = 'none';
+        const foodLog = document.createElement('food-log');
+        foodLog.onLog = async (entry) => {
+            try {
+                await HealthService.createNutritionEntry({
+                    date: new Date().toISOString().split('T')[0],
+                    ...entry,
+                });
+                this.returnToDashboard();
+                await this.loadData();
+            }
+            catch (err) {
+                console.error('Failed to log nutrition', err);
+            }
+        };
+        foodLog.onBack = () => {
+            this.returnToDashboard();
+        };
+        this.content.appendChild(foodLog);
+    }
+    returnToDashboard() {
+        // Remove scanner and food-log elements if present
+        this.content.querySelectorAll('barcode-scanner, food-log').forEach(el => el.remove());
+        this.dashboard.style.display = '';
     }
     getStartOfWeek() {
         const now = new Date();

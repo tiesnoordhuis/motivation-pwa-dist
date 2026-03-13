@@ -68,7 +68,13 @@ dialog::backdrop {
     align-items: center;
     justify-content: space-between;
     padding: 1.1rem 1.25rem 0.75rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+    .dialog-header {
+        border-bottom-color: rgba(255, 255, 255, 0.08);
+    }
 }
 
 .dialog-title {
@@ -133,8 +139,15 @@ dialog::backdrop {
 }
 
 .status-badge--inactive {
-    background: rgba(255, 255, 255, 0.06);
-    color: rgba(255, 255, 255, 0.35);
+    background: rgba(0, 0, 0, 0.06);
+    color: rgba(0, 0, 0, 0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+    .status-badge--inactive {
+        background: rgba(255, 255, 255, 0.06);
+        color: rgba(255, 255, 255, 0.35);
+    }
 }
 
 /* ── Actions ─────────────────────────────────────────────────────── */
@@ -158,8 +171,13 @@ dialog::backdrop {
 .action-btn:active { transform: scale(0.97); }
 .action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-.action-btn--primary  { background: rgba(255,255,255,0.12); color: var(--text-color, #eee); }
-.action-btn--primary:hover { background: rgba(255,255,255,0.2); }
+.action-btn--primary  { background: rgba(0,0,0,0.08); color: var(--text-color, #000); }
+.action-btn--primary:hover { background: rgba(0,0,0,0.14); }
+
+@media (prefers-color-scheme: dark) {
+    .action-btn--primary  { background: rgba(255,255,255,0.12); color: var(--text-color, #eee); }
+    .action-btn--primary:hover { background: rgba(255,255,255,0.2); }
+}
 .action-btn--danger   { background: rgba(229, 57, 53, 0.25); color: #ef5350; }
 .action-btn--danger:hover { background: rgba(229, 57, 53, 0.4); }
 .action-btn--success  { background: rgba(76, 175, 80, 0.25); color: #66bb6a; }
@@ -179,11 +197,17 @@ dialog::backdrop {
 
 /* ── Credential section ──────────────────────────────────────────── */
 .credential-section {
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
     padding-top: 0.85rem;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    .credential-section {
+        border-top-color: rgba(255, 255, 255, 0.08);
+    }
 }
 
 .credential-section h3 {
@@ -205,8 +229,8 @@ dialog::backdrop {
     flex: 1;
     padding: 0.5rem 0.75rem;
     border-radius: 10px;
-    border: 1px solid rgba(255,255,255,0.12);
-    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(0,0,0,0.15);
+    background: rgba(0,0,0,0.04);
     color: inherit;
     font-size: 0.85rem;
     font-family: inherit;
@@ -214,7 +238,17 @@ dialog::backdrop {
 }
 
 .credential-row input[type="password"]:focus {
-    border-color: rgba(255,255,255,0.3);
+    border-color: rgba(0,0,0,0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+    .credential-row input[type="password"] {
+        border-color: rgba(255,255,255,0.12);
+        background: rgba(255,255,255,0.06);
+    }
+    .credential-row input[type="password"]:focus {
+        border-color: rgba(255,255,255,0.3);
+    }
 }
 
 .credential-status {

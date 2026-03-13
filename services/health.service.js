@@ -34,38 +34,4 @@ export class HealthService {
             throw new Error(`Failed to delete activity: ${response.statusText}`);
         }
     }
-    // --- Nutrition ---
-    static async fetchNutritionByDate(date) {
-        const response = await fetch(`${API_URL}/api/sections/health/nutrition?date=${date}`);
-        if (!response.ok) {
-            throw new Error(`Failed to fetch nutrition: ${response.statusText}`);
-        }
-        return response.json();
-    }
-    static async fetchNutritionSummary(from, to) {
-        const response = await fetch(`${API_URL}/api/sections/health/nutrition/summary?from=${from}&to=${to}`);
-        if (!response.ok) {
-            throw new Error(`Failed to fetch nutrition summary: ${response.statusText}`);
-        }
-        return response.json();
-    }
-    static async createNutritionEntry(entry) {
-        const response = await fetch(`${API_URL}/api/sections/health/nutrition`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(entry),
-        });
-        if (!response.ok) {
-            throw new Error(`Failed to create nutrition entry: ${response.statusText}`);
-        }
-        return response.json();
-    }
-    static async deleteNutritionEntry(id) {
-        const response = await fetch(`${API_URL}/api/sections/health/nutrition/${id}`, {
-            method: 'DELETE',
-        });
-        if (!response.ok) {
-            throw new Error(`Failed to delete nutrition entry: ${response.statusText}`);
-        }
-    }
 }

@@ -42,13 +42,8 @@ const isApiRequest = (request) => {
     return url.pathname.startsWith('/api/') || url.port === '3000';
 };
 self.addEventListener("fetch", (event) => {
-    const url = new URL(event.request.url);
     if (isApiRequest(event.request)) {
         // Never cache API requests — always go straight to the network
-        return;
-    }
-    if (url.origin !== self.location.origin) {
-        // Don't intercept cross-origin requests (e.g. Open Food Facts API)
         return;
     }
     event.respondWith(networkFirst(event.request));

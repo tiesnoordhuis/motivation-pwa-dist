@@ -91,20 +91,9 @@ template.innerHTML = `
                 <h3 class="subsection-title"><span class="accent-bar"></span> This Week</h3>
                 <div class="activity-list" id="week-list"></div>
             </div>
-
-            <div>
-                <h3 class="subsection-title"><span class="accent-bar"></span> Nutrition Today</h3>
-                <nutrition-widget id="nutrition-widget"></nutrition-widget>
-            </div>
         </div>
 
-        <button class="health-fab" id="fab-btn" title="Log">+</button>
-
-        <div class="fab-menu" id="fab-menu" style="display:none">
-            <button class="fab-option" id="fab-scan">📷 Scan Barcode</button>
-            <button class="fab-option" id="fab-search">🔍 Search Food</button>
-            <button class="fab-option" id="fab-activity">🏃 Log Activity</button>
-        </div>
+        <button class="health-fab" id="fab-btn" title="Log Activity">+</button>
 
         <dialog class="activity-dialog" id="activity-dialog">
             <form method="dialog" id="activity-form">
@@ -146,9 +135,6 @@ export class HealthDashboard extends HTMLElement {
     _upcomingActivities = [];
     _allActivities = [];
     _onSave = null;
-    _onScanBarcode = null;
-    _onSearchFood = null;
-    _fabMenuOpen = false;
     constructor() {
         super();
         const shadow = this.attachShadow({ mode: 'open' });
@@ -157,21 +143,8 @@ export class HealthDashboard extends HTMLElement {
     }
     connectedCallback() {
         const shadow = this.shadowRoot;
-        // FAB menu toggle
-        shadow.getElementById('fab-btn').addEventListener('click', () => this.toggleFabMenu());
-        // FAB options
-        shadow.getElementById('fab-scan').addEventListener('click', () => {
-            this.closeFabMenu();
-            if (this._onScanBarcode)
-                this._onScanBarcode();
-        });
-        shadow.getElementById('fab-search').addEventListener('click', () => {
-            this.closeFabMenu();
-            if (this._onSearchFood)
-                this._onSearchFood();
-        });
-        shadow.getElementById('fab-activity').addEventListener('click', () => {
-            this.closeFabMenu();
+        // FAB
+        shadow.getElementById('fab-btn').addEventListener('click', () => {
             const dialog = shadow.getElementById('activity-dialog');
             const dateInput = shadow.getElementById('act-date');
             dateInput.value = new Date().toISOString().split('T')[0];
@@ -196,25 +169,6 @@ export class HealthDashboard extends HTMLElement {
     }
     set onSave(handler) {
         this._onSave = handler;
-    }
-    set onScanBarcode(handler) {
-        this._onScanBarcode = handler;
-    }
-    set onSearchFood(handler) {
-        this._onSearchFood = handler;
-    }
-    toggleFabMenu() {
-        this._fabMenuOpen = !this._fabMenuOpen;
-        const menu = this.shadowRoot.getElementById('fab-menu');
-        const fab = this.shadowRoot.getElementById('fab-btn');
-        menu.style.display = this._fabMenuOpen ? '' : 'none';
-        fab.textContent = this._fabMenuOpen ? '×' : '+';
-    }
-    closeFabMenu() {
-        this._fabMenuOpen = false;
-        const shadow = this.shadowRoot;
-        shadow.getElementById('fab-menu').style.display = 'none';
-        shadow.getElementById('fab-btn').textContent = '+';
     }
     showLoading() {
         const shadow = this.shadowRoot;
@@ -249,18 +203,6 @@ export class HealthDashboard extends HTMLElement {
     set allActivities(activities) {
         this._allActivities = activities;
         this.updateStats();
-    }
-    /** Set today's nutrition entries for the widget */
-    set todayNutrition(entries) {
-        const widget = this.shadowRoot.getElementById('nutrition-widget');
-        if (widget)
-            widget.todayEntries = entries;
-    }
-    /** Set 7-day nutrition summary for the widget */
-    set weekNutritionSummary(summaries) {
-        const widget = this.shadowRoot.getElementById('nutrition-widget');
-        if (widget)
-            widget.weekSummary = summaries;
     }
     updateStats() {
         const shadow = this.shadowRoot;

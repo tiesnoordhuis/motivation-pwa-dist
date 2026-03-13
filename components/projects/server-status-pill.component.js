@@ -1,6 +1,6 @@
 import styles from './server-status-pill.css' with { type: 'css' };
 import { fetchServerStatus, isPiGatewayReachable, deriveBootStage, stageLabel, stageColor, wake, unlock, boot, shutdown, } from '../../services/server-control.service.js';
-import { hasStoredCredential, setupCredential, getPassword, clearCredential, isPrfLikelySupported, } from '../../services/server-credential.service.js';
+import { hasStoredCredential, storePassword, getPassword, clearCredential, } from '../../services/server-credential.service.js';
 // ── Template ─────────────────────────────────────────────────────────────────
 const template = document.createElement('template');
 template.innerHTML = `
@@ -36,7 +36,7 @@ template.innerHTML = `
 
         <!-- Credential management -->
         <div class="credential-section" id="credential-section">
-            <h3>Biometric Credential</h3>
+            <h3>Password</h3>
             <div id="credential-content"></div>
         </div>
 
@@ -112,8 +112,8 @@ export class ServerStatusPill extends HTMLElement {
         }
     }
     // ── Dialog ────────────────────────────────────────────────────────────────
-    async openDialog() {
-        this.hasCredential = await hasStoredCredential();
+    openDialog() {
+        this.hasCredential = hasStoredCredential();
         this.renderDialogContent();
         this.clearFeedback();
         this.dialog.showModal();
@@ -152,12 +152,14 @@ export class ServerStatusPill extends HTMLElement {
                 this.addActionButton('Wake', 'primary', () => this.doWake());
                 break;
             case 'present':
-                this.addActionButton('Decrypt Drive', 'primary', () => this.doUnlock());
+                this.addActionButton('Wake', 'primary', () => this.doWake());
                 break;
             case 'dropbear':
-                this.addActionButton('Boot Ubuntu', 'success', () => this.doBoot());
+                this.addActionButton('Decrypt Drive', 'primary', () => this.doUnlock());
                 break;
             case 'ssh':
+                this.addActionButton('Boot Ubuntu', 'success', () => this.doBoot());
+                break;
             case 'running':
                 this.addActionButton('Shutdown', 'danger', () => this.doShutdown());
                 break;
@@ -188,67 +190,56 @@ export class ServerStatusPill extends HTMLElement {
     }
     renderCredentialSection() {
         this.credentialContent.innerHTML = '';
-        if (!isPrfLikelySupported()) {
-            const p = document.createElement('p');
-            p.className = 'credential-status';
-            p.textContent = 'WebAuthn PRF not supported in this browser (needs Chrome 116+ or Safari 17.4+).';
-            this.credentialContent.appendChild(p);
-            return;
-        }
         if (this.hasCredential) {
             const row = document.createElement('div');
             row.className = 'credential-row';
             const status = document.createElement('span');
             status.className = 'credential-status credential-status--set';
-            status.textContent = '✓ Biometric credential stored';
+            status.textContent = '✓ Password saved for this session';
             row.appendChild(status);
             const removeBtn = document.createElement('button');
             removeBtn.className = 'action-btn action-btn--danger';
             removeBtn.style.cssText = 'padding:0.3rem 0.75rem;font-size:0.78rem;margin-left:auto';
-            removeBtn.textContent = 'Remove';
-            removeBtn.addEventListener('click', async () => {
-                await clearCredential();
+            removeBtn.textContent = 'Clear';
+            removeBtn.addEventListener('click', () => {
+                clearCredential();
                 this.hasCredential = false;
                 this.renderCredentialSection();
-                this.showFeedback('Credential removed.', 'ok');
+                this.showFeedback('Password cleared.', 'ok');
             });
             row.appendChild(removeBtn);
             this.credentialContent.appendChild(row);
         }
         else {
-            const row = document.createElement('div');
-            row.className = 'credential-row';
+            const form = document.createElement('form');
+            form.className = 'credential-row';
+            form.autocomplete = 'on';
             const input = document.createElement('input');
             input.type = 'password';
+            input.name = 'password';
+            input.autocomplete = 'current-password';
             input.placeholder = 'Master password';
-            row.appendChild(input);
-            const setupBtn = document.createElement('button');
-            setupBtn.className = 'action-btn action-btn--primary';
-            setupBtn.style.cssText = 'padding:0.35rem 0.85rem;font-size:0.85rem;white-space:nowrap';
-            setupBtn.textContent = 'Set up';
-            setupBtn.addEventListener('click', async () => {
+            form.appendChild(input);
+            const saveBtn = document.createElement('button');
+            saveBtn.type = 'submit';
+            saveBtn.className = 'action-btn action-btn--primary';
+            saveBtn.style.cssText = 'padding:0.35rem 0.85rem;font-size:0.85rem;white-space:nowrap';
+            saveBtn.textContent = 'Save';
+            form.appendChild(saveBtn);
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
                 const pw = input.value.trim();
                 if (!pw) {
                     this.showFeedback('Enter the master password first.', 'err');
                     return;
                 }
-                setupBtn.disabled = true;
-                try {
-                    await setupCredential(pw);
-                    input.value = '';
-                    this.hasCredential = true;
-                    this.renderCredentialSection();
-                    this.showFeedback('Biometric credential set up successfully.', 'ok');
-                }
-                catch (e) {
-                    this.showFeedback(e.message, 'err');
-                }
-                finally {
-                    setupBtn.disabled = false;
-                }
+                storePassword(pw);
+                input.value = '';
+                this.hasCredential = true;
+                this.renderCredentialSection();
+                this.showFeedback('Password saved for this session.', 'ok');
             });
-            row.appendChild(setupBtn);
-            this.credentialContent.appendChild(row);
+            this.credentialContent.appendChild(form);
         }
     }
     // ── Actions ───────────────────────────────────────────────────────────────
@@ -301,22 +292,13 @@ export class ServerStatusPill extends HTMLElement {
             this.showFeedback(result.error ?? 'Shutdown failed.', 'err');
         }
     }
-    /**
-     * Retrieve password via WebAuthn biometric.
-     * Falls back to a null return if no credential is set, showing a prompt to set one up.
-     */
-    async requirePassword() {
-        if (!this.hasCredential) {
-            this.showFeedback('No biometric credential set up. Add one below.', 'err');
+    requirePassword() {
+        const pw = getPassword();
+        if (!pw) {
+            this.showFeedback('No password set. Enter it below first.', 'err');
             return null;
         }
-        try {
-            return await getPassword();
-        }
-        catch (e) {
-            this.showFeedback(e.message, 'err');
-            return null;
-        }
+        return pw;
     }
     // ── Feedback ──────────────────────────────────────────────────────────────
     showFeedback(message, type) {

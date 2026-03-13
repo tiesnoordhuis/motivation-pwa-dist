@@ -44,9 +44,14 @@ template.innerHTML = `
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group">
+                    <div class="form-group serving-group">
                         <label for="serving-size">Serving (g)</label>
-                        <input type="number" id="serving-size" min="1" value="100">
+                        <div class="serving-controls">
+                            <button class="btn-step" id="step-down">−</button>
+                            <input type="number" id="serving-size" min="1" value="100">
+                            <button class="btn-step" id="step-up">+</button>
+                        </div>
+                        <div class="portion-presets" id="portion-presets"></div>
                     </div>
                     <div class="form-group">
                         <label for="meal-type">Meal</label>
@@ -90,6 +95,7 @@ template.innerHTML = `
 `;
 export class FoodLog extends HTMLElement {
     _product = null;
+    _defaultGrams = 100;
     _searchTimeout = null;
     _searchSeq = 0;
     _onLog = null;
@@ -113,6 +119,9 @@ export class FoodLog extends HTMLElement {
         const servingInput = shadow.getElementById('serving-size');
         servingInput.addEventListener('input', () => this.updateServingDisplay());
         servingInput.addEventListener('change', () => this.updateServingDisplay());
+        // Step up/down buttons with adaptive increments
+        shadow.getElementById('step-down').addEventListener('click', () => this.adjustServing(-1));
+        shadow.getElementById('step-up').addEventListener('click', () => this.adjustServing(1));
         // Log button
         shadow.getElementById('log-btn').addEventListener('click', () => this.handleLog());
         // Back button
@@ -167,8 +176,12 @@ export class FoodLog extends HTMLElement {
         shadow.getElementById('protein-100').textContent = String(product.protein_per_100g);
         shadow.getElementById('carbs-100').textContent = String(product.carbs_per_100g);
         shadow.getElementById('fat-100').textContent = String(product.fat_per_100g);
-        // Reset serving to 100g
-        shadow.getElementById('serving-size').value = '100';
+        // Smart default serving size
+        this._defaultGrams = OpenFoodFactsService.getDefaultServing(product);
+        const servingInput = shadow.getElementById('serving-size');
+        servingInput.value = String(this._defaultGrams);
+        // Render portion presets
+        this.renderPortionPresets();
         this.updateServingDisplay();
     }
     showSearchView() {
@@ -188,6 +201,31 @@ export class FoodLog extends HTMLElement {
         shadow.getElementById('protein-serving').textContent = String(serving.protein_g);
         shadow.getElementById('carbs-serving').textContent = String(serving.carbs_g);
         shadow.getElementById('fat-serving').textContent = String(serving.fat_g);
+    }
+    adjustServing(direction) {
+        const shadow = this.shadowRoot;
+        const input = shadow.getElementById('serving-size');
+        const current = parseInt(input.value, 10) || 0;
+        const step = OpenFoodFactsService.getServingStep(current);
+        const newValue = Math.max(1, current + direction * step);
+        input.value = String(newValue);
+        this.updateServingDisplay();
+    }
+    renderPortionPresets() {
+        const shadow = this.shadowRoot;
+        const container = shadow.getElementById('portion-presets');
+        container.innerHTML = '';
+        const presets = OpenFoodFactsService.getPortionPresets(this._defaultGrams);
+        for (const preset of presets) {
+            const btn = document.createElement('button');
+            btn.className = 'preset-btn';
+            btn.textContent = `${preset.label}× (${preset.grams}g)`;
+            btn.addEventListener('click', () => {
+                shadow.getElementById('serving-size').value = String(preset.grams);
+                this.updateServingDisplay();
+            });
+            container.appendChild(btn);
+        }
     }
     handleLog() {
         if (!this._product || !this._onLog)

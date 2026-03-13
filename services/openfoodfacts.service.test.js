@@ -42,7 +42,7 @@ test('OpenFoodFactsService', async (t) => {
         assert.strictEqual(result.sodium_per_100g, 0.05);
         const fetchMock = global.fetch;
         const url = fetchMock.mock.calls[0].arguments[0];
-        assert.strictEqual(url, 'https://world.openfoodfacts.org/api/v2/product/8710400500247.json');
+        assert.ok(url.includes('/api/sections/health/openfoodfacts/product/8710400500247'));
     });
     await t.test('lookupBarcode returns null when product not found', async () => {
         global.fetch = mock.fn(async () => ({
@@ -94,7 +94,7 @@ test('OpenFoodFactsService', async (t) => {
                     code: '1234567890123',
                 },
                 {
-                    product_name: 'Skyr',
+                    product_name: 'Vanilla Yogurt',
                     brands: 'Arla',
                     nutriments: {
                         'energy-kcal_100g': 63,
@@ -116,11 +116,13 @@ test('OpenFoodFactsService', async (t) => {
         assert.strictEqual(results[0].brands, 'Fage');
         assert.strictEqual(results[0].calories_per_100g, 97);
         assert.strictEqual(results[0].barcode, '1234567890123');
-        assert.strictEqual(results[1].product_name, 'Skyr');
+        assert.strictEqual(results[1].product_name, 'Vanilla Yogurt');
         const fetchMock = global.fetch;
         const url = fetchMock.mock.calls[0].arguments[0];
         assert.ok(url.includes('search_terms=yogurt'));
-        assert.ok(url.includes('page_size=10'));
+        assert.ok(url.includes('page_size=25'));
+        assert.ok(url.includes('lc=nl'));
+        assert.ok(url.includes('/api/sections/health/openfoodfacts/search'));
     });
     await t.test('searchFood returns empty array on error', async () => {
         global.fetch = mock.fn(async () => ({
@@ -172,5 +174,137 @@ test('OpenFoodFactsService', async (t) => {
         const serving = OpenFoodFactsService.calculateServing(product, 100);
         assert.strictEqual(serving.calories, 379);
         assert.strictEqual(serving.protein_g, 13.2);
+    });
+    await t.test('getDefaultServing returns serving_quantity when available', () => {
+        const product = {
+            product_name: 'Granola Bar',
+            calories_per_100g: 450,
+            protein_per_100g: 7,
+            carbs_per_100g: 60,
+            fat_per_100g: 20,
+            fiber_per_100g: 3,
+            sugar_per_100g: 25,
+            sodium_per_100g: 0.2,
+            serving_quantity: 35,
+        };
+        assert.strictEqual(OpenFoodFactsService.getDefaultServing(product), 35);
+    });
+    await t.test('getDefaultServing uses product_quantity for beverages', () => {
+        const product = {
+            product_name: 'Orange Juice',
+            calories_per_100g: 45,
+            protein_per_100g: 0.7,
+            carbs_per_100g: 10,
+            fat_per_100g: 0.1,
+            fiber_per_100g: 0.2,
+            sugar_per_100g: 9,
+            sodium_per_100g: 0.01,
+            product_quantity: 330,
+            categories_tags: ['en:beverages', 'en:fruit-juices'],
+        };
+        assert.strictEqual(OpenFoodFactsService.getDefaultServing(product), 330);
+    });
+    await t.test('getDefaultServing parses serving_size string', () => {
+        const product = {
+            product_name: 'Cereal',
+            calories_per_100g: 380,
+            protein_per_100g: 8,
+            carbs_per_100g: 70,
+            fat_per_100g: 5,
+            fiber_per_100g: 7,
+            sugar_per_100g: 18,
+            sodium_per_100g: 0.5,
+            serving_size: '1 bowl (40g)',
+        };
+        assert.strictEqual(OpenFoodFactsService.getDefaultServing(product), 40);
+    });
+    await t.test('getDefaultServing falls back to 100g', () => {
+        const product = {
+            product_name: 'Mystery Food',
+            calories_per_100g: 200,
+            protein_per_100g: 5,
+            carbs_per_100g: 30,
+            fat_per_100g: 8,
+            fiber_per_100g: 2,
+            sugar_per_100g: 10,
+            sodium_per_100g: 0.3,
+        };
+        assert.strictEqual(OpenFoodFactsService.getDefaultServing(product), 100);
+    });
+    await t.test('getDefaultServing uses full package for small items', () => {
+        const product = {
+            product_name: 'Chocolate Bar',
+            calories_per_100g: 540,
+            protein_per_100g: 6,
+            carbs_per_100g: 58,
+            fat_per_100g: 31,
+            fiber_per_100g: 2,
+            sugar_per_100g: 50,
+            sodium_per_100g: 0.1,
+            product_quantity: 45,
+        };
+        assert.strictEqual(OpenFoodFactsService.getDefaultServing(product), 45);
+    });
+    await t.test('parseServingSize parses various formats', () => {
+        assert.strictEqual(OpenFoodFactsService.parseServingSize('30g'), 30);
+        assert.strictEqual(OpenFoodFactsService.parseServingSize('250 ml'), 250);
+        assert.strictEqual(OpenFoodFactsService.parseServingSize('1 bar (45g)'), 45);
+        assert.strictEqual(OpenFoodFactsService.parseServingSize('1 slice (28g)'), 28);
+        assert.strictEqual(OpenFoodFactsService.parseServingSize(''), 0);
+    });
+    await t.test('getServingStep returns adaptive increments', () => {
+        assert.strictEqual(OpenFoodFactsService.getServingStep(30), 5);
+        assert.strictEqual(OpenFoodFactsService.getServingStep(50), 5);
+        assert.strictEqual(OpenFoodFactsService.getServingStep(100), 25);
+        assert.strictEqual(OpenFoodFactsService.getServingStep(200), 25);
+        assert.strictEqual(OpenFoodFactsService.getServingStep(300), 50);
+        assert.strictEqual(OpenFoodFactsService.getServingStep(500), 50);
+        assert.strictEqual(OpenFoodFactsService.getServingStep(600), 100);
+    });
+    await t.test('getPortionPresets returns correct presets', () => {
+        const presets = OpenFoodFactsService.getPortionPresets(100);
+        assert.strictEqual(presets.length, 4);
+        assert.strictEqual(presets[0].grams, 50);
+        assert.strictEqual(presets[0].label, '½');
+        assert.strictEqual(presets[1].grams, 100);
+        assert.strictEqual(presets[1].label, '1');
+        assert.strictEqual(presets[2].grams, 150);
+        assert.strictEqual(presets[2].label, '1½');
+        assert.strictEqual(presets[3].grams, 200);
+        assert.strictEqual(presets[3].label, '2');
+    });
+    await t.test('rankByRelevance prioritizes products with most query matches', () => {
+        const products = [
+            { product_name: 'Apple Pie', brands: 'Brand A', calories_per_100g: 200 },
+            { product_name: 'Greek Yogurt', brands: 'Fage', calories_per_100g: 97 },
+            { product_name: 'Apple Juice Green Apple', brands: 'Brand B', calories_per_100g: 45 },
+        ];
+        const ranked = OpenFoodFactsService.rankByRelevance(products, 'apple juice');
+        assert.strictEqual(ranked[0].product_name, 'Apple Juice Green Apple');
+        assert.strictEqual(ranked.length, 2); // Greek Yogurt has 0 matches, filtered out
+    });
+    await t.test('searchFood includes country filter and re-ranks results', async () => {
+        const apiResponse = {
+            products: [
+                { product_name: 'Random Thing', brands: 'X', nutriments: { 'energy-kcal_100g': 100 }, code: '1' },
+                { product_name: 'Chocomel Chocolate Milk', brands: 'Chocomel', nutriments: { 'energy-kcal_100g': 82 }, code: '2' },
+            ],
+        };
+        global.fetch = mock.fn(async () => ({
+            ok: true,
+            json: async () => apiResponse,
+        }));
+        const results = await OpenFoodFactsService.searchFood('chocomel');
+        // Should be re-ranked: Chocomel first (name matches), Random Thing filtered out
+        assert.strictEqual(results.length, 1);
+        assert.strictEqual(results[0].product_name, 'Chocomel Chocolate Milk');
+        // Verify search URL includes country filter
+        const fetchMock = global.fetch;
+        const url = fetchMock.mock.calls[0].arguments[0];
+        assert.ok(url.includes('page_size=25'));
+        assert.ok(url.includes('lc=nl'));
+        assert.ok(url.includes('tag_0=netherlands'));
+        assert.ok(url.includes('sort_by=unique_scans_n'));
+        assert.ok(url.includes('/api/sections/health/openfoodfacts/search'));
     });
 });

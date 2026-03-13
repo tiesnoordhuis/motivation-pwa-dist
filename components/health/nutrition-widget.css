@@ -53,11 +53,34 @@
     color: var(--text-color, #000);
 }
 
+.trend-chart {
+    position: relative;
+}
+
 .trend-bars {
     display: flex;
     align-items: flex-end;
     gap: 4px;
     height: 60px;
+}
+
+.target-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 0;
+    border-top: 1.5px dashed var(--health-color-dark);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.target-label {
+    position: absolute;
+    right: 0;
+    top: -14px;
+    font-size: 0.5rem;
+    color: var(--health-color-dark);
+    font-weight: 600;
 }
 
 .trend-bar-wrapper {
@@ -75,6 +98,10 @@
     min-height: 2px;
     margin-top: auto;
     transition: height 0.3s;
+}
+
+.trend-bar.over-target {
+    background: linear-gradient(to top, var(--health-color) 70%, #e67e22);
 }
 
 .trend-day {

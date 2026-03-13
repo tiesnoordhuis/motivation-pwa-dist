@@ -85,4 +85,43 @@ test('NutritionWidget component', async (t) => {
         assert.strictEqual(shadow.getElementById('today-protein').textContent, '0g');
         dom.window.document.body.removeChild(el);
     });
+    await t.test('weekSummary renders target line', () => {
+        const el = dom.window.document.createElement('nutrition-widget');
+        dom.window.document.body.appendChild(el);
+        const today = new Date().toISOString().split('T')[0];
+        const summaries = [
+            { date: today, total_calories: 2500, total_protein_g: 100, total_carbs_g: 300, total_fat_g: 90, entry_count: 5 },
+        ];
+        el.weekSummary = summaries;
+        const shadow = el.shadowRoot;
+        const targetLine = shadow.getElementById('target-line');
+        assert.notStrictEqual(targetLine.style.display, 'none');
+        // Target label should show the target value
+        const targetLabel = shadow.getElementById('target-label');
+        assert.strictEqual(targetLabel.textContent, '2000');
+        dom.window.document.body.removeChild(el);
+    });
+    await t.test('weekSummary marks bars over target', () => {
+        const el = dom.window.document.createElement('nutrition-widget');
+        dom.window.document.body.appendChild(el);
+        const today = new Date().toISOString().split('T')[0];
+        const summaries = [
+            { date: today, total_calories: 2500, total_protein_g: 100, total_carbs_g: 300, total_fat_g: 90, entry_count: 5 },
+        ];
+        el.weekSummary = summaries;
+        const shadow = el.shadowRoot;
+        const bars = shadow.querySelectorAll('.trend-bar');
+        // Today's bar should have over-target class (2500 > 2000)
+        const todayBar = bars[bars.length - 1]; // Last bar is today
+        assert.ok(todayBar.classList.contains('over-target'));
+        dom.window.document.body.removeChild(el);
+    });
+    await t.test('calorieTarget defaults to 2000 and can be changed', () => {
+        const el = dom.window.document.createElement('nutrition-widget');
+        dom.window.document.body.appendChild(el);
+        assert.strictEqual(el.calorieTarget, 2000);
+        el.calorieTarget = 1800;
+        assert.strictEqual(el.calorieTarget, 1800);
+        dom.window.document.body.removeChild(el);
+    });
 });

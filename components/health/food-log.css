@@ -145,11 +145,15 @@
 .form-row {
     display: flex;
     gap: 0.75rem;
-    align-items: flex-end;
+    align-items: flex-start;
 }
 
 .form-group {
     flex: 1;
+}
+
+.serving-group {
+    flex: 1.5;
 }
 
 .form-group label {
@@ -161,7 +165,77 @@
     color: var(--text-color, #000);
 }
 
-.form-group input,
+.serving-controls {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+}
+
+.serving-controls input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--card-border, #ddd);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background: var(--bg-color, #fff);
+    color: var(--text-color, #000);
+    box-sizing: border-box;
+    text-align: center;
+    flex: 1;
+}
+
+.serving-controls input:focus {
+    outline: 2px solid var(--health-color);
+    border-color: var(--health-color);
+}
+
+.btn-step {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--card-border, #ddd);
+    border-radius: 8px;
+    background: var(--card-bg, #eaeaea);
+    color: var(--text-color, #000);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    line-height: 1;
+}
+
+.btn-step:active {
+    background: var(--health-color);
+    color: #000;
+}
+
+.portion-presets {
+    display: flex;
+    gap: 0.25rem;
+    margin-top: 0.35rem;
+    flex-wrap: wrap;
+}
+
+.preset-btn {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--health-color-dark);
+    border-radius: 6px;
+    background: var(--health-color-light);
+    color: var(--health-color-dark);
+    font-size: 0.7rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.preset-btn:active {
+    background: var(--health-color);
+    color: #000;
+}
+
 .form-group select {
     width: 100%;
     padding: 0.5rem;
@@ -173,7 +247,6 @@
     box-sizing: border-box;
 }
 
-.form-group input:focus,
 .form-group select:focus {
     outline: 2px solid var(--health-color);
     border-color: var(--health-color);

@@ -48,8 +48,11 @@ export class BarcodeScanner extends HTMLElement {
             if (e.key === 'Enter')
                 this.handleManualEntry();
         });
-        // Check BarcodeDetector availability
-        if (!('BarcodeDetector' in window)) {
+        // Auto-start camera if BarcodeDetector is available, otherwise show fallback
+        if ('BarcodeDetector' in window) {
+            this.startCamera();
+        }
+        else {
             shadow.getElementById('permission-prompt').style.display = 'none';
             shadow.getElementById('fallback').style.display = '';
         }

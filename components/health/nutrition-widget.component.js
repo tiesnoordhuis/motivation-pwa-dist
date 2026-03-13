@@ -24,7 +24,12 @@ template.innerHTML = `
 
         <div id="trend-section" class="trend-container">
             <div class="trend-title">7-day calorie trend</div>
-            <div class="trend-bars" id="trend-bars"></div>
+            <div class="trend-chart" id="trend-chart">
+                <div class="target-line" id="target-line">
+                    <span class="target-label" id="target-label"></span>
+                </div>
+                <div class="trend-bars" id="trend-bars"></div>
+            </div>
         </div>
 
         <div id="empty-state" class="empty-state" style="display:none">
@@ -33,11 +38,27 @@ template.innerHTML = `
     </div>
 `;
 export class NutritionWidget extends HTMLElement {
+    _calorieTarget = 2500;
     constructor() {
         super();
         const shadow = this.attachShadow({ mode: 'open' });
         shadow.adoptedStyleSheets = [styles];
         shadow.appendChild(template.content.cloneNode(true));
+        // Load calorie target from localStorage
+        const stored = localStorage.getItem('health_calorie_target');
+        if (stored) {
+            const parsed = parseInt(stored, 10);
+            if (parsed > 0)
+                this._calorieTarget = parsed;
+        }
+    }
+    /** Set the daily calorie target (renders target line on chart) */
+    set calorieTarget(value) {
+        this._calorieTarget = value;
+        localStorage.setItem('health_calorie_target', String(value));
+    }
+    get calorieTarget() {
+        return this._calorieTarget;
     }
     /** Set today's nutrition entries to calculate today's summary */
     set todayEntries(entries) {
@@ -74,7 +95,15 @@ export class NutritionWidget extends HTMLElement {
                 calories: calByDate.get(dateStr) ?? 0,
             });
         }
-        const maxCal = Math.max(...days.map(d => d.calories), 1);
+        // Scale bars relative to the max of actual calories and target
+        const maxCal = Math.max(...days.map(d => d.calories), this._calorieTarget, 1);
+        // Position the target line
+        const targetLine = shadow.getElementById('target-line');
+        const targetLabel = shadow.getElementById('target-label');
+        const targetPercent = (this._calorieTarget / maxCal) * 100;
+        targetLine.style.bottom = `${targetPercent}%`;
+        targetLabel.textContent = `${this._calorieTarget}`;
+        targetLine.style.display = '';
         for (const day of days) {
             const wrapper = document.createElement('div');
             wrapper.className = 'trend-bar-wrapper';
@@ -82,6 +111,10 @@ export class NutritionWidget extends HTMLElement {
             bar.className = 'trend-bar';
             const heightPercent = (day.calories / maxCal) * 100;
             bar.style.height = `${heightPercent}%`;
+            // Highlight bars above target
+            if (day.calories > this._calorieTarget) {
+                bar.classList.add('over-target');
+            }
             const calLabel = document.createElement('div');
             calLabel.className = 'trend-cal';
             calLabel.textContent = day.calories > 0 ? String(day.calories) : '';

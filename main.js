@@ -20,7 +20,10 @@ import './components/health/barcode-scanner.component.js';
 import './components/health/food-log.component.js';
 import './components/health/nutrition-widget.component.js';
 import './components/projects/server-status-pill.component.js';
+import { handleStravaOAuthCallback } from './services/strava-callback.js';
 console.log('Motivation PWA Started');
+// Handle Strava OAuth callback (redirects back with ?code=xxx)
+handleStravaOAuthCallback();
 // Service Worker Registration
 window.addEventListener('load', async () => {
     try {

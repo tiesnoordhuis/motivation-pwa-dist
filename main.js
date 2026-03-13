@@ -1,11 +1,13 @@
-import { GoalService } from './services/goal.service.js';
-import { GoalRenderer } from './renderers/goal.renderer.js';
-import { AgendaRenderer } from './renderers/agenda.renderer.js';
-import { HomeRenderer } from './renderers/home.renderer.js';
-import { HealthRenderer } from './renderers/health.renderer.js';
 import { Router } from './router.js';
 import { registerServiceWorker } from './services/service-worker.service.js';
-import { initSectionTransitions } from './transitions/section-transition.js';
+import { homeRoutes } from './renderers/home.renderer.js';
+import { goalRoutes } from './renderers/goal.renderer.js';
+import { agendaRoutes } from './renderers/agenda.renderer.js';
+import { healthRoutes } from './renderers/health.renderer.js';
+import { socialRoutes } from './renderers/social.renderer.js';
+import { vietnameseRoutes } from './renderers/vietnamese.renderer.js';
+import { projectsRoutes } from './renderers/projects.renderer.js';
+import { todoRoutes } from './renderers/todo.renderer.js';
 // Side-effect imports: register custom elements via customElements.define().
 import './components/goal/goal-item.component.js';
 import './components/goal/goal-list.component.js';
@@ -33,92 +35,18 @@ window.addEventListener('load', async () => {
         console.error('SW registration failed: ', err);
     }
 });
-// Renderers (lazy-initialized by the router)
-let goalRenderer = null;
-let agendaRenderer = null;
-let healthRenderer = null;
-const homeRenderer = new HomeRenderer();
-// Router Setup
+// Each section defines its own routes — main.ts just merges them.
 const router = new Router({
     routes: {
-        '#/': {
-            view: '#home-view',
-            init: async () => {
-                await homeRenderer.init();
-            },
-            onEnter: async () => {
-                await homeRenderer.loadSummaries();
-            },
-        },
-        '#/goals': {
-            view: '#goals-view',
-            init: async () => {
-                goalRenderer = new GoalRenderer();
-                await initGoals();
-            },
-            onEnter: async () => {
-                if (goalRenderer) {
-                    await goalRenderer.refreshGoals();
-                }
-            },
-        },
-        '#/agenda': {
-            view: '#agenda-view',
-            init: async () => {
-                agendaRenderer = new AgendaRenderer();
-                await agendaRenderer.init();
-            },
-            onEnter: async () => {
-                if (agendaRenderer) {
-                    await agendaRenderer.init();
-                }
-            },
-        },
-        '#/health': {
-            view: '#health-view',
-            init: async () => {
-                healthRenderer = new HealthRenderer();
-                await healthRenderer.init();
-            },
-            onEnter: async () => {
-                if (healthRenderer) {
-                    await healthRenderer.loadData();
-                }
-            },
-        },
-        '#/social': {
-            view: '#social-view',
-        },
-        '#/vietnamese': {
-            view: '#vietnamese-view',
-        },
-        '#/projects': {
-            view: '#projects-view',
-        },
-        '#/todo': {
-            view: '#todo-view',
-        },
+        ...homeRoutes(),
+        ...goalRoutes(),
+        ...agendaRoutes(),
+        ...healthRoutes(),
+        ...socialRoutes(),
+        ...vietnameseRoutes(),
+        ...projectsRoutes(),
+        ...todoRoutes(),
     },
     fallback: '#/',
 });
-async function initGoals() {
-    if (!goalRenderer)
-        return;
-    try {
-        goalRenderer.showLoading();
-        const goals = await GoalService.fetchGoals();
-        goalRenderer.renderGoals(goals);
-        goalRenderer.hideError();
-    }
-    catch (err) {
-        goalRenderer.showError('Failed to load goals. Is the server running?');
-        console.error(err);
-    }
-    finally {
-        goalRenderer.hideLoading();
-    }
-}
-// Wire section card expand/shrink transitions
-initSectionTransitions(router);
-// Start the router
 router.start();

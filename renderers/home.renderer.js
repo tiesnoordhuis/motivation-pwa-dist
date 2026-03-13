@@ -1,3 +1,16 @@
+let instance = null;
+export function homeRoutes() {
+    return {
+        '#/': {
+            view: '#home-view',
+            init: async () => {
+                instance = new HomeRenderer();
+                await instance.init();
+            },
+            onEnter: async () => { await instance?.loadSummaries(); },
+        },
+    };
+}
 const SECTIONS = [
     {
         id: 'health',

@@ -32,6 +32,7 @@ export function healthRoutes() {
 export class HealthRenderer {
     content;
     dashboard;
+    loadSequence = 0;
     constructor() {
         const container = document.getElementById('health-view');
         const page = buildSectionPage(container, 'Health', 'health', '#/health');
@@ -134,6 +135,7 @@ export class HealthRenderer {
         this.content.appendChild(foodLog);
     }
     async loadData() {
+        const currentLoad = ++this.loadSequence;
         this.dashboard.showLoading();
         try {
             const now = new Date();
@@ -146,19 +148,32 @@ export class HealthRenderer {
             const tomorrow = new Date(now);
             tomorrow.setDate(tomorrow.getDate() + 1);
             const tomorrowStr = tomorrow.toISOString().split('T')[0];
-            // Fetch all data in parallel
-            const [manualActivities, calendarActivities, todayNutrition, nutritionSummary] = await Promise.all([
+            // Fetch core dashboard data first for faster first render.
+            const [manualActivities, todayNutrition, nutritionSummary] = await Promise.all([
                 HealthService.fetchActivities(),
-                HealthService.fetchCalendarActivities(14, 30),
                 HealthService.fetchNutritionByDate(today),
                 HealthService.fetchNutritionSummary(weekAgoStr, tomorrowStr),
             ]);
-            // Split calendar activities into past (this week) and upcoming (future)
+            if (currentLoad !== this.loadSequence)
+                return;
+            const weekStart = this.getStartOfWeek();
+            const weekStartStr = weekStart.toISOString().split('T')[0];
+            // Show immediate content with manual activities while calendar data is loading.
+            this.dashboard.weekActivities = manualActivities.filter(a => a.date >= weekStartStr);
+            this.dashboard.upcomingActivities = [];
+            this.dashboard.allActivities = manualActivities;
+            this.dashboard.todayNutrition = todayNutrition;
+            this.dashboard.weekNutritionSummary = nutritionSummary;
+            this.dashboard.hideLoading();
+            this.dashboard.showContent();
+            // Fetch calendar activities in the background and patch UI when ready.
+            const calendarActivities = await HealthService.fetchCalendarActivities(14, 30);
+            if (currentLoad !== this.loadSequence)
+                return;
+            // Split calendar activities into past (this week) and upcoming (future).
             const pastCalendar = calendarActivities.filter(a => a.date <= today);
             const upcomingCalendar = calendarActivities.filter(a => a.date > today);
             // This week's activities = manual + past calendar events from this week
-            const weekStart = this.getStartOfWeek();
-            const weekStartStr = weekStart.toISOString().split('T')[0];
             const weekActivities = [
                 ...manualActivities.filter(a => a.date >= weekStartStr),
                 ...pastCalendar.filter(a => a.date >= weekStartStr),
@@ -168,10 +183,6 @@ export class HealthRenderer {
             this.dashboard.weekActivities = weekActivities;
             this.dashboard.upcomingActivities = upcomingCalendar;
             this.dashboard.allActivities = allActivities;
-            this.dashboard.todayNutrition = todayNutrition;
-            this.dashboard.weekNutritionSummary = nutritionSummary;
-            this.dashboard.hideLoading();
-            this.dashboard.showContent();
         }
         catch (err) {
             console.error('Failed to load health data', err);

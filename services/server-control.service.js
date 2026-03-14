@@ -34,7 +34,6 @@ export function stageColor(stage) {
 // ── Status polling ──────────────────────────────────────────────────────────
 async function fetchState(endpoint) {
     const res = await fetch(`${PI_GATEWAY_URL}${endpoint}`);
-    console.log(res);
     const data = await res.json();
     return (data.state ?? 'UNKNOWN');
 }

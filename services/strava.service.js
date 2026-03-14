@@ -2,7 +2,13 @@ import { API_URL } from '../config.js';
 export class StravaService {
     static async getAuthUrl() {
         const redirectUri = `${window.location.origin}${window.location.pathname}`;
-        const response = await fetch(`${API_URL}/api/connected-services/strava/auth-url?redirect_uri=${encodeURIComponent(redirectUri)}`);
+        let response;
+        try {
+            response = await fetch(`${API_URL}/api/connected-services/strava/auth-url?redirect_uri=${encodeURIComponent(redirectUri)}`);
+        }
+        catch {
+            throw new Error(`Failed to reach API at ${API_URL}. Check VPN/local network and CORS/PNA settings.`);
+        }
         if (!response.ok)
             throw new Error(`Failed to get auth URL: ${response.statusText}`);
         const data = await response.json();

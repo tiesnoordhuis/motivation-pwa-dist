@@ -68,6 +68,17 @@ export class ServerStatusPill extends HTMLElement {
     stravaStatus = { connected: false, last_sync: null };
     hasCredential = false;
     polling = null;
+    consecutivePollFailures = 0;
+    onHashChange = () => {
+        if (this.isPollingActive()) {
+            this.schedulePoll(0);
+        }
+    };
+    onVisibilityChange = () => {
+        if (this.isPollingActive()) {
+            this.schedulePoll(0);
+        }
+    };
     constructor() {
         super();
         this.shadow = this.attachShadow({ mode: 'open' });
@@ -93,31 +104,67 @@ export class ServerStatusPill extends HTMLElement {
         // Listen for Strava OAuth callback events
         window.addEventListener('strava-connected', () => void this.refreshStravaStatus());
         window.addEventListener('strava-connection-failed', () => void this.refreshStravaStatus());
-        void this.refresh();
-        void this.refreshStravaStatus();
-        this.polling = setInterval(() => {
-            void this.refresh();
-            void this.refreshStravaStatus();
-        }, 30_000);
+        window.addEventListener('hashchange', this.onHashChange);
+        document.addEventListener('visibilitychange', this.onVisibilityChange);
+        this.schedulePoll(0);
     }
     disconnectedCallback() {
         if (this.polling)
-            clearInterval(this.polling);
+            clearTimeout(this.polling);
+        window.removeEventListener('hashchange', this.onHashChange);
+        document.removeEventListener('visibilitychange', this.onVisibilityChange);
     }
     // ── Poll + update state ───────────────────────────────────────────────────
+    isHomeRoute() {
+        return window.location.hash === '#/' || window.location.hash === '';
+    }
+    isPollingActive() {
+        if (document.visibilityState !== 'visible')
+            return false;
+        return (this.dialog?.open ?? false) || this.isHomeRoute();
+    }
+    schedulePoll(delayMs) {
+        if (this.polling)
+            clearTimeout(this.polling);
+        this.polling = setTimeout(() => {
+            void this.pollOnce();
+        }, delayMs);
+    }
+    getBackoffDelay() {
+        const baseDelayMs = 30_000;
+        const factor = Math.min(4, this.consecutivePollFailures);
+        return Math.min(5 * 60_000, baseDelayMs * 2 ** factor);
+    }
+    async pollOnce() {
+        if (!this.isPollingActive()) {
+            this.schedulePoll(60_000);
+            return;
+        }
+        const [statusOk, stravaOk] = await Promise.all([
+            this.refresh(),
+            this.refreshStravaStatus(),
+        ]);
+        if (statusOk && stravaOk) {
+            this.consecutivePollFailures = 0;
+            this.schedulePoll(30_000);
+            return;
+        }
+        this.consecutivePollFailures += 1;
+        this.schedulePoll(this.getBackoffDelay());
+    }
     async refresh() {
         const reachable = await isPiGatewayReachable();
         if (!reachable) {
             this.applyStage('unreachable', null);
-            return;
+            return false;
         }
         const status = await fetchServerStatus().catch(() => null);
-        console.log(status);
         if (!status) {
             this.applyStage('unreachable', null);
-            return;
+            return false;
         }
         this.applyStage(deriveBootStage(status), status);
+        return true;
     }
     async refreshStravaStatus() {
         try {
@@ -125,11 +172,17 @@ export class ServerStatusPill extends HTMLElement {
         }
         catch {
             this.stravaStatus = { connected: false, last_sync: null };
+            this.stravaDot.className = 'dot dot--strava dot--gray';
+            if (this.dialog.open) {
+                this.renderServicesSection();
+            }
+            return false;
         }
         this.stravaDot.className = `dot dot--strava ${this.stravaStatus.connected ? 'dot--green' : 'dot--gray'}`;
         if (this.dialog.open) {
             this.renderServicesSection();
         }
+        return true;
     }
     applyStage(stage, status) {
         this.stage = stage;
@@ -357,8 +410,9 @@ export class ServerStatusPill extends HTMLElement {
                     const url = await StravaService.getAuthUrl();
                     window.location.href = url;
                 }
-                catch {
-                    this.showFeedback('Failed to start Strava auth', 'err');
+                catch (err) {
+                    const message = err instanceof Error ? err.message : 'Failed to start Strava auth';
+                    this.showFeedback(message, 'err');
                     connectBtn.disabled = false;
                     connectBtn.textContent = 'Connect';
                 }

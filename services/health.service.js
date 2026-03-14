@@ -68,4 +68,26 @@ export class HealthService {
             throw new Error(`Failed to delete nutrition entry: ${response.statusText}`);
         }
     }
+    // --- AI Estimation ---
+    static async estimateNutrition(description, image) {
+        const body = { description };
+        if (image)
+            body.image = image;
+        const response = await fetch(`${API_URL}/api/sections/health/nutrition/estimate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+        });
+        if (!response.ok) {
+            const data = await response.json().catch(() => ({}));
+            throw new Error(data.error ?? `Estimation failed: ${response.statusText}`);
+        }
+        return response.json();
+    }
+    static async getOllamaStatus() {
+        const response = await fetch(`${API_URL}/api/sections/health/nutrition/ollama-status`);
+        if (!response.ok)
+            return { running: false };
+        return response.json();
+    }
 }

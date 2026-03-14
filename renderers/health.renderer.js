@@ -22,6 +22,11 @@ export function healthRoutes() {
             parent: '#/health',
             onEnter: () => { instance?.showFoodSearch(); },
         },
+        '#/health/ai-estimate': {
+            view: '#health-view',
+            parent: '#/health',
+            onEnter: () => { instance?.showAiEstimate(); },
+        },
     };
 }
 export class HealthRenderer {
@@ -47,6 +52,7 @@ export class HealthRenderer {
         // FAB nutrition options — navigate via hash
         this.dashboard.onScanBarcode = () => { window.location.hash = '#/health/scanner'; };
         this.dashboard.onSearchFood = () => { window.location.hash = '#/health/food-search'; };
+        this.dashboard.onAiEstimate = () => { window.location.hash = '#/health/ai-estimate'; };
     }
     /** Show the health dashboard and load fresh data. */
     showDashboard() {
@@ -85,6 +91,25 @@ export class HealthRenderer {
         };
         this.content.appendChild(scanner);
         this.content.appendChild(foodLog);
+    }
+    /** Show the AI nutrition estimate sub-view. */
+    showAiEstimate() {
+        this.dashboard.style.display = 'none';
+        this.cleanUpSubViews();
+        const aiEstimate = document.createElement('ai-estimate');
+        aiEstimate.onEstimate = async (description, image) => {
+            return HealthService.estimateNutrition(description, image);
+        };
+        aiEstimate.onLog = async (entry) => {
+            try {
+                await HealthService.createNutritionEntry(entry);
+                window.location.hash = '#/health';
+            }
+            catch (err) {
+                console.error('Failed to log AI nutrition estimate', err);
+            }
+        };
+        this.content.appendChild(aiEstimate);
     }
     /** Show the food search sub-view. */
     showFoodSearch() {
@@ -160,6 +185,7 @@ export class HealthRenderer {
             el.remove();
         });
         this.content.querySelectorAll('food-log').forEach(el => el.remove());
+        this.content.querySelectorAll('ai-estimate').forEach(el => el.remove());
     }
     /** Called when leaving the health section entirely. */
     cleanup() {

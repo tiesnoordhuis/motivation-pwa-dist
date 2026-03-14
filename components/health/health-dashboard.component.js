@@ -103,6 +103,7 @@ template.innerHTML = `
         <div class="fab-menu" id="fab-menu" style="display:none">
             <button class="fab-option" id="fab-scan">📷 Scan Barcode</button>
             <button class="fab-option" id="fab-search">🔍 Search Food</button>
+            <button class="fab-option" id="fab-ai">🤖 AI Estimate</button>
             <button class="fab-option" id="fab-activity">🏃 Log Activity</button>
         </div>
 
@@ -148,6 +149,7 @@ export class HealthDashboard extends HTMLElement {
     _onSave = null;
     _onScanBarcode = null;
     _onSearchFood = null;
+    _onAiEstimate = null;
     _fabMenuOpen = false;
     constructor() {
         super();
@@ -169,6 +171,11 @@ export class HealthDashboard extends HTMLElement {
             this.closeFabMenu();
             if (this._onSearchFood)
                 this._onSearchFood();
+        });
+        shadow.getElementById('fab-ai').addEventListener('click', () => {
+            this.closeFabMenu();
+            if (this._onAiEstimate)
+                this._onAiEstimate();
         });
         shadow.getElementById('fab-activity').addEventListener('click', () => {
             this.closeFabMenu();
@@ -202,6 +209,9 @@ export class HealthDashboard extends HTMLElement {
     }
     set onSearchFood(handler) {
         this._onSearchFood = handler;
+    }
+    set onAiEstimate(handler) {
+        this._onAiEstimate = handler;
     }
     toggleFabMenu() {
         this._fabMenuOpen = !this._fabMenuOpen;

@@ -99,6 +99,11 @@ template.innerHTML = `
     </div>
 `;
 export class AiEstimate extends HTMLElement {
+    static MAX_IMAGE_BASE64_LENGTH = 450_000;
+    static INITIAL_MAX_DIMENSION = 1024;
+    static MIN_DIMENSION = 512;
+    static INITIAL_QUALITY = 0.85;
+    static MIN_QUALITY = 0.4;
     _imageBase64 = null;
     _model = '';
     _onLog = null;
@@ -153,27 +158,79 @@ export class AiEstimate extends HTMLElement {
     }
     async loadImage(file) {
         const shadow = this.shadowRoot;
-        // Resize to max 1024px to keep payload reasonable
         const bitmap = await createImageBitmap(file);
-        const maxSize = 1024;
-        let width = bitmap.width;
-        let height = bitmap.height;
-        if (width > maxSize || height > maxSize) {
-            const scale = maxSize / Math.max(width, height);
-            width = Math.round(width * scale);
-            height = Math.round(height * scale);
-        }
-        const canvas = new OffscreenCanvas(width, height);
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(bitmap, 0, 0, width, height);
-        const blob = await canvas.convertToBlob({ type: 'image/jpeg', quality: 0.85 });
-        const buffer = await blob.arrayBuffer();
-        this._imageBase64 = btoa(new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), ''));
+        const { blob, base64 } = await this.compressBitmapForUpload(bitmap);
+        this._imageBase64 = base64;
         // Show preview
         const preview = shadow.getElementById('photo-preview');
         preview.src = URL.createObjectURL(blob);
         preview.style.display = '';
         shadow.getElementById('btn-remove-photo').style.display = '';
+    }
+    async compressBitmapForUpload(bitmap) {
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        if (!context)
+            throw new Error('Failed to prepare image canvas');
+        let targetDimension = AiEstimate.INITIAL_MAX_DIMENSION;
+        let quality = AiEstimate.INITIAL_QUALITY;
+        let bestBlob = null;
+        let bestBase64 = '';
+        while (targetDimension >= AiEstimate.MIN_DIMENSION) {
+            const scale = Math.min(1, targetDimension / Math.max(bitmap.width, bitmap.height));
+            const width = Math.max(1, Math.round(bitmap.width * scale));
+            const height = Math.max(1, Math.round(bitmap.height * scale));
+            canvas.width = width;
+            canvas.height = height;
+            context.clearRect(0, 0, width, height);
+            context.drawImage(bitmap, 0, 0, width, height);
+            quality = AiEstimate.INITIAL_QUALITY;
+            while (quality >= AiEstimate.MIN_QUALITY) {
+                const blob = await this.canvasToJpegBlob(canvas, quality);
+                const base64 = await this.blobToBase64(blob);
+                bestBlob = blob;
+                bestBase64 = base64;
+                if (base64.length <= AiEstimate.MAX_IMAGE_BASE64_LENGTH) {
+                    return { blob, base64 };
+                }
+                quality = Math.round((quality - 0.1) * 10) / 10;
+            }
+            targetDimension = Math.round(targetDimension * 0.8);
+        }
+        if (!bestBlob || !bestBase64) {
+            throw new Error('Failed to process selected image');
+        }
+        return { blob: bestBlob, base64: bestBase64 };
+    }
+    canvasToJpegBlob(canvas, quality) {
+        return new Promise((resolve, reject) => {
+            canvas.toBlob((blob) => {
+                if (!blob) {
+                    reject(new Error('Failed to encode image'));
+                    return;
+                }
+                resolve(blob);
+            }, 'image/jpeg', quality);
+        });
+    }
+    async blobToBase64(blob) {
+        const dataUrl = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                if (typeof reader.result !== 'string') {
+                    reject(new Error('Failed to read image data'));
+                    return;
+                }
+                resolve(reader.result);
+            };
+            reader.onerror = () => reject(new Error('Failed to read image data'));
+            reader.readAsDataURL(blob);
+        });
+        const commaIndex = dataUrl.indexOf(',');
+        if (commaIndex === -1) {
+            throw new Error('Failed to convert image to base64');
+        }
+        return dataUrl.slice(commaIndex + 1);
     }
     clearImage() {
         const shadow = this.shadowRoot;

@@ -95,6 +95,46 @@ export class HealthRenderer {
         };
         this.content.appendChild(foodLog);
     }
+    async showDayDetail(dateStr) {
+        this.dashboard.hidden = true;
+        this.cleanUpSubViews();
+        const detail = document.createElement('health-day-detail');
+        detail.dateContext = dateStr;
+        detail.showLoading();
+        detail.onAddWorkout = (d) => {
+            // Re-use dashboard logic to show workout modal pre-filled with date
+            this.dashboard.hidden = false;
+            detail.hidden = true;
+            this.dashboard.openManualAddDialog(d);
+        };
+        detail.onAddFood = (d, meal) => {
+            // Navigate to food search, potentially passing meal/date context in future
+            window.location.hash = '#/health/food-search';
+        };
+        this.content.appendChild(detail);
+        const currentLoad = ++this.loadSequence;
+        try {
+            // Load DB activities (which now includes calendar activities) and nutrition
+            const [activities, nutrition] = await Promise.all([
+                HealthService.fetchActivities(),
+                HealthService.fetchNutritionByDate(dateStr)
+            ]);
+            if (currentLoad !== this.loadSequence)
+                return;
+            // Only grab activities for the specific date
+            const dayActivities = activities.filter(a => a.date.startsWith(dateStr));
+            detail.activities = dayActivities;
+            detail.nutrition = nutrition;
+            detail.hideLoading();
+            detail.showContent();
+        }
+        catch (err) {
+            console.error('Failed to load day detail data', err);
+            if (currentLoad === this.loadSequence) {
+                detail.showError('Failed to load detail for ' + dateStr);
+            }
+        }
+    }
     async loadData() {
         const currentLoad = ++this.loadSequence;
         this.dashboard.showLoading();
@@ -103,33 +143,24 @@ export class HealthRenderer {
             const todayStr = today.toString();
             const weekAgoStr = today.subtract({ days: 6 }).toString();
             const tomorrowStr = today.add({ days: 1 }).toString();
-            const [manualActivities, todayNutrition, nutritionSummary] = await Promise.all([
+            const [manualActivities, nutritionSummary, weekNutrition] = await Promise.all([
                 HealthService.fetchActivities(),
-                HealthService.fetchNutritionByDate(todayStr),
                 HealthService.fetchNutritionSummary(weekAgoStr, tomorrowStr),
+                HealthService.fetchNutritionByDateRange(weekAgoStr, tomorrowStr)
             ]);
             if (currentLoad !== this.loadSequence)
                 return;
             const weekStartStr = this.getStartOfWeek().toString();
-            this.dashboard.weekActivities = manualActivities.filter(a => a.date >= weekStartStr);
-            this.dashboard.upcomingActivities = [];
-            this.dashboard.allActivities = manualActivities;
-            this.dashboard.todayNutrition = todayNutrition;
+            const pastAndTodayActivities = manualActivities.filter(a => a.date <= todayStr);
+            const futureActivities = manualActivities.filter(a => a.date > todayStr);
+            this.dashboard.weekActivities = pastAndTodayActivities.filter(a => a.date >= weekStartStr);
+            this.dashboard.upcomingActivities = futureActivities;
+            this.dashboard.allActivities = pastAndTodayActivities;
+            this.dashboard.allNutrition = weekNutrition;
+            this.dashboard.todayNutrition = weekNutrition.filter(n => n.date.startsWith(todayStr));
             this.dashboard.weekNutritionSummary = nutritionSummary;
             this.dashboard.hideLoading();
             this.dashboard.showContent();
-            const calendarActivities = await HealthService.fetchCalendarActivities(14, 30);
-            if (currentLoad !== this.loadSequence)
-                return;
-            const pastCalendar = calendarActivities.filter(a => a.date <= todayStr);
-            const upcomingCalendar = calendarActivities.filter(a => a.date > todayStr);
-            const weekActivities = [
-                ...manualActivities.filter(a => a.date >= weekStartStr),
-                ...pastCalendar.filter(a => a.date >= weekStartStr),
-            ];
-            this.dashboard.weekActivities = weekActivities;
-            this.dashboard.upcomingActivities = upcomingCalendar;
-            this.dashboard.allActivities = [...manualActivities, ...pastCalendar];
         }
         catch (err) {
             console.error('Failed to load health data', err);
@@ -143,6 +174,7 @@ export class HealthRenderer {
         });
         this.content.querySelectorAll('food-log').forEach(el => el.remove());
         this.content.querySelectorAll('ai-estimate').forEach(el => el.remove());
+        this.content.querySelectorAll('health-day-detail').forEach(el => el.remove());
     }
     cleanup() {
         this.cleanUpSubViews();

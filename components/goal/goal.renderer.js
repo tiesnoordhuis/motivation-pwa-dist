@@ -1,6 +1,6 @@
 import { GoalService } from '../../services/goal.service.js';
-import { GoalNavigator } from './goal-navigator.js';
-import { GoalDialogController } from './goal-dialog.controller.js';
+import { GoalNavigator } from './goal-navigator/goal-navigator.js';
+import { GoalDialogController } from './goal-dialog/goal-dialog.controller.js';
 export class GoalRenderer {
     navigator;
     dialogController;

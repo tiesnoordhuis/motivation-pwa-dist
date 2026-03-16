@@ -8,13 +8,6 @@ export class HealthService {
         }
         return response.json();
     }
-    static async fetchCalendarActivities(daysAhead = 30, daysBehind = 30) {
-        const response = await fetch(`${API_URL}/api/sections/health/calendar-activities?days_ahead=${daysAhead}&days_behind=${daysBehind}`);
-        if (!response.ok) {
-            throw new Error(`Failed to fetch calendar activities: ${response.statusText}`);
-        }
-        return response.json();
-    }
     static async createActivity(activity) {
         const response = await fetch(`${API_URL}/api/sections/health/activities`, {
             method: 'POST',
@@ -39,6 +32,13 @@ export class HealthService {
         const response = await fetch(`${API_URL}/api/sections/health/nutrition?date=${date}`);
         if (!response.ok) {
             throw new Error(`Failed to fetch nutrition: ${response.statusText}`);
+        }
+        return response.json();
+    }
+    static async fetchNutritionByDateRange(from, to) {
+        const response = await fetch(`${API_URL}/api/sections/health/nutrition?from=${from}&to=${to}`);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch nutrition range: ${response.statusText}`);
         }
         return response.json();
     }

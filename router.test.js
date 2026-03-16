@@ -40,24 +40,24 @@ test('Router', async (t) => {
         setupDOM();
         const { Router } = await import('./router.js');
         const router = new Router({ routes: createRoutes() });
-        assert.strictEqual(router.resolveRoute(''), '#/');
-        assert.strictEqual(router.resolveRoute('#'), '#/');
-        assert.strictEqual(router.resolveRoute('#/'), '#/');
+        assert.deepStrictEqual(router.resolveRoute(''), { route: '#/', params: {} });
+        assert.deepStrictEqual(router.resolveRoute('#'), { route: '#/', params: {} });
+        assert.deepStrictEqual(router.resolveRoute('#/'), { route: '#/', params: {} });
     });
     await t.test('resolveRoute returns matching route', async () => {
         setupDOM();
         const { Router } = await import('./router.js');
         const router = new Router({ routes: createRoutes() });
-        assert.strictEqual(router.resolveRoute('#/health'), '#/health');
-        assert.strictEqual(router.resolveRoute('#/social'), '#/social');
-        assert.strictEqual(router.resolveRoute('#/goals'), '#/goals');
+        assert.deepStrictEqual(router.resolveRoute('#/health'), { route: '#/health', params: {} });
+        assert.deepStrictEqual(router.resolveRoute('#/social'), { route: '#/social', params: {} });
+        assert.deepStrictEqual(router.resolveRoute('#/goals'), { route: '#/goals', params: {} });
     });
     await t.test('resolveRoute returns fallback for unknown route', async () => {
         setupDOM();
         const { Router } = await import('./router.js');
         const router = new Router({ routes: createRoutes() });
-        assert.strictEqual(router.resolveRoute('#/unknown'), '#/');
-        assert.strictEqual(router.resolveRoute('#/doesnotexist'), '#/');
+        assert.deepStrictEqual(router.resolveRoute('#/unknown'), { route: '#/', params: {} });
+        assert.deepStrictEqual(router.resolveRoute('#/doesnotexist'), { route: '#/', params: {} });
     });
     await t.test('currentRoute starts empty before start()', async () => {
         setupDOM();
@@ -149,7 +149,44 @@ test('Router', async (t) => {
         const router = new Router({ routes });
         const expectedRoutes = ['#/', '#/goals', '#/agenda', '#/health', '#/social', '#/vietnamese', '#/projects', '#/todo'];
         for (const route of expectedRoutes) {
-            assert.strictEqual(router.resolveRoute(route), route, `Route ${route} should be supported`);
+            assert.deepStrictEqual(router.resolveRoute(route), { route, params: {} }, `Route ${route} should be supported`);
         }
+    });
+    await t.test('resolveRoute supports dynamic parameters', async () => {
+        setupDOM();
+        const { Router } = await import('./router.js');
+        const routes = {
+            '#/home': { view: '#home-view' },
+            '#/user/:id': { view: '#user-view' },
+            '#/health/day/:date': { view: '#health-view' },
+        };
+        const router = new Router({ routes });
+        assert.deepStrictEqual(router.resolveRoute('#/user/123'), { route: '#/user/:id', params: { id: '123' } });
+        assert.deepStrictEqual(router.resolveRoute('#/health/day/2026-03-14'), { route: '#/health/day/:date', params: { date: '2026-03-14' } });
+        // Falls back to home if pattern is mismatched
+        assert.deepStrictEqual(router.resolveRoute('#/health/day/'), { route: '#/', params: {} });
+    });
+    await t.test('onEnter receives extracted parameters', async () => {
+        setupDOM();
+        const { Router } = await import('./router.js');
+        let capturedParams;
+        let enterCount = 0;
+        const routes = {
+            ...createRoutes(),
+            '#/item/:itemId': {
+                view: '#home-view',
+                onEnter: (params) => {
+                    capturedParams = params;
+                    enterCount++;
+                }
+            }
+        };
+        const router = new Router({ routes });
+        router.start();
+        await new Promise(r => setTimeout(r, 10));
+        router.navigate('#/item/42');
+        await new Promise(r => setTimeout(r, 10));
+        assert.strictEqual(enterCount, 1);
+        assert.deepStrictEqual(capturedParams, { itemId: '42' });
     });
 });

@@ -26,5 +26,17 @@ export function healthRoutes() {
             parent: '#/health',
             onEnter: () => { instance?.showAiEstimate(); },
         },
+        '#/health/day/:date': {
+            view: '#health-view',
+            parent: '#/health',
+            onEnter: async (params) => {
+                if (params && params.date) {
+                    await instance?.showDayDetail(params.date);
+                }
+                else {
+                    window.location.hash = '#/health';
+                }
+            },
+        },
     };
 }

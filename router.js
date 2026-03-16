@@ -26,41 +26,73 @@ export class Router {
     navigate(hash) {
         window.location.hash = hash;
     }
-    /** Resolve the current hash to a known route, or the fallback */
+    /** Resolve the current hash to a known route, or the fallback, and return params */
     resolveRoute(hash) {
         // Normalize bare/empty hash to home
         if (!hash || hash === '#') {
-            return '#/';
+            return { route: '#/', params: {} };
         }
         // Direct match
         if (this.routes[hash]) {
-            return hash;
+            return { route: hash, params: {} };
+        }
+        // Pattern match
+        for (const routePattern of Object.keys(this.routes)) {
+            if (!routePattern.includes(':'))
+                continue;
+            const patternParts = routePattern.split('/');
+            const hashParts = hash.split('/');
+            if (patternParts.length !== hashParts.length)
+                continue;
+            const params = {};
+            let isMatch = true;
+            for (let i = 0; i < patternParts.length; i++) {
+                if (patternParts[i].startsWith(':')) {
+                    if (!hashParts[i]) {
+                        isMatch = false; // Parameter must not be empty
+                        break;
+                    }
+                    const paramName = patternParts[i].substring(1);
+                    params[paramName] = hashParts[i];
+                }
+                else if (patternParts[i] !== hashParts[i]) {
+                    isMatch = false;
+                    break;
+                }
+            }
+            if (isMatch) {
+                return { route: routePattern, params };
+            }
         }
         // Unknown route → home
-        return '#/';
+        return { route: '#/', params: {} };
     }
     /** Core routing logic triggered on every hash change */
     async onHashChange() {
         const hash = window.location.hash || '#/';
-        const route = this.resolveRoute(hash);
+        const { route, params } = this.resolveRoute(hash);
         // Redirect to fallback if hash was unknown
-        if (route !== hash) {
-            window.location.hash = route;
+        // We only redirect if the resolved route doesn't match the original hash pattern
+        // meaning it fell back to '#/'
+        if (route === '#/' && hash !== '#/') {
+            window.location.hash = '#/';
             return;
         }
-        // Skip if already on this route
-        if (route === this._currentRoute)
+        // Skip if already on this exact hash
+        if (hash === this._currentRoute)
             return;
         this._previousRoute = this._currentRoute;
-        this._currentRoute = route;
-        const isBack = this.isBackNavigation(this._previousRoute, route);
+        this._currentRoute = hash;
+        // Determine if we're going back based on the resolved route pattern
+        const prevResolved = this.resolveRoute(this._previousRoute).route;
+        const isBack = this.isBackNavigation(prevResolved, route);
         if (isBack) {
             document.documentElement.classList.add('back-transition');
         }
         else {
             document.documentElement.classList.remove('back-transition');
         }
-        const transition = () => this.activateRoute(route);
+        const transition = () => this.activateRoute(route, params);
         if (document.startViewTransition) {
             document.startViewTransition(transition);
         }
@@ -73,7 +105,7 @@ export class Router {
         return this.routes[route]?.parent ?? route;
     }
     /** Activate a route: hide all views, lazy-init if needed, show target view */
-    async activateRoute(route) {
+    async activateRoute(route, params) {
         const config = this.routes[route];
         if (!config)
             return;
@@ -115,7 +147,7 @@ export class Router {
         }
         // Call onEnter hook
         if (config.onEnter) {
-            await config.onEnter();
+            await config.onEnter(params);
         }
     }
     /**

@@ -1,58 +1,25 @@
 import styles from './health-dashboard.css' with { type: 'css' };
-function activityIcon(type) {
-    switch (type) {
-        case 'gym': return '🏋️';
-        case 'tennis': return '🎾';
-        case 'ice-skating': return '⛸️';
-        case 'running': return '🏃';
-        case 'cycling': return '🚴';
-        case 'swimming': return '🏊';
-        default: return '💪';
-    }
-}
-function formatDate(dateStr) {
-    const d = new Date(dateStr);
-    return d.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
-}
-function formatTime(dateStr) {
-    const d = new Date(dateStr);
-    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-}
+import { activityIcon } from './sub/health-utils.js';
 function getStartOfWeek() {
-    const now = new Date();
-    const day = now.getDay();
-    const diff = now.getDate() - day + (day === 0 ? -6 : 1); // Monday start
-    const monday = new Date(now);
-    monday.setHours(0, 0, 0, 0);
-    monday.setDate(diff);
-    return monday;
+    const today = Temporal.Now.plainDateISO();
+    return today.subtract({ days: today.dayOfWeek - 1 });
 }
 function getEndOfWeek() {
-    const start = getStartOfWeek();
-    const end = new Date(start);
-    end.setDate(end.getDate() + 6);
-    end.setHours(23, 59, 59, 999);
-    return end;
+    return getStartOfWeek().add({ days: 6 });
 }
 function computeStreak(activities) {
     if (activities.length === 0)
         return 0;
-    // Get unique active dates, sorted descending
     const dates = [...new Set(activities.map(a => a.date.split('T')[0]))].sort().reverse();
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    let streak = 0;
-    let checkDate = new Date(today);
-    // Check if today has activity, if not start from yesterday
-    const todayStr = checkDate.toISOString().split('T')[0];
-    if (!dates.includes(todayStr)) {
-        checkDate.setDate(checkDate.getDate() - 1);
+    let checkDate = Temporal.Now.plainDateISO();
+    if (!dates.includes(checkDate.toString())) {
+        checkDate = checkDate.subtract({ days: 1 });
     }
+    let streak = 0;
     for (let i = 0; i < 365; i++) {
-        const dateStr = checkDate.toISOString().split('T')[0];
-        if (dates.includes(dateStr)) {
+        if (dates.includes(checkDate.toString())) {
             streak++;
-            checkDate.setDate(checkDate.getDate() - 1);
+            checkDate = checkDate.subtract({ days: 1 });
         }
         else {
             break;
@@ -68,9 +35,9 @@ template.innerHTML = `
             <div>Loading health data…</div>
         </div>
 
-        <div id="error" class="error-banner" style="display:none"></div>
+        <div id="error" class="error-banner" hidden></div>
 
-        <div id="content" style="display:none">
+        <div id="content" hidden>
             <div class="stats-row">
                 <div class="stat-card">
                     <div class="stat-value" id="workouts-count">0</div>
@@ -100,7 +67,7 @@ template.innerHTML = `
 
         <button class="health-fab" id="fab-btn" title="Log">+</button>
 
-        <div class="fab-menu" id="fab-menu" style="display:none">
+        <div class="fab-menu" id="fab-menu" hidden>
             <button class="fab-option" id="fab-scan">📷 Scan Barcode</button>
             <button class="fab-option" id="fab-search">🔍 Search Food</button>
             <button class="fab-option" id="fab-ai">🤖 AI Estimate</button>
@@ -159,9 +126,7 @@ export class HealthDashboard extends HTMLElement {
     }
     connectedCallback() {
         const shadow = this.shadowRoot;
-        // FAB menu toggle
         shadow.getElementById('fab-btn').addEventListener('click', () => this.toggleFabMenu());
-        // FAB options
         shadow.getElementById('fab-scan').addEventListener('click', () => {
             this.closeFabMenu();
             if (this._onScanBarcode)
@@ -181,10 +146,9 @@ export class HealthDashboard extends HTMLElement {
             this.closeFabMenu();
             const dialog = shadow.getElementById('activity-dialog');
             const dateInput = shadow.getElementById('act-date');
-            dateInput.value = new Date().toISOString().split('T')[0];
+            dateInput.value = Temporal.Now.plainDateISO().toString();
             dialog.showModal();
         });
-        // Dialog form
         const form = shadow.getElementById('activity-form');
         const dialog = shadow.getElementById('activity-dialog');
         dialog.addEventListener('close', () => {
@@ -215,58 +179,52 @@ export class HealthDashboard extends HTMLElement {
     }
     toggleFabMenu() {
         this._fabMenuOpen = !this._fabMenuOpen;
-        const menu = this.shadowRoot.getElementById('fab-menu');
-        const fab = this.shadowRoot.getElementById('fab-btn');
-        menu.style.display = this._fabMenuOpen ? '' : 'none';
-        fab.textContent = this._fabMenuOpen ? '×' : '+';
+        const shadow = this.shadowRoot;
+        shadow.getElementById('fab-menu').hidden = !this._fabMenuOpen;
+        shadow.getElementById('fab-btn').textContent = this._fabMenuOpen ? '×' : '+';
     }
     closeFabMenu() {
         this._fabMenuOpen = false;
         const shadow = this.shadowRoot;
-        shadow.getElementById('fab-menu').style.display = 'none';
+        shadow.getElementById('fab-menu').hidden = true;
         shadow.getElementById('fab-btn').textContent = '+';
     }
     showLoading() {
         const shadow = this.shadowRoot;
-        shadow.getElementById('loading').style.display = '';
-        shadow.getElementById('content').style.display = 'none';
-        shadow.getElementById('error').style.display = 'none';
+        shadow.getElementById('loading').hidden = false;
+        shadow.getElementById('content').hidden = true;
+        shadow.getElementById('error').hidden = true;
     }
     hideLoading() {
-        this.shadowRoot.getElementById('loading').style.display = 'none';
+        this.shadowRoot.getElementById('loading').hidden = true;
     }
     showError(message) {
         const shadow = this.shadowRoot;
         const el = shadow.getElementById('error');
         el.textContent = message;
-        el.style.display = '';
-        shadow.getElementById('loading').style.display = 'none';
+        el.hidden = false;
+        shadow.getElementById('loading').hidden = true;
     }
     showContent() {
-        this.shadowRoot.getElementById('content').style.display = '';
+        this.shadowRoot.getElementById('content').hidden = false;
     }
-    /** Set this week's activities (manual + calendar past) */
     set weekActivities(activities) {
         this._weekActivities = activities;
         this.renderWeekList();
     }
-    /** Set upcoming calendar activities */
     set upcomingActivities(activities) {
         this._upcomingActivities = activities;
         this.renderUpcomingList();
     }
-    /** Set all activities for streak calculation */
     set allActivities(activities) {
         this._allActivities = activities;
         this.updateStats();
     }
-    /** Set today's nutrition entries for the widget */
     set todayNutrition(entries) {
         const widget = this.shadowRoot.getElementById('nutrition-widget');
         if (widget)
             widget.todayEntries = entries;
     }
-    /** Set 7-day nutrition summary for the widget */
     set weekNutritionSummary(summaries) {
         const widget = this.shadowRoot.getElementById('nutrition-widget');
         if (widget)
@@ -274,74 +232,50 @@ export class HealthDashboard extends HTMLElement {
     }
     updateStats() {
         const shadow = this.shadowRoot;
-        // Workouts this week
         const weekStart = getStartOfWeek();
         const weekEnd = getEndOfWeek();
         const weekCount = this._weekActivities.filter(a => {
-            const d = new Date(a.date);
-            return d >= weekStart && d <= weekEnd;
+            const d = Temporal.PlainDate.from(a.date.split('T')[0]);
+            return Temporal.PlainDate.compare(d, weekStart) >= 0 &&
+                Temporal.PlainDate.compare(d, weekEnd) <= 0;
         }).length;
         shadow.getElementById('workouts-count').textContent = String(weekCount);
-        // Streak
-        const streak = computeStreak(this._allActivities);
-        shadow.getElementById('streak-count').textContent = String(streak);
+        shadow.getElementById('streak-count').textContent = String(computeStreak(this._allActivities));
     }
     renderWeekList() {
         const container = this.shadowRoot.getElementById('week-list');
-        container.innerHTML = '';
+        container.replaceChildren();
         if (this._weekActivities.length === 0) {
-            container.innerHTML = '<div class="empty-state">No activities this week yet. Tap + to log one!</div>';
+            const empty = document.createElement('p');
+            empty.className = 'empty-state';
+            empty.textContent = 'No activities this week yet. Tap + to log one!';
+            container.appendChild(empty);
             return;
         }
-        // Sort by date descending
         const sorted = [...this._weekActivities].sort((a, b) => b.date.localeCompare(a.date));
         for (const activity of sorted) {
-            const item = document.createElement('div');
-            item.className = 'activity-item';
-            item.innerHTML = `
-                <div class="activity-icon">${activityIcon(activity.type)}</div>
-                <div class="activity-info">
-                    <div class="activity-title">${this.escapeHtml(activity.title)}</div>
-                    <div class="activity-meta">${formatDate(activity.date)}${activity.duration_minutes ? ` · ${activity.duration_minutes} min` : ''}</div>
-                </div>
-                <span class="activity-source">${activity.source}</span>
-            `;
+            const item = document.createElement('health-activity-item');
             container.appendChild(item);
+            item.activity = activity;
         }
         this.updateStats();
     }
     renderUpcomingList() {
         const container = this.shadowRoot.getElementById('upcoming-list');
-        container.innerHTML = '';
+        container.replaceChildren();
         if (this._upcomingActivities.length === 0) {
-            container.innerHTML = '<div class="empty-state">No upcoming workouts scheduled.</div>';
+            const empty = document.createElement('p');
+            empty.className = 'empty-state';
+            empty.textContent = 'No upcoming workouts scheduled.';
+            container.appendChild(empty);
             return;
         }
-        // Sort by date ascending (soonest first)
         const sorted = [...this._upcomingActivities].sort((a, b) => a.date.localeCompare(b.date));
         for (const activity of sorted) {
-            const date = new Date(activity.date);
-            const meta = activity.metadata ? JSON.parse(activity.metadata) : null;
-            const startTime = meta?.start ? formatTime(meta.start) : '';
-            const item = document.createElement('div');
-            item.className = 'upcoming-item';
-            item.innerHTML = `
-                <div class="upcoming-date">
-                    <div class="upcoming-day">${date.getDate()}</div>
-                    <div class="upcoming-weekday">${date.toLocaleDateString([], { weekday: 'short' })}</div>
-                </div>
-                <div class="upcoming-info">
-                    <div class="upcoming-title">${activityIcon(activity.type)} ${this.escapeHtml(activity.title)}</div>
-                    <div class="upcoming-time">${startTime}${activity.duration_minutes ? ` · ${activity.duration_minutes} min` : ''}</div>
-                </div>
-            `;
+            const item = document.createElement('health-upcoming-item');
             container.appendChild(item);
+            item.activity = activity;
         }
-    }
-    escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
     }
 }
 customElements.define('health-dashboard', HealthDashboard);

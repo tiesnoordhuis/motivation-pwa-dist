@@ -3,9 +3,9 @@ export class GoalNavigator {
     goalHeader;
     _currentParentId = null;
     _allGoals = [];
-    constructor() {
-        this.goalList = document.getElementById('goals-list');
-        this.goalHeader = document.getElementById('goal-header');
+    constructor(goalList, goalHeader) {
+        this.goalList = goalList;
+        this.goalHeader = goalHeader;
     }
     get currentParentId() {
         return this._currentParentId;
@@ -32,22 +32,18 @@ export class GoalNavigator {
             }
         }
         // Update header card
-        if (this.goalHeader) {
-            if (currentGoal) {
-                this.goalHeader.dataset.goalId = currentGoal.id;
-                this.goalHeader.dataset.title = currentGoal.title;
-                this.goalHeader.dataset.description = currentGoal.description ?? '';
-            }
-            else {
-                delete this.goalHeader.dataset.goalId;
-                delete this.goalHeader.dataset.title;
-                delete this.goalHeader.dataset.description;
-            }
+        if (currentGoal) {
+            this.goalHeader.dataset.goalId = currentGoal.id;
+            this.goalHeader.dataset.title = currentGoal.title;
+            this.goalHeader.dataset.description = currentGoal.description ?? '';
+        }
+        else {
+            delete this.goalHeader.dataset.goalId;
+            delete this.goalHeader.dataset.title;
+            delete this.goalHeader.dataset.description;
         }
         // Update goal list
-        if (this.goalList) {
-            this.goalList.goals = goalsToShow;
-        }
+        this.goalList.goals = goalsToShow;
     }
     findGoal(nodes, id) {
         for (const node of nodes) {

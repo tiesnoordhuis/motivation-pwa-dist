@@ -59,12 +59,6 @@ test('Router', async (t) => {
         assert.strictEqual(router.resolveRoute('#/unknown'), '#/');
         assert.strictEqual(router.resolveRoute('#/doesnotexist'), '#/');
     });
-    await t.test('resolveRoute uses custom fallback', async () => {
-        setupDOM();
-        const { Router } = await import('./router.js');
-        const router = new Router({ routes: createRoutes(), fallback: '#/goals' });
-        assert.strictEqual(router.resolveRoute('#/unknown'), '#/goals');
-    });
     await t.test('currentRoute starts empty before start()', async () => {
         setupDOM();
         const { Router } = await import('./router.js');

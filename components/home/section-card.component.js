@@ -1,10 +1,8 @@
 import styles from './section-card.css' with { type: 'css' };
 const template = document.createElement('template');
 template.innerHTML = `
-    <div class="section-card">
-        <h2 class="card-title" id="title"></h2>
-        <p class="card-summary" id="summary"></p>
-    </div>
+    <h2 class="card-title" id="title"></h2>
+    <p class="card-summary" id="summary"></p>
 `;
 export class SectionCard extends HTMLElement {
     static get observedAttributes() {

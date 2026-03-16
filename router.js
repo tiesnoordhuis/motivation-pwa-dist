@@ -5,13 +5,11 @@
  */
 export class Router {
     routes;
-    fallback;
     initialized = new Set();
     _currentRoute = '';
     _previousRoute = '';
     constructor(options) {
         this.routes = options.routes;
-        this.fallback = options.fallback ?? '#/';
     }
     get currentRoute() {
         return this._currentRoute;
@@ -30,20 +28,20 @@ export class Router {
     }
     /** Resolve the current hash to a known route, or the fallback */
     resolveRoute(hash) {
-        // Normalize: empty hash or just '#' → fallback
-        if (!hash || hash === '#' || hash === '#/') {
-            return this.fallback;
+        // Normalize bare/empty hash to home
+        if (!hash || hash === '#') {
+            return '#/';
         }
         // Direct match
         if (this.routes[hash]) {
             return hash;
         }
-        // Unknown route → fallback
-        return this.fallback;
+        // Unknown route → home
+        return '#/';
     }
     /** Core routing logic triggered on every hash change */
     async onHashChange() {
-        const hash = window.location.hash || this.fallback;
+        const hash = window.location.hash || '#/';
         const route = this.resolveRoute(hash);
         // Redirect to fallback if hash was unknown
         if (route !== hash) {

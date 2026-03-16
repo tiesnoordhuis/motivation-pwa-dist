@@ -14,7 +14,7 @@
 export function buildSectionPage(container, title, colorModifier, _sectionHash) {
     // Ensure section-page classes
     container.classList.add('section-page', `section-page--${colorModifier}`);
-    container.innerHTML = '';
+    container.replaceChildren();
     // Header
     const header = document.createElement('div');
     header.className = 'section-page__header';

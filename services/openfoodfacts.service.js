@@ -42,40 +42,49 @@ export class OpenFoodFactsService {
     }
     static async searchFood(query) {
         try {
-            const params = new URLSearchParams({
+            const fetchProducts = async (params) => {
+                const response = await fetch(`${OFF_PROXY_BASE}/search?${params}`);
+                if (!response.ok)
+                    return [];
+                const data = await response.json();
+                if (!data.products || !Array.isArray(data.products))
+                    return [];
+                return data.products.map((p) => ({
+                    product_name: p.product_name ?? 'Unknown Product',
+                    brands: p.brands || undefined,
+                    image_url: p.image_front_url || undefined,
+                    barcode: p.code || undefined,
+                    serving_size: p.serving_size || undefined,
+                    serving_quantity: typeof p.serving_quantity === 'number' ? p.serving_quantity : undefined,
+                    quantity: p.quantity || undefined,
+                    product_quantity: typeof p.product_quantity === 'number' ? p.product_quantity
+                        : typeof p.product_quantity === 'string' ? parseFloat(p.product_quantity) || undefined
+                            : undefined,
+                    categories_tags: Array.isArray(p.categories_tags) ? p.categories_tags : undefined,
+                    ...parseNutriments(p.nutriments ?? {}),
+                }));
+            };
+            const dutchParams = new URLSearchParams({
                 search_terms: query,
                 json: '1',
                 page_size: '25',
-                // Prioritize Dutch language products, sort by popularity
                 lc: 'nl',
                 sort_by: 'unique_scans_n',
-                // Filter to NL / UK / US products
                 tagtype_0: 'countries',
                 tag_contains_0: 'contains',
                 tag_0: 'netherlands',
             });
-            const response = await fetch(`${OFF_PROXY_BASE}/search?${params}`);
-            if (!response.ok)
-                return [];
-            const data = await response.json();
-            if (!data.products || !Array.isArray(data.products))
-                return [];
-            const products = data.products.map((p) => ({
-                product_name: p.product_name ?? 'Unknown Product',
-                brands: p.brands || undefined,
-                image_url: p.image_front_url || undefined,
-                barcode: p.code || undefined,
-                serving_size: p.serving_size || undefined,
-                serving_quantity: typeof p.serving_quantity === 'number' ? p.serving_quantity : undefined,
-                quantity: p.quantity || undefined,
-                product_quantity: typeof p.product_quantity === 'number' ? p.product_quantity
-                    : typeof p.product_quantity === 'string' ? parseFloat(p.product_quantity) || undefined
-                        : undefined,
-                categories_tags: Array.isArray(p.categories_tags) ? p.categories_tags : undefined,
-                ...parseNutriments(p.nutriments ?? {}),
-            }));
+            const globalParams = new URLSearchParams({
+                search_terms: query,
+                json: '1',
+                page_size: '50',
+                sort_by: 'unique_scans_n',
+            });
+            // Try NL-focused search first, then broaden globally when no results are found.
+            const products = await fetchProducts(dutchParams);
+            const fallbackProducts = products.length > 0 ? products : await fetchProducts(globalParams);
             // Re-rank by query relevance: score by how many query words appear in product_name
-            return this.rankByRelevance(products, query).slice(0, 10);
+            return this.rankByRelevance(fallbackProducts, query).slice(0, 10);
         }
         catch {
             return [];

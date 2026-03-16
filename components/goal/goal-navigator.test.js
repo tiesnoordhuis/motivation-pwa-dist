@@ -32,6 +32,11 @@ test('GoalNavigator', async (t) => {
     global.customElements.define('goal-list', MockGoalList);
     global.customElements.define('goal-header-card', MockGoalHeaderCard);
     const { GoalNavigator } = await import('./goal-navigator.js');
+    function makeNavigator() {
+        const goalList = document.getElementById('goals-list');
+        const goalHeader = document.getElementById('goal-header');
+        return new GoalNavigator(goalList, goalHeader);
+    }
     const sampleGoals = [
         {
             id: '1', title: 'Goal 1', status: 'ACTIVE', description: 'Desc 1',
@@ -44,39 +49,39 @@ test('GoalNavigator', async (t) => {
     ];
     await t.test('findGoal finds a top-level goal', () => {
         setupDOM();
-        const nav = new GoalNavigator();
+        const nav = makeNavigator();
         nav.renderGoals(sampleGoals);
         const found = nav.findGoal(sampleGoals, '2');
         assert.strictEqual(found?.title, 'Goal 2');
     });
     await t.test('findGoal finds a nested goal', () => {
         setupDOM();
-        const nav = new GoalNavigator();
+        const nav = makeNavigator();
         nav.renderGoals(sampleGoals);
         const found = nav.findGoal(sampleGoals, '1a');
         assert.strictEqual(found?.title, 'Sub 1a');
     });
     await t.test('findGoal returns undefined for missing id', () => {
         setupDOM();
-        const nav = new GoalNavigator();
+        const nav = makeNavigator();
         const found = nav.findGoal(sampleGoals, 'nonexistent');
         assert.strictEqual(found, undefined);
     });
     await t.test('findParentNode returns parent of nested goal', () => {
         setupDOM();
-        const nav = new GoalNavigator();
+        const nav = makeNavigator();
         const parent = nav.findParentNode(sampleGoals, '1a');
         assert.strictEqual(parent?.id, '1');
     });
     await t.test('findParentNode returns null for top-level goal', () => {
         setupDOM();
-        const nav = new GoalNavigator();
+        const nav = makeNavigator();
         const parent = nav.findParentNode(sampleGoals, '1');
         assert.strictEqual(parent, null);
     });
     await t.test('renderGoals assigns goals to goal-list component', () => {
         setupDOM();
-        const nav = new GoalNavigator();
+        const nav = makeNavigator();
         nav.renderGoals(sampleGoals);
         const list = document.getElementById('goals-list');
         assert.strictEqual(list.goals.length, 2);
@@ -84,7 +89,7 @@ test('GoalNavigator', async (t) => {
     });
     await t.test('navigateTo sets currentParentId and shows sub-goals', () => {
         setupDOM();
-        const nav = new GoalNavigator();
+        const nav = makeNavigator();
         nav.renderGoals(sampleGoals);
         nav.navigateTo('1');
         const list = document.getElementById('goals-list');
@@ -96,7 +101,7 @@ test('GoalNavigator', async (t) => {
     });
     await t.test('navigateUp returns to parent view', () => {
         setupDOM();
-        const nav = new GoalNavigator();
+        const nav = makeNavigator();
         nav.renderGoals(sampleGoals);
         nav.navigateTo('1');
         nav.navigateUp();
@@ -107,7 +112,7 @@ test('GoalNavigator', async (t) => {
     });
     await t.test('navigateUp at root level does nothing', () => {
         setupDOM();
-        const nav = new GoalNavigator();
+        const nav = makeNavigator();
         nav.renderGoals(sampleGoals);
         nav.navigateUp();
         const list = document.getElementById('goals-list');
@@ -115,7 +120,7 @@ test('GoalNavigator', async (t) => {
     });
     await t.test('currentParentId getter returns current parent', () => {
         setupDOM();
-        const nav = new GoalNavigator();
+        const nav = makeNavigator();
         nav.renderGoals(sampleGoals);
         assert.strictEqual(nav.currentParentId, null);
         nav.navigateTo('1');

@@ -1,31 +1,6 @@
-import { GoalService } from '../services/goal.service.js';
+import { GoalService } from '../../services/goal.service.js';
 import { GoalNavigator } from './goal-navigator.js';
 import { GoalDialogController } from './goal-dialog.controller.js';
-let instance = null;
-export function goalRoutes() {
-    return {
-        '#/goals': {
-            view: '#goals-view',
-            init: async () => {
-                instance = new GoalRenderer();
-                try {
-                    instance.showLoading();
-                    const goals = await GoalService.fetchGoals();
-                    instance.renderGoals(goals);
-                    instance.hideError();
-                }
-                catch (err) {
-                    instance.showError('Failed to load goals. Is the server running?');
-                    console.error(err);
-                }
-                finally {
-                    instance.hideLoading();
-                }
-            },
-            onEnter: async () => { await instance?.refreshGoals(); },
-        },
-    };
-}
 export class GoalRenderer {
     navigator;
     dialogController;
@@ -33,15 +8,28 @@ export class GoalRenderer {
     errorMessage;
     createBtn;
     constructor() {
+        const container = document.getElementById('goals-view');
+        const header = document.createElement('goal-header-card');
+        header.id = 'goal-header';
+        this.errorMessage = document.createElement('p');
+        this.errorMessage.className = 'hidden';
+        const goalList = document.createElement('goal-list');
+        goalList.id = 'goals-list';
+        this.createBtn = document.createElement('button');
+        this.createBtn.className = 'fab';
+        this.createBtn.title = 'New Goal';
+        this.createBtn.textContent = '+';
+        container.appendChild(header);
+        container.appendChild(this.errorMessage);
+        container.appendChild(goalList);
+        container.appendChild(this.createBtn);
         this.loadingIndicator = document.getElementById('loading-indicator');
-        this.errorMessage = document.getElementById('error-message');
-        this.createBtn = document.getElementById('create-goal-btn');
-        this.navigator = new GoalNavigator();
+        this.navigator = new GoalNavigator(goalList, header);
         this.dialogController = new GoalDialogController(() => this.refreshGoals());
         this.initEvents();
     }
     initEvents() {
-        this.createBtn?.addEventListener('click', () => {
+        this.createBtn.addEventListener('click', () => {
             this.dialogController.openGoalDialog(null, this.navigator.currentParentId);
         });
         // Event Delegation from Web Components
@@ -83,19 +71,15 @@ export class GoalRenderer {
             this.hideLoading();
         }
     }
-    // Public API for main.ts
     renderGoals(goals) {
         this.navigator.renderGoals(goals);
     }
     showError(msg) {
-        if (this.errorMessage) {
-            this.errorMessage.textContent = msg;
-            this.errorMessage.classList.remove('hidden');
-        }
+        this.errorMessage.textContent = msg;
+        this.errorMessage.classList.remove('hidden');
     }
     hideError() {
-        if (this.errorMessage)
-            this.errorMessage.classList.add('hidden');
+        this.errorMessage.classList.add('hidden');
     }
     showLoading() {
         this.loadingIndicator?.classList.remove('hidden');

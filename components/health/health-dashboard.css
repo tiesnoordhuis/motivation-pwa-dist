@@ -5,6 +5,8 @@
     --health-color-dark: #d4ac0d;
 }
 
+[hidden] { display: none !important; }
+
 .health-dashboard {
     display: flex;
     flex-direction: column;
@@ -63,7 +65,8 @@
     gap: 0.5rem;
 }
 
-.activity-item {
+/* Activity item — light DOM custom element styled here */
+health-activity-item {
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -73,7 +76,7 @@
     transition: transform 0.15s;
 }
 
-.activity-item:active {
+health-activity-item:active {
     transform: scale(0.98);
 }
 
@@ -121,8 +124,8 @@
     flex-shrink: 0;
 }
 
-/* Upcoming events */
-.upcoming-item {
+/* Upcoming item — light DOM custom element styled here */
+health-upcoming-item {
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -180,6 +183,7 @@
     color: var(--text-color, #000);
     opacity: 0.5;
     font-size: 0.9rem;
+    margin: 0;
 }
 
 /* Loading & Error */
@@ -370,7 +374,7 @@
         background: rgba(241, 196, 15, 0.1);
     }
 
-    .activity-item {
+    health-activity-item {
         color: var(--text-color, #fff);
     }
 

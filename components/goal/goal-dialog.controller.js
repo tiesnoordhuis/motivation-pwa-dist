@@ -1,4 +1,4 @@
-import { GoalService } from '../services/goal.service.js';
+import { GoalService } from '../../services/goal.service.js';
 export class GoalDialogController {
     goalDialog;
     goalForm;

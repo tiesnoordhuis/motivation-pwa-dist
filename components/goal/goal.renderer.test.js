@@ -7,14 +7,8 @@ test('GoalRenderer', async (t) => {
 <!DOCTYPE html>
 <html>
 <body>
-    <div class="actions">
-       <goal-header-card id="goal-header"></goal-header-card>
-    </div>
     <div id="loading-indicator" class="hidden">Loading...</div>
-    <p id="error-message" class="hidden"></p>
-    
-    <button id="create-goal-btn">New</button>
-    <goal-list id="goals-list"></goal-list>
+    <div id="goals-view"></div>
 
     <dialog id="goal-dialog">
         <form id="goal-form">
@@ -87,8 +81,8 @@ test('GoalRenderer', async (t) => {
     });
     await t.test('renderGoals handles empty list', () => {
         setupDOM();
-        const list = document.getElementById('goals-list');
         const renderer = new GoalRenderer();
+        const list = document.getElementById('goals-list');
         renderer.renderGoals([]);
         assert.strictEqual(list.goals.length, 0);
     });

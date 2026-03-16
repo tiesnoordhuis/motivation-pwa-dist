@@ -8,16 +8,16 @@ template.innerHTML = `
             <div class="search-bar">
                 <input type="text" id="search-input" placeholder="Search for food…">
             </div>
-            <div id="search-loading" class="loading-text" style="display:none">Searching…</div>
-            <div id="search-error" class="error-text" style="display:none"></div>
+            <div id="search-loading" class="loading-text" hidden>Searching…</div>
+            <div id="search-error" class="error-text" hidden></div>
             <div id="search-results" class="search-results"></div>
         </div>
 
         <!-- Product detail / log view -->
-        <div id="detail-view" style="display:none">
+        <div id="detail-view" hidden>
             <div class="product-detail">
                 <div class="product-header">
-                    <img id="product-image" class="product-image" style="display:none" alt="">
+                    <img id="product-image" class="product-image" hidden alt="">
                     <div class="product-info">
                         <h3 id="product-name"></h3>
                         <div class="brand" id="product-brand"></div>
@@ -90,7 +90,7 @@ template.innerHTML = `
             </div>
         </div>
 
-        <div id="lookup-loading" class="loading-text" style="display:none">Looking up product…</div>
+        <div id="lookup-loading" class="loading-text" hidden>Looking up product…</div>
     </div>
 `;
 export class FoodLog extends HTMLElement {
@@ -108,23 +108,18 @@ export class FoodLog extends HTMLElement {
     }
     connectedCallback() {
         const shadow = this.shadowRoot;
-        // Search input with debounce
         const searchInput = shadow.getElementById('search-input');
         searchInput.addEventListener('input', () => {
             if (this._searchTimeout)
                 clearTimeout(this._searchTimeout);
             this._searchTimeout = setTimeout(() => this.performSearch(searchInput.value.trim()), 300);
         });
-        // Serving size change — listen to both input and change for mobile number steppers
         const servingInput = shadow.getElementById('serving-size');
         servingInput.addEventListener('input', () => this.updateServingDisplay());
         servingInput.addEventListener('change', () => this.updateServingDisplay());
-        // Step up/down buttons with adaptive increments
         shadow.getElementById('step-down').addEventListener('click', () => this.adjustServing(-1));
         shadow.getElementById('step-up').addEventListener('click', () => this.adjustServing(1));
-        // Log button
         shadow.getElementById('log-btn').addEventListener('click', () => this.handleLog());
-        // Back button
         shadow.getElementById('back-btn').addEventListener('click', () => {
             this.showSearchView();
             if (this._onBack)
@@ -137,58 +132,54 @@ export class FoodLog extends HTMLElement {
     set onBack(handler) {
         this._onBack = handler;
     }
-    /** Look up a barcode and show the product detail view */
     async lookupBarcode(barcode) {
         const shadow = this.shadowRoot;
-        shadow.getElementById('search-view').style.display = 'none';
-        shadow.getElementById('detail-view').style.display = 'none';
-        shadow.getElementById('lookup-loading').style.display = '';
+        shadow.getElementById('search-view').hidden = true;
+        shadow.getElementById('detail-view').hidden = true;
+        shadow.getElementById('lookup-loading').hidden = false;
         const product = await OpenFoodFactsService.lookupBarcode(barcode);
-        shadow.getElementById('lookup-loading').style.display = 'none';
+        shadow.getElementById('lookup-loading').hidden = true;
         if (product) {
             this.showProduct(product);
         }
         else {
-            // Product not found — show search view with message
-            shadow.getElementById('search-view').style.display = '';
+            shadow.getElementById('search-view').hidden = false;
             const errorEl = shadow.getElementById('search-error');
             errorEl.textContent = `Product not found for barcode ${barcode}. Try searching by name.`;
-            errorEl.style.display = '';
+            errorEl.hidden = false;
         }
     }
     showProduct(product) {
         this._product = product;
         const shadow = this.shadowRoot;
-        shadow.getElementById('search-view').style.display = 'none';
-        shadow.getElementById('lookup-loading').style.display = 'none';
-        shadow.getElementById('detail-view').style.display = '';
+        shadow.getElementById('search-view').hidden = true;
+        shadow.getElementById('lookup-loading').hidden = true;
+        shadow.getElementById('detail-view').hidden = false;
         shadow.getElementById('product-name').textContent = product.product_name;
         shadow.getElementById('product-brand').textContent = product.brands ?? '';
         const img = shadow.getElementById('product-image');
         if (product.image_url) {
             img.src = product.image_url;
-            img.style.display = '';
+            img.hidden = false;
         }
         else {
-            img.style.display = 'none';
+            img.hidden = true;
         }
         shadow.getElementById('cal-100').textContent = String(product.calories_per_100g);
         shadow.getElementById('protein-100').textContent = String(product.protein_per_100g);
         shadow.getElementById('carbs-100').textContent = String(product.carbs_per_100g);
         shadow.getElementById('fat-100').textContent = String(product.fat_per_100g);
-        // Smart default serving size
         this._defaultGrams = OpenFoodFactsService.getDefaultServing(product);
         const servingInput = shadow.getElementById('serving-size');
         servingInput.value = String(this._defaultGrams);
-        // Render portion presets
         this.renderPortionPresets();
         this.updateServingDisplay();
     }
     showSearchView() {
         const shadow = this.shadowRoot;
-        shadow.getElementById('search-view').style.display = '';
-        shadow.getElementById('detail-view').style.display = 'none';
-        shadow.getElementById('lookup-loading').style.display = 'none';
+        shadow.getElementById('search-view').hidden = false;
+        shadow.getElementById('detail-view').hidden = true;
+        shadow.getElementById('lookup-loading').hidden = true;
         this._product = null;
     }
     updateServingDisplay() {
@@ -214,7 +205,7 @@ export class FoodLog extends HTMLElement {
     renderPortionPresets() {
         const shadow = this.shadowRoot;
         const container = shadow.getElementById('portion-presets');
-        container.innerHTML = '';
+        container.replaceChildren();
         const presets = OpenFoodFactsService.getPortionPresets(this._defaultGrams);
         for (const preset of presets) {
             const btn = document.createElement('button');
@@ -247,31 +238,41 @@ export class FoodLog extends HTMLElement {
         if (query.length < 2)
             return;
         const shadow = this.shadowRoot;
-        shadow.getElementById('search-loading').style.display = '';
-        shadow.getElementById('search-error').style.display = 'none';
-        shadow.getElementById('search-results').innerHTML = '';
+        shadow.getElementById('search-loading').hidden = false;
+        shadow.getElementById('search-error').hidden = true;
+        shadow.getElementById('search-results').replaceChildren();
         const seq = ++this._searchSeq;
         try {
             const results = await OpenFoodFactsService.searchFood(query);
-            // Discard stale results if a newer search was fired
             if (seq !== this._searchSeq)
                 return;
-            shadow.getElementById('search-loading').style.display = 'none';
+            shadow.getElementById('search-loading').hidden = true;
             const container = shadow.getElementById('search-results');
             if (results.length === 0) {
-                container.innerHTML = '<div class="empty-state">No products found</div>';
+                const empty = document.createElement('p');
+                empty.className = 'empty-state';
+                empty.textContent = 'No products found';
+                container.appendChild(empty);
                 return;
             }
             for (const product of results) {
                 const item = document.createElement('div');
                 item.className = 'search-result-item';
-                item.innerHTML = `
-                    <div class="result-info">
-                        <div class="result-name">${this.escapeHtml(product.product_name)}</div>
-                        <div class="result-brand">${this.escapeHtml(product.brands ?? '')}</div>
-                    </div>
-                    <div class="result-cal">${product.calories_per_100g} kcal</div>
-                `;
+                const info = document.createElement('div');
+                info.className = 'result-info';
+                const name = document.createElement('div');
+                name.className = 'result-name';
+                name.textContent = product.product_name;
+                const brand = document.createElement('div');
+                brand.className = 'result-brand';
+                brand.textContent = product.brands ?? '';
+                const cal = document.createElement('div');
+                cal.className = 'result-cal';
+                cal.textContent = `${product.calories_per_100g} kcal`;
+                info.appendChild(name);
+                info.appendChild(brand);
+                item.appendChild(info);
+                item.appendChild(cal);
                 item.addEventListener('click', () => this.showProduct(product));
                 container.appendChild(item);
             }
@@ -279,16 +280,11 @@ export class FoodLog extends HTMLElement {
         catch {
             if (seq !== this._searchSeq)
                 return;
-            shadow.getElementById('search-loading').style.display = 'none';
+            shadow.getElementById('search-loading').hidden = true;
             const errorEl = shadow.getElementById('search-error');
             errorEl.textContent = 'Search failed. Please try again.';
-            errorEl.style.display = '';
+            errorEl.hidden = false;
         }
-    }
-    escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
     }
 }
 customElements.define('food-log', FoodLog);

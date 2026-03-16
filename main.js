@@ -1,21 +1,29 @@
 import { Router } from './router.js';
 import { registerServiceWorker } from './services/service-worker.service.js';
-import { homeRoutes } from './renderers/home.renderer.js';
-import { goalRoutes } from './renderers/goal.renderer.js';
-import { agendaRoutes } from './renderers/agenda.renderer.js';
-import { healthRoutes } from './renderers/health.renderer.js';
-import { socialRoutes } from './renderers/social.renderer.js';
-import { vietnameseRoutes } from './renderers/vietnamese.renderer.js';
-import { projectsRoutes } from './renderers/projects.renderer.js';
-import { todoRoutes } from './renderers/todo.renderer.js';
+import { homeRoutes } from './components/home/home.routes.js';
+import { goalRoutes } from './components/goal/goal.routes.js';
+import { agendaRoutes } from './components/agenda/agenda.routes.js';
+import { healthRoutes } from './components/health/health.routes.js';
+import { socialRoutes } from './components/social/social.routes.js';
+import { vietnameseRoutes } from './components/vietnamese/vietnamese.routes.js';
+import { projectsRoutes } from './components/projects/projects.routes.js';
+import { extraRoutes } from './components/extra/extra.routes.js';
 // Side-effect imports: register custom elements via customElements.define().
+import './components/home/section-card.component.js';
+import './components/home/health-section-card.component.js';
+import './components/home/social-section-card.component.js';
+import './components/home/learn-section-card.component.js';
+import './components/home/projects-section-card.component.js';
+import './components/home/home-footer.component.js';
+import './components/home/home-screen.component.js';
 import './components/goal/goal-item.component.js';
 import './components/goal/goal-list.component.js';
 import './components/goal/goal-header-card.component.js';
 import './components/agenda/agenda-item.component.js';
 import './components/agenda/agenda-list.component.js';
-import './components/home/section-card.component.js';
 import './components/health/health-dashboard.component.js';
+import './components/health/sub/health-activity-item.component.js';
+import './components/health/sub/health-upcoming-item.component.js';
 import './components/health/barcode-scanner.component.js';
 import './components/health/food-log.component.js';
 import './components/health/nutrition-widget.component.js';
@@ -49,8 +57,7 @@ const router = new Router({
         ...socialRoutes(),
         ...vietnameseRoutes(),
         ...projectsRoutes(),
-        ...todoRoutes(),
+        ...extraRoutes(),
     },
-    fallback: '#/',
 });
 router.start();

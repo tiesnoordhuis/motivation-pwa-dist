@@ -5,6 +5,8 @@
     --health-color-dark: #d4ac0d;
 }
 
+[hidden] { display: none !important; }
+
 .food-log-container {
     display: flex;
     flex-direction: column;

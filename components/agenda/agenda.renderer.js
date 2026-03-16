@@ -1,17 +1,4 @@
-import { AgendaService } from '../services/agenda.service.js';
-let instance = null;
-export function agendaRoutes() {
-    return {
-        '#/agenda': {
-            view: '#agenda-view',
-            init: async () => {
-                instance = new AgendaRenderer();
-                await instance.init();
-            },
-            onEnter: async () => { await instance?.init(); },
-        },
-    };
-}
+import { AgendaService } from '../../services/agenda.service.js';
 export class AgendaRenderer {
     container;
     agendaList;
@@ -40,20 +27,20 @@ export class AgendaRenderer {
     showLoading() {
         const loader = document.getElementById('loading-indicator');
         if (loader)
-            loader.classList.remove('hidden');
+            loader.hidden = false;
     }
     hideLoading() {
         const loader = document.getElementById('loading-indicator');
         if (loader)
-            loader.classList.add('hidden');
+            loader.hidden = true;
     }
     showError(message) {
         const errorElement = document.getElementById('error-message');
         if (errorElement) {
             errorElement.textContent = message;
-            errorElement.classList.remove('hidden');
+            errorElement.hidden = false;
             setTimeout(() => {
-                errorElement.classList.add('hidden');
+                errorElement.hidden = true;
             }, 5000);
         }
     }

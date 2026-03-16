@@ -1,5 +1,6 @@
 import { HealthService } from '../../services/health.service.js';
 import { buildSectionPage } from '../../utils/section-page.utils.js';
+import { navigate } from '../../router.js';
 export class HealthRenderer {
     content;
     dashboard;
@@ -20,9 +21,9 @@ export class HealthRenderer {
                 this.dashboard.showError('Failed to save activity.');
             }
         };
-        this.dashboard.onScanBarcode = () => { window.location.hash = '#/health/scanner'; };
-        this.dashboard.onSearchFood = () => { window.location.hash = '#/health/food-search'; };
-        this.dashboard.onAiEstimate = () => { window.location.hash = '#/health/ai-estimate'; };
+        this.dashboard.onScanBarcode = () => { navigate('#/health/scanner'); };
+        this.dashboard.onSearchFood = () => { navigate('#/health/food-search'); };
+        this.dashboard.onAiEstimate = () => { navigate('#/health/ai-estimate'); };
     }
     showDashboard() {
         this.cleanUpSubViews();
@@ -45,7 +46,7 @@ export class HealthRenderer {
                     date: Temporal.Now.plainDateISO().toString(),
                     ...entry,
                 });
-                window.location.hash = '#/health';
+                navigate('#/health');
             }
             catch (err) {
                 console.error('Failed to log nutrition', err);
@@ -69,7 +70,7 @@ export class HealthRenderer {
         aiEstimate.onLog = async (entry) => {
             try {
                 await HealthService.createNutritionEntry(entry);
-                window.location.hash = '#/health';
+                navigate('#/health');
             }
             catch (err) {
                 console.error('Failed to log AI nutrition estimate', err);
@@ -87,7 +88,7 @@ export class HealthRenderer {
                     date: Temporal.Now.plainDateISO().toString(),
                     ...entry,
                 });
-                window.location.hash = '#/health';
+                navigate('#/health');
             }
             catch (err) {
                 console.error('Failed to log nutrition', err);
@@ -109,7 +110,7 @@ export class HealthRenderer {
         };
         detail.onAddFood = (d, meal) => {
             // Navigate to food search, potentially passing meal/date context in future
-            window.location.hash = '#/health/food-search';
+            navigate('#/health/food-search');
         };
         this.content.appendChild(detail);
         const currentLoad = ++this.loadSequence;

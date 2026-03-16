@@ -1,6 +1,7 @@
 import styles from './health-dashboard.css' with { type: 'css' };
 import '../health-timeline/health-timeline.component.js';
 import '../calorie-trend-chart/calorie-trend-chart.component.js';
+import { navigate } from '../../../router.js';
 function getStartOfWeek() {
     const today = Temporal.Now.plainDateISO();
     return today.subtract({ days: today.dayOfWeek - 1 });
@@ -110,7 +111,7 @@ export class HealthDashboard extends HTMLElement {
             if (target.matches('timeline-day')) {
                 const date = target.dayData?.date;
                 if (date) {
-                    window.location.hash = `#/health/day/${date}`;
+                    navigate(`#/health/day/${date}`);
                 }
             }
             else if (target.matches('.fab-mini') || target.closest('.fab-mini')) {

@@ -3,6 +3,7 @@ import '../activity-card/activity-card.component.js';
 import '../nutrition-card/nutrition-card.component.js';
 import { ActivityCard } from '../activity-card/activity-card.component.js';
 import { NutritionCard } from '../nutrition-card/nutrition-card.component.js';
+import { navigate } from '../../../../router.js';
 const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const template = document.createElement('template');
@@ -34,7 +35,7 @@ export class TimelineDay extends HTMLElement {
                 this._onDayClick(this._data.date);
             }
             else if (this._data) {
-                window.location.hash = `#/health/day/${this._data.date}`;
+                navigate(`#/health/day/${this._data.date}`);
             }
         });
     }

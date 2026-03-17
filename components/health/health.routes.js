@@ -1,4 +1,5 @@
 import { HealthRenderer } from './health.renderer.js';
+import { navigate } from '../../router.js';
 let instance = null;
 export function healthRoutes() {
     return {
@@ -34,7 +35,7 @@ export function healthRoutes() {
                     await instance?.showDayDetail(params.date);
                 }
                 else {
-                    window.location.hash = '#/health';
+                    navigate('#/health');
                 }
             },
         },

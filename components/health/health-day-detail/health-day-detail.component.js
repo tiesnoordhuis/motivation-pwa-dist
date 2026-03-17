@@ -1,6 +1,7 @@
 import styles from './health-day-detail.css' with { type: 'css' };
 import { MEAL_TYPES } from '@motivation/shared';
 import './activity-detail-card.component.js';
+import { navigate } from '../../../router.js';
 const template = document.createElement('template');
 template.innerHTML = `
     <div class="day-detail-container">
@@ -101,13 +102,13 @@ export class HealthDayDetail extends HTMLElement {
             if (!this._dateStr)
                 return;
             const prevDay = Temporal.PlainDate.from(this._dateStr).subtract({ days: 1 }).toString();
-            window.location.hash = `#/health/day/${prevDay}`;
+            navigate(`#/health/day/${prevDay}`);
         });
         shadow.getElementById('next-btn').addEventListener('click', () => {
             if (!this._dateStr)
                 return;
             const nextDay = Temporal.PlainDate.from(this._dateStr).add({ days: 1 }).toString();
-            window.location.hash = `#/health/day/${nextDay}`;
+            navigate(`#/health/day/${nextDay}`);
         });
         shadow.getElementById('add-workout-btn').addEventListener('click', () => {
             if (this._onAddWorkout && this._dateStr)

@@ -225,7 +225,7 @@ export class ServerStatusPill extends HTMLElement {
         }
     }
     renderActions() {
-        this.actionsEl.innerHTML = '';
+        this.actionsEl.replaceChildren();
         if (this.stage === 'unreachable') {
             const p = document.createElement('p');
             p.style.cssText = 'margin:0;font-size:0.85rem;opacity:0.5;text-align:center';
@@ -275,7 +275,7 @@ export class ServerStatusPill extends HTMLElement {
         return btn;
     }
     renderCredentialSection() {
-        this.credentialContent.innerHTML = '';
+        this.credentialContent.replaceChildren();
         if (this.hasCredential) {
             const row = document.createElement('div');
             row.className = 'credential-row';
@@ -330,7 +330,7 @@ export class ServerStatusPill extends HTMLElement {
     }
     // ── Connected Services ──────────────────────────────────────────────────
     renderServicesSection() {
-        this.servicesContent.innerHTML = '';
+        this.servicesContent.replaceChildren();
         const row = document.createElement('div');
         row.className = 'service-row';
         const left = document.createElement('div');

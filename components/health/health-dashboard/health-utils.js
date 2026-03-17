@@ -17,3 +17,13 @@ export function formatTime(isoStr) {
     const zdt = Temporal.Instant.from(isoStr).toZonedDateTimeISO(Temporal.Now.timeZoneId());
     return zdt.toLocaleString(undefined, { hour: '2-digit', minute: '2-digit' });
 }
+export function getDefaultMealType() {
+    const hour = new Date().getHours();
+    if (hour < 11)
+        return 'Breakfast';
+    if (hour < 15)
+        return 'Lunch';
+    if (hour < 21)
+        return 'Dinner';
+    return 'Snacks';
+}

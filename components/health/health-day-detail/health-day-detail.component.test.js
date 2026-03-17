@@ -70,4 +70,50 @@ test('HealthDayDetail Component', async (t) => {
             lunchBtn.click();
         });
     });
+    await t.test('fires edit food event when food item is clicked', () => {
+        return new Promise((resolve) => {
+            const el = new HealthDayDetail();
+            const testEntry = {
+                id: 42,
+                date: '2026-03-14',
+                meal_type: 'Lunch',
+                food_name: 'Salad',
+                calories: 300,
+                source: 'manual',
+                created_at: '2026-03-14T12:00:00Z',
+            };
+            el.nutrition = [testEntry];
+            el.onEditFood = (entry) => {
+                assert.strictEqual(entry.id, 42);
+                assert.strictEqual(entry.food_name, 'Salad');
+                resolve();
+            };
+            const foodItem = el.shadowRoot.querySelector('.food-item');
+            assert.ok(foodItem, 'Food item should exist');
+            foodItem.click();
+        });
+    });
+    await t.test('fires edit workout event when manual activity card is clicked', () => {
+        return new Promise((resolve) => {
+            const el = new HealthDayDetail();
+            const testActivity = {
+                id: 'act-1',
+                type: 'running',
+                source: 'manual',
+                title: 'Morning run',
+                date: '2026-03-14',
+                created_at: '2026-03-14T08:00:00Z',
+                updated_at: '2026-03-14T08:00:00Z',
+            };
+            el.activities = [testActivity];
+            el.onEditWorkout = (activity) => {
+                assert.strictEqual(activity.id, 'act-1');
+                assert.strictEqual(activity.title, 'Morning run');
+                resolve();
+            };
+            const card = el.shadowRoot.querySelector('activity-detail-card');
+            assert.ok(card, 'Activity card should exist');
+            card.click();
+        });
+    });
 });

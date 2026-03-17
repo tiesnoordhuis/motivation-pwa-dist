@@ -1,5 +1,7 @@
 import styles from './food-log.css' with { type: 'css' };
+import { MEAL_TYPES } from '@motivation/shared';
 import { OpenFoodFactsService } from '../../../services/openfoodfacts.service.js';
+import { getDefaultMealType } from '../health-dashboard/health-utils.js';
 const template = document.createElement('template');
 template.innerHTML = `
     <div class="food-log-container">
@@ -56,10 +58,7 @@ template.innerHTML = `
                     <div class="form-group">
                         <label for="meal-type">Meal</label>
                         <select id="meal-type">
-                            <option value="Breakfast">Breakfast</option>
-                            <option value="Lunch">Lunch</option>
-                            <option value="Dinner">Dinner</option>
-                            <option value="Snacks">Snacks</option>
+                            ${MEAL_TYPES.map(m => `<option value="${m}">${m}</option>`).join('\n                            ')}
                         </select>
                     </div>
                 </div>
@@ -172,6 +171,8 @@ export class FoodLog extends HTMLElement {
         this._defaultGrams = OpenFoodFactsService.getDefaultServing(product);
         const servingInput = shadow.getElementById('serving-size');
         servingInput.value = String(this._defaultGrams);
+        // Auto-select meal type based on time of day
+        shadow.getElementById('meal-type').value = getDefaultMealType();
         this.renderPortionPresets();
         this.updateServingDisplay();
     }

@@ -29,14 +29,14 @@ export class AgendaItem extends HTMLElement {
     formatTime(dateString) {
         if (!dateString)
             return '';
-        const date = new Date(dateString);
-        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const zdt = Temporal.Instant.from(dateString).toZonedDateTimeISO(Temporal.Now.timeZoneId());
+        return zdt.toLocaleString(undefined, { hour: '2-digit', minute: '2-digit' });
     }
     formatDate(dateString) {
         if (!dateString)
             return '';
-        const date = new Date(dateString);
-        return date.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+        const zdt = Temporal.Instant.from(dateString).toZonedDateTimeISO(Temporal.Now.timeZoneId());
+        return zdt.toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
     }
     update() {
         const shadow = this.shadowRoot;

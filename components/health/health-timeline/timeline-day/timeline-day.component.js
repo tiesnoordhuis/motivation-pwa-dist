@@ -3,9 +3,6 @@ import '../activity-card/activity-card.component.js';
 import '../nutrition-card/nutrition-card.component.js';
 import { ActivityCard } from '../activity-card/activity-card.component.js';
 import { NutritionCard } from '../nutrition-card/nutrition-card.component.js';
-import { navigate } from '../../../../router.js';
-const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const template = document.createElement('template');
 template.innerHTML = `
     <div class="timeline-day" id="day-container">
@@ -35,7 +32,7 @@ export class TimelineDay extends HTMLElement {
                 this._onDayClick(this._data.date);
             }
             else if (this._data) {
-                navigate(`#/health/day/${this._data.date}`);
+                window.location.hash = `#/health/day/${this._data.date}`;
             }
         });
     }
@@ -49,7 +46,7 @@ export class TimelineDay extends HTMLElement {
     formatDateHeader(dateStr) {
         const d = Temporal.PlainDate.from(dateStr);
         const today = Temporal.Now.plainDateISO();
-        const dateValue = `${d.day} ${MONTHS[d.month - 1]}`;
+        const dateValue = d.toLocaleString(undefined, { day: 'numeric', month: 'short' });
         if (d.equals(today)) {
             return { label: 'Today', value: dateValue };
         }
@@ -57,8 +54,7 @@ export class TimelineDay extends HTMLElement {
         if (d.equals(yesterday)) {
             return { label: 'Yesterday', value: dateValue };
         }
-        const jsDayOfWeek = d.dayOfWeek === 7 ? 0 : d.dayOfWeek;
-        return { label: WEEKDAYS[jsDayOfWeek], value: dateValue };
+        return { label: d.toLocaleString(undefined, { weekday: 'long' }), value: dateValue };
     }
     render() {
         if (!this._data)

@@ -27,6 +27,17 @@ export class HealthService {
             throw new Error(`Failed to delete activity: ${response.statusText}`);
         }
     }
+    static async updateActivity(id, updates) {
+        const response = await fetch(`${API_URL}/api/sections/health/activities/${id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updates),
+        });
+        if (!response.ok) {
+            throw new Error(`Failed to update activity: ${response.statusText}`);
+        }
+        return response.json();
+    }
     // --- Nutrition ---
     static async fetchNutritionByDate(date) {
         const response = await fetch(`${API_URL}/api/sections/health/nutrition?date=${date}`);
@@ -67,6 +78,17 @@ export class HealthService {
         if (!response.ok) {
             throw new Error(`Failed to delete nutrition entry: ${response.statusText}`);
         }
+    }
+    static async updateNutritionEntry(id, updates) {
+        const response = await fetch(`${API_URL}/api/sections/health/nutrition/${id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updates),
+        });
+        if (!response.ok) {
+            throw new Error(`Failed to update nutrition entry: ${response.statusText}`);
+        }
+        return response.json();
     }
     // --- AI Estimation ---
     static async estimateNutrition(description, image) {

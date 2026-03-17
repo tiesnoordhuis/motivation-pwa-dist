@@ -1,15 +1,14 @@
 import styles from './calorie-trend-chart.css' with { type: 'css' };
-const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const template = document.createElement('template');
 template.innerHTML = `
     <div class="trend-container" id="trend-section">
         <div class="trend-chart" id="trend-chart">
-            <div class="target-line" id="target-line" style="display:none">
+            <div class="target-line" id="target-line" hidden>
                 <span class="target-label" id="target-label"></span>
             </div>
             <div class="trend-bars" id="trend-bars"></div>
         </div>
-        <div id="empty-state" class="empty-state" style="display:none">
+        <div id="empty-state" class="empty-state" hidden>
             No nutrition data yet.
         </div>
     </div>
@@ -43,15 +42,11 @@ export class CalorieTrendChart extends HTMLElement {
         const calByDate = new Map(summaries.map(s => [s.date, s.total_calories]));
         const days = [];
         for (let i = 6; i >= 0; i--) {
-            // Replaced JS Date Date with Temporal for correct TZ handling if required
             const d = Temporal.Now.plainDateISO().subtract({ days: i });
             const dateStr = d.toString();
-            // Temporal dayOfWeek is 1-7
-            const dayOfWeek = d.dayOfWeek === 7 ? 0 : d.dayOfWeek;
-            const label = WEEKDAYS[dayOfWeek === 0 ? 6 : dayOfWeek - 1];
             days.push({
                 date: dateStr,
-                dayLabel: label,
+                dayLabel: d.toLocaleString(undefined, { weekday: 'short' }),
                 calories: calByDate.get(dateStr) ?? 0,
             });
         }
@@ -63,7 +58,7 @@ export class CalorieTrendChart extends HTMLElement {
         const targetPercent = (this._calorieTarget / chartCeiling) * 100;
         targetLine.style.bottom = `${targetPercent}%`;
         targetLabel.textContent = `${this._calorieTarget}`;
-        targetLine.style.display = '';
+        targetLine.hidden = false;
         for (const day of days) {
             const wrapper = document.createElement('div');
             wrapper.className = 'trend-bar-wrapper';

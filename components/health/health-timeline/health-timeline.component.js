@@ -69,7 +69,7 @@ export class HealthTimeline extends HTMLElement {
         // Wait for both data sources (or decide how to handle partial)
         const merged = mergeTimelineData(this._activities, this._nutrition);
         const container = this.shadowRoot.getElementById('timeline-list');
-        container.innerHTML = '';
+        container.replaceChildren();
         // Generate date sequence from newest to oldest
         if (merged.size === 0)
             return;
@@ -85,7 +85,7 @@ export class HealthTimeline extends HTMLElement {
         }
         while (Temporal.PlainDate.compare(currentIter, oldestDataDate) >= 0) {
             const dateStr = currentIter.toString();
-            const dayData = merged.get(dateStr) || { date: dateStr, activities: [], nutrition: [] };
+            const dayData = merged.get(dateStr) ?? { date: dateStr, activities: [], nutrition: [] };
             const dayElement = document.createElement('timeline-day');
             dayElement.dayData = dayData;
             container.appendChild(dayElement);

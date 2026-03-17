@@ -60,10 +60,10 @@ export class GoalHeaderCard extends HTMLElement {
         if (!card)
             return;
         if (!this.dataset.goalId) {
-            card.style.display = 'none';
+            card.hidden = true;
             return;
         }
-        card.style.display = '';
+        card.hidden = false;
         shadow.getElementById('title').textContent = this.dataset.title ?? '';
         shadow.getElementById('title').style.viewTransitionName = `title-${this.dataset.goalId}`;
         shadow.getElementById('description').textContent = this.dataset.description ?? '';

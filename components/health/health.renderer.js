@@ -1,6 +1,5 @@
 import { HealthService } from '../../services/health.service.js';
 import { buildSectionPage } from '../../utils/section-page.utils.js';
-import { navigate } from '../../router.js';
 export class HealthRenderer {
     content;
     dashboard;
@@ -21,9 +20,9 @@ export class HealthRenderer {
                 this.dashboard.showError('Failed to save activity.');
             }
         };
-        this.dashboard.onScanBarcode = () => { navigate('#/health/scanner'); };
-        this.dashboard.onSearchFood = () => { navigate('#/health/food-search'); };
-        this.dashboard.onAiEstimate = () => { navigate('#/health/ai-estimate'); };
+        this.dashboard.onScanBarcode = () => { window.location.hash = '#/health/scanner'; };
+        this.dashboard.onSearchFood = () => { window.location.hash = '#/health/food-search'; };
+        this.dashboard.onAiEstimate = () => { window.location.hash = '#/health/ai-estimate'; };
     }
     showDashboard() {
         this.cleanUpSubViews();
@@ -46,7 +45,7 @@ export class HealthRenderer {
                     date: Temporal.Now.plainDateISO().toString(),
                     ...entry,
                 });
-                navigate('#/health');
+                window.location.hash = '#/health';
             }
             catch (err) {
                 console.error('Failed to log nutrition', err);
@@ -70,7 +69,7 @@ export class HealthRenderer {
         aiEstimate.onLog = async (entry) => {
             try {
                 await HealthService.createNutritionEntry(entry);
-                navigate('#/health');
+                window.location.hash = '#/health';
             }
             catch (err) {
                 console.error('Failed to log AI nutrition estimate', err);
@@ -88,7 +87,7 @@ export class HealthRenderer {
                     date: Temporal.Now.plainDateISO().toString(),
                     ...entry,
                 });
-                navigate('#/health');
+                window.location.hash = '#/health';
             }
             catch (err) {
                 console.error('Failed to log nutrition', err);
@@ -110,7 +109,59 @@ export class HealthRenderer {
         };
         detail.onAddFood = (d, meal) => {
             // Navigate to food search, potentially passing meal/date context in future
-            navigate('#/health/food-search');
+            window.location.hash = '#/health/food-search';
+        };
+        detail.onEditFood = (entry) => {
+            detail.hidden = true;
+            const editor = document.createElement('nutrition-edit');
+            editor.entry = entry;
+            editor.onSave = async (id, updates) => {
+                try {
+                    await HealthService.updateNutritionEntry(id, updates);
+                    editor.remove();
+                    await this.showDayDetail(dateStr);
+                }
+                catch (err) {
+                    console.error('Failed to update nutrition entry', err);
+                }
+            };
+            editor.onDelete = async (id) => {
+                try {
+                    await HealthService.deleteNutritionEntry(id);
+                    editor.remove();
+                    await this.showDayDetail(dateStr);
+                }
+                catch (err) {
+                    console.error('Failed to delete nutrition entry', err);
+                }
+            };
+            this.content.appendChild(editor);
+        };
+        detail.onEditWorkout = (activity) => {
+            detail.hidden = true;
+            const editor = document.createElement('activity-edit');
+            editor.activity = activity;
+            editor.onSave = async (id, updates) => {
+                try {
+                    await HealthService.updateActivity(id, updates);
+                    editor.remove();
+                    await this.showDayDetail(dateStr);
+                }
+                catch (err) {
+                    console.error('Failed to update activity', err);
+                }
+            };
+            editor.onDelete = async (id) => {
+                try {
+                    await HealthService.deleteActivity(id);
+                    editor.remove();
+                    await this.showDayDetail(dateStr);
+                }
+                catch (err) {
+                    console.error('Failed to delete activity', err);
+                }
+            };
+            this.content.appendChild(editor);
         };
         this.content.appendChild(detail);
         const currentLoad = ++this.loadSequence;
@@ -176,6 +227,8 @@ export class HealthRenderer {
         this.content.querySelectorAll('food-log').forEach(el => el.remove());
         this.content.querySelectorAll('ai-estimate').forEach(el => el.remove());
         this.content.querySelectorAll('health-day-detail').forEach(el => el.remove());
+        this.content.querySelectorAll('nutrition-edit').forEach(el => el.remove());
+        this.content.querySelectorAll('activity-edit').forEach(el => el.remove());
     }
     cleanup() {
         this.cleanUpSubViews();

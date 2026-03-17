@@ -1,6 +1,6 @@
 import styles from './health-day-detail.css' with { type: 'css' };
+import { MEAL_TYPES } from '@motivation/shared';
 import './activity-detail-card.component.js';
-import { navigate } from '../../../router.js';
 const template = document.createElement('template');
 template.innerHTML = `
     <div class="day-detail-container">
@@ -90,6 +90,8 @@ export class HealthDayDetail extends HTMLElement {
     // Handlers
     _onAddWorkout = null;
     _onAddFood = null;
+    _onEditFood = null;
+    _onEditWorkout = null;
     constructor() {
         super();
         const shadow = this.attachShadow({ mode: 'open' });
@@ -99,13 +101,13 @@ export class HealthDayDetail extends HTMLElement {
             if (!this._dateStr)
                 return;
             const prevDay = Temporal.PlainDate.from(this._dateStr).subtract({ days: 1 }).toString();
-            navigate(`#/health/day/${prevDay}`);
+            window.location.hash = `#/health/day/${prevDay}`;
         });
         shadow.getElementById('next-btn').addEventListener('click', () => {
             if (!this._dateStr)
                 return;
             const nextDay = Temporal.PlainDate.from(this._dateStr).add({ days: 1 }).toString();
-            navigate(`#/health/day/${nextDay}`);
+            window.location.hash = `#/health/day/${nextDay}`;
         });
         shadow.getElementById('add-workout-btn').addEventListener('click', () => {
             if (this._onAddWorkout && this._dateStr)
@@ -123,6 +125,8 @@ export class HealthDayDetail extends HTMLElement {
     }
     set onAddWorkout(handler) { this._onAddWorkout = handler; }
     set onAddFood(handler) { this._onAddFood = handler; }
+    set onEditFood(handler) { this._onEditFood = handler; }
+    set onEditWorkout(handler) { this._onEditWorkout = handler; }
     set dateContext(val) {
         this._dateStr = val;
         this.shadowRoot.getElementById('day-title').textContent = val;
@@ -196,13 +200,19 @@ export class HealthDayDetail extends HTMLElement {
         for (const act of this._activities) {
             const card = document.createElement('activity-detail-card');
             card.activity = act;
+            if (act.source === 'manual') {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', () => {
+                    if (this._onEditWorkout)
+                        this._onEditWorkout(act);
+                });
+            }
             container.appendChild(card);
         }
     }
     renderNutrition() {
         const shadow = this.shadowRoot;
-        const meals = ['Breakfast', 'Lunch', 'Dinner', 'Snacks'];
-        for (const meal of meals) {
+        for (const meal of MEAL_TYPES) {
             const container = shadow.getElementById(`${meal.toLowerCase()}-list`);
             container.replaceChildren();
             const entries = this._nutrition.filter(e => e.meal_type && e.meal_type.toLowerCase() === meal.toLowerCase());
@@ -216,6 +226,7 @@ export class HealthDayDetail extends HTMLElement {
             for (const entry of entries) {
                 const item = document.createElement('div');
                 item.className = 'food-item';
+                item.style.cursor = 'pointer';
                 const name = document.createElement('span');
                 name.className = 'food-name';
                 name.textContent = entry.food_name ?? 'Unknown food';
@@ -224,6 +235,10 @@ export class HealthDayDetail extends HTMLElement {
                 cals.textContent = `${Math.round(entry.calories ?? 0)} kcal`;
                 item.appendChild(name);
                 item.appendChild(cals);
+                item.addEventListener('click', () => {
+                    if (this._onEditFood)
+                        this._onEditFood(entry);
+                });
                 container.appendChild(item);
             }
         }

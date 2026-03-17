@@ -25,7 +25,7 @@ export class AgendaList extends HTMLElement {
     }
     render() {
         const container = this.shadowRoot.getElementById('list-container');
-        container.innerHTML = '';
+        container.replaceChildren();
         if (this._events.length === 0) {
             container.appendChild(emptyTemplate.content.cloneNode(true));
             return;

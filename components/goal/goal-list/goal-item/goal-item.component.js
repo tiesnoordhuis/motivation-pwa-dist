@@ -74,7 +74,7 @@ export class GoalItem extends HTMLElement {
     }
     renderCubes() {
         const container = this.shadowRoot.getElementById('cubes');
-        container.innerHTML = '';
+        container.replaceChildren();
         for (const sub of this._subGoals) {
             const cube = document.createElement('goal-cube');
             cube.setAttribute('status', sub.status);

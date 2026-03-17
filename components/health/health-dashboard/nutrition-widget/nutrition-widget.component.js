@@ -1,5 +1,4 @@
 import styles from './nutrition-widget.css' with { type: 'css' };
-const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const template = document.createElement('template');
 template.innerHTML = `
     <div class="nutrition-widget">
@@ -32,13 +31,13 @@ template.innerHTML = `
             </div>
         </div>
 
-        <div id="empty-state" class="empty-state" style="display:none">
+        <div id="empty-state" class="empty-state" hidden>
             No nutrition data yet. Scan or search food to start tracking!
         </div>
     </div>
 `;
 export class NutritionWidget extends HTMLElement {
-    _calorieTarget = 2000;
+    _calorieTarget = 2500;
     constructor() {
         super();
         const shadow = this.attachShadow({ mode: 'open' });
@@ -77,21 +76,18 @@ export class NutritionWidget extends HTMLElement {
     set weekSummary(summaries) {
         const shadow = this.shadowRoot;
         const barsContainer = shadow.getElementById('trend-bars');
-        barsContainer.innerHTML = '';
+        barsContainer.replaceChildren();
         // Build a map of date → calories
         const calByDate = new Map(summaries.map(s => [s.date, s.total_calories]));
         // Generate last 7 days
+        const today = Temporal.Now.plainDateISO();
         const days = [];
         for (let i = 6; i >= 0; i--) {
-            const d = new Date(); // TODO change to Temporal
-            d.setDate(d.getDate() - i);
-            const dateStr = d.toISOString().split('T')[0];
-            const dayOfWeek = d.getDay();
-            // Convert JS day (0=Sun) to our label
-            const label = WEEKDAYS[dayOfWeek === 0 ? 6 : dayOfWeek - 1];
+            const d = today.subtract({ days: i });
+            const dateStr = d.toString();
             days.push({
                 date: dateStr,
-                dayLabel: label,
+                dayLabel: d.toLocaleString(undefined, { weekday: 'short' }),
                 calories: calByDate.get(dateStr) ?? 0,
             });
         }
@@ -103,7 +99,7 @@ export class NutritionWidget extends HTMLElement {
         const targetPercent = (this._calorieTarget / maxCal) * 100;
         targetLine.style.bottom = `${targetPercent}%`;
         targetLabel.textContent = `${this._calorieTarget}`;
-        targetLine.style.display = '';
+        targetLine.hidden = false;
         for (const day of days) {
             const wrapper = document.createElement('div');
             wrapper.className = 'trend-bar-wrapper';
@@ -127,11 +123,11 @@ export class NutritionWidget extends HTMLElement {
             barsContainer.appendChild(wrapper);
         }
         const hasTrendData = summaries.length > 0;
-        shadow.getElementById('trend-section').style.display = hasTrendData ? '' : 'none';
+        shadow.getElementById('trend-section').hidden = !hasTrendData;
         this.updateEmptyState(hasTrendData);
     }
     updateEmptyState(hasData) {
-        this.shadowRoot.getElementById('empty-state').style.display = hasData ? 'none' : '';
+        this.shadowRoot.getElementById('empty-state').hidden = hasData;
     }
 }
 customElements.define('nutrition-widget', NutritionWidget);

@@ -2,22 +2,7 @@
  * Vanilla hash-based router for the Motivation PWA.
  * Uses the View Transitions API for animated route changes.
  * Each route lazy-initializes its section renderer on first visit.
- *
- * Navigation within a section (e.g. health overview → day detail → overview)
- * uses history.replaceState so the browser back button skips intra-section
- * bouncing and returns straight to the previous section or home.
  */
-/** Global navigate function — set by Router.start(). */
-let globalNavigate = (hash) => {
-    window.location.hash = hash;
-};
-/**
- * Navigate to a hash route. Uses the active router's smart navigation
- * (replaceState for intra-section nav, pushState otherwise).
- */
-export function navigate(hash) {
-    globalNavigate(hash);
-}
 export class Router {
     routes;
     initialized = new Set();
@@ -34,30 +19,12 @@ export class Router {
     }
     /** Start listening for hash changes and navigate to the current hash. */
     start() {
-        globalNavigate = (hash) => this.navigate(hash);
         window.addEventListener('hashchange', () => this.onHashChange());
-        window.addEventListener('popstate', () => this.onHashChange());
         this.onHashChange();
     }
-    /**
-     * Programmatic navigation.
-     *
-     * Intra-section navigations (both routes share the same top-level section)
-     * use `history.replaceState` so they don't accumulate in the history stack.
-     * Cross-section navigations use the normal `location.hash` assignment which
-     * pushes a new history entry.
-     */
+    /** Programmatic navigation. */
     navigate(hash) {
-        if (this.shouldReplace(hash)) {
-            // Replace the current history entry — no new entry pushed.
-            // This won't fire hashchange, so we trigger routing manually.
-            window.history.replaceState(null, '', window.location.pathname + hash);
-            this.onHashChange();
-        }
-        else {
-            // Normal push — fires hashchange automatically.
-            window.location.hash = hash;
-        }
+        window.location.hash = hash;
     }
     /** Resolve the current hash to a known route, or the fallback, and return params */
     resolveRoute(hash) {
@@ -99,35 +66,6 @@ export class Router {
         }
         // Unknown route → home
         return { route: '#/', params: {} };
-    }
-    /**
-     * Should this navigation replace the current history entry?
-     *
-     * The goal is a 2-level history within sections:
-     *   - Root → child (entering a sub-view): PUSH, so back returns to root
-     *   - Child → child (sibling sub-views): REPLACE, so back returns to root
-     *   - Child → root (returning to overview): REPLACE, so back exits section
-     *
-     * This prevents circular navigation (overview → detail → overview → detail)
-     * from bloating the history, while still letting "back" reach the section root.
-     */
-    shouldReplace(newHash) {
-        if (!this._currentRoute)
-            return false;
-        const { route: currRoute } = this.resolveRoute(this._currentRoute);
-        const { route: nextRoute } = this.resolveRoute(newHash);
-        const currSection = this.getSection(currRoute);
-        const nextSection = this.getSection(nextRoute);
-        // Only applies within the same section (not home)
-        if (currSection !== nextSection || currSection === '#/')
-            return false;
-        const currIsChild = this.routes[currRoute]?.parent != null;
-        // Child → anything in same section: REPLACE
-        // (covers child→child sibling nav AND child→root return)
-        if (currIsChild)
-            return true;
-        // Root → child: PUSH (so back returns to root)
-        return false;
     }
     /** Core routing logic triggered on every hash change */
     async onHashChange() {

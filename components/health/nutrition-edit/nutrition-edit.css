@@ -1,0 +1,237 @@
+:host {
+    display: block;
+}
+
+.edit-container {
+    padding: 16px;
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.edit-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.edit-header h3 {
+    margin: 0;
+    color: var(--text-primary, #fff);
+    font-size: 1.1rem;
+    flex: 1;
+}
+
+.source-badge {
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    background: rgba(212, 160, 23, 0.15);
+    color: var(--accent-color, #d4a017);
+}
+
+.food-name-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color, #444);
+    border-radius: 8px;
+    background: var(--surface-color, #1e1e1e);
+    color: var(--text-primary, #fff);
+    font-size: 1.1rem;
+    font-weight: 600;
+    box-sizing: border-box;
+}
+
+.food-name-input:read-only {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.macro-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.macro-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 4px;
+    border: 1px solid var(--border-color, #444);
+    border-radius: 8px;
+    background: var(--surface-color, #1e1e1e);
+}
+
+.macro-input {
+    width: 60px;
+    padding: 6px;
+    text-align: center;
+    border: 1px solid var(--border-color, #444);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-primary, #fff);
+    font-size: 1.1rem;
+    font-weight: 600;
+    -moz-appearance: textfield;
+}
+
+.macro-input::-webkit-outer-spin-button,
+.macro-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.macro-label {
+    color: var(--text-secondary, #aaa);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+.extra-macros {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.extra-macro-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border: 1px solid var(--border-color, #444);
+    border-radius: 8px;
+}
+
+.extra-macro-label {
+    color: var(--text-secondary, #aaa);
+    font-size: 0.85rem;
+}
+
+.extra-macro-input {
+    width: 50px;
+    padding: 4px;
+    text-align: right;
+    border: 1px solid var(--border-color, #444);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-primary, #fff);
+    font-size: 0.95rem;
+    -moz-appearance: textfield;
+}
+
+.extra-macro-input::-webkit-outer-spin-button,
+.extra-macro-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.form-row {
+    display: flex;
+    gap: 12px;
+}
+
+.form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.form-group label {
+    color: var(--text-secondary, #aaa);
+    font-size: 0.85rem;
+}
+
+.form-select,
+.form-input {
+    padding: 10px 12px;
+    border: 1px solid var(--border-color, #444);
+    border-radius: 8px;
+    background: var(--surface-color, #1e1e1e);
+    color: var(--text-primary, #fff);
+    font-size: 0.95rem;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-delete {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #f44336;
+    border-radius: 8px;
+    background: transparent;
+    color: #f44336;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.btn-delete:hover {
+    background: rgba(244, 67, 54, 0.1);
+}
+
+.btn-save {
+    flex: 2;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: var(--accent-color, #d4a017);
+    color: #000;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-save:hover {
+    opacity: 0.9;
+}
+
+.serving-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.serving-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-step {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border-color, #444);
+    border-radius: 8px;
+    background: var(--surface-color, #1e1e1e);
+    color: var(--text-primary, #fff);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.serving-input {
+    width: 70px;
+    padding: 8px;
+    text-align: center;
+    border: 1px solid var(--border-color, #444);
+    border-radius: 8px;
+    background: var(--surface-color, #1e1e1e);
+    color: var(--text-primary, #fff);
+    font-size: 1rem;
+    -moz-appearance: textfield;
+}
+
+.serving-input::-webkit-outer-spin-button,
+.serving-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}

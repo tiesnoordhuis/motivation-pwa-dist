@@ -1,7 +1,7 @@
 import styles from './health-dashboard.css' with { type: 'css' };
+import { ACTIVITY_TYPES } from '@motivation/shared';
 import '../health-timeline/health-timeline.component.js';
 import '../calorie-trend-chart/calorie-trend-chart.component.js';
-import { navigate } from '../../../router.js';
 function getStartOfWeek() {
     const today = Temporal.Now.plainDateISO();
     return today.subtract({ days: today.dayOfWeek - 1 });
@@ -63,13 +63,7 @@ template.innerHTML = `
                 <div class="form-group">
                     <label for="act-type">Type</label>
                     <select id="act-type">
-                        <option value="workout">Workout</option>
-                        <option value="running">Running</option>
-                        <option value="cycling">Cycling</option>
-                        <option value="swimming">Swimming</option>
-                        <option value="gym">Gym</option>
-                        <option value="tennis">Tennis</option>
-                        <option value="ice-skating">Ice Skating</option>
+                        ${ACTIVITY_TYPES.map(t => `<option value="${t}">${t.charAt(0).toUpperCase() + t.slice(1).replace('-', ' ')}</option>`).join('\n                        ')}
                     </select>
                 </div>
                 <div class="form-group">
@@ -111,7 +105,7 @@ export class HealthDashboard extends HTMLElement {
             if (target.matches('timeline-day')) {
                 const date = target.dayData?.date;
                 if (date) {
-                    navigate(`#/health/day/${date}`);
+                    window.location.hash = `#/health/day/${date}`;
                 }
             }
             else if (target.matches('.fab-mini') || target.closest('.fab-mini')) {

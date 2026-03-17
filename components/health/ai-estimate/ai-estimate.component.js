@@ -1,4 +1,6 @@
 import styles from './ai-estimate.css' with { type: 'css' };
+import { MEAL_TYPES } from '@motivation/shared';
+import { getDefaultMealType } from '../health-dashboard/health-utils.js';
 const template = document.createElement('template');
 template.innerHTML = `
     <div class="ai-estimate-container">
@@ -72,10 +74,7 @@ template.innerHTML = `
                 <div class="form-group">
                     <label for="meal-type">Meal</label>
                     <select id="meal-type" class="form-select">
-                        <option value="Breakfast">Breakfast</option>
-                        <option value="Lunch">Lunch</option>
-                        <option value="Dinner">Dinner</option>
-                        <option value="Snacks">Snacks</option>
+                        ${MEAL_TYPES.map(m => `<option value="${m}">${m}</option>`).join('\n                        ')}
                     </select>
                 </div>
                 <div class="form-group">
@@ -348,17 +347,7 @@ export class AiEstimate extends HTMLElement {
         shadow.getElementById('log-date').value = new Date().toISOString().split('T')[0];
     }
     setDefaultMealType() {
-        const hour = new Date().getHours();
-        let meal;
-        if (hour < 11)
-            meal = 'Breakfast';
-        else if (hour < 15)
-            meal = 'Lunch';
-        else if (hour < 21)
-            meal = 'Dinner';
-        else
-            meal = 'Snacks';
-        this.shadowRoot.getElementById('meal-type').value = meal;
+        this.shadowRoot.getElementById('meal-type').value = getDefaultMealType();
     }
 }
 customElements.define('ai-estimate', AiEstimate);

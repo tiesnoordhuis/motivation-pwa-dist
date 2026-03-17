@@ -28,6 +28,8 @@ import './components/health/health-day-detail/health-day-detail.component.js';
 import './components/health/barcode-scanner/barcode-scanner.component.js';
 import './components/health/food-log/food-log.component.js';
 import './components/health/ai-estimate/ai-estimate.component.js';
+import './components/health/nutrition-edit/nutrition-edit.component.js';
+import './components/health/activity-edit/activity-edit.component.js';
 import './components/projects/server-status-pill/server-status-pill.component.js';
 import { handleStravaOAuthCallback } from './services/strava-callback.js';
 console.log('Motivation PWA Started');

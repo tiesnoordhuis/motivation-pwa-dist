@@ -58,21 +58,21 @@ test('NutritionWidget component', async (t) => {
         dom.window.document.body.appendChild(el);
         const today = new Date().toISOString().split('T')[0];
         const summaries = [
-            { date: today, total_calories: 2000, total_protein_g: 80, total_carbs_g: 250, total_fat_g: 70, entry_count: 4 },
+            { date: today, total_calories: 2500, total_protein_g: 80, total_carbs_g: 250, total_fat_g: 70, entry_count: 4 },
         ];
         el.weekSummary = summaries;
         const bars = el.shadowRoot.getElementById('trend-bars');
         const barWrappers = bars.querySelectorAll('.trend-bar-wrapper');
         assert.strictEqual(barWrappers.length, 7);
         // Trend section visible
-        assert.strictEqual(el.shadowRoot.getElementById('trend-section').style.display, '');
+        assert.strictEqual(el.shadowRoot.getElementById('trend-section').hidden, false);
         dom.window.document.body.removeChild(el);
     });
     await t.test('weekSummary hides trend when empty', () => {
         const el = dom.window.document.createElement('nutrition-widget');
         dom.window.document.body.appendChild(el);
         el.weekSummary = [];
-        assert.strictEqual(el.shadowRoot.getElementById('trend-section').style.display, 'none');
+        assert.strictEqual(el.shadowRoot.getElementById('trend-section').hidden, true);
         dom.window.document.body.removeChild(el);
     });
     await t.test('handles entries with missing nutrition values', () => {
@@ -99,7 +99,7 @@ test('NutritionWidget component', async (t) => {
         assert.notStrictEqual(targetLine.style.display, 'none');
         // Target label should show the target value
         const targetLabel = shadow.getElementById('target-label');
-        assert.strictEqual(targetLabel.textContent, '2000');
+        assert.strictEqual(targetLabel.textContent, '2500');
         dom.window.document.body.removeChild(el);
     });
     await t.test('weekSummary marks bars over target', () => {
@@ -107,20 +107,20 @@ test('NutritionWidget component', async (t) => {
         dom.window.document.body.appendChild(el);
         const today = new Date().toISOString().split('T')[0];
         const summaries = [
-            { date: today, total_calories: 2500, total_protein_g: 100, total_carbs_g: 300, total_fat_g: 90, entry_count: 5 },
+            { date: today, total_calories: 2800, total_protein_g: 100, total_carbs_g: 300, total_fat_g: 90, entry_count: 5 },
         ];
         el.weekSummary = summaries;
         const shadow = el.shadowRoot;
         const bars = shadow.querySelectorAll('.trend-bar');
-        // Today's bar should have over-target class (2500 > 2000)
+        // Today's bar should have over-target class (2800 > 2500)
         const todayBar = bars[bars.length - 1]; // Last bar is today
         assert.ok(todayBar.classList.contains('over-target'));
         dom.window.document.body.removeChild(el);
     });
-    await t.test('calorieTarget defaults to 2000 and can be changed', () => {
+    await t.test('calorieTarget defaults to 2500 and can be changed', () => {
         const el = dom.window.document.createElement('nutrition-widget');
         dom.window.document.body.appendChild(el);
-        assert.strictEqual(el.calorieTarget, 2000);
+        assert.strictEqual(el.calorieTarget, 2500);
         el.calorieTarget = 1800;
         assert.strictEqual(el.calorieTarget, 1800);
         dom.window.document.body.removeChild(el);

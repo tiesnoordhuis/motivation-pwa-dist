@@ -18,7 +18,7 @@ export function formatTime(isoStr) {
     return zdt.toLocaleString(undefined, { hour: '2-digit', minute: '2-digit' });
 }
 export function getDefaultMealType() {
-    const hour = new Date().getHours();
+    const hour = Temporal.Now.plainTimeISO().hour;
     if (hour < 11)
         return 'Breakfast';
     if (hour < 15)

@@ -29,11 +29,14 @@ export class HealthRenderer {
         this.cleanUpSubViews();
         this.dashboard.hidden = false;
     }
-    showScanner() {
+    showScanner(dateStr, mealType) {
         this.dashboard.hidden = true;
         this.cleanUpSubViews();
         const scanner = document.createElement('barcode-scanner');
         const foodLog = document.createElement('food-log');
+        if (mealType) {
+            foodLog.defaultMealType = mealType;
+        }
         foodLog.hidden = true;
         scanner.onBarcodeDetected = async (barcode) => {
             scanner.hidden = true;
@@ -43,7 +46,7 @@ export class HealthRenderer {
         foodLog.onLog = async (entry) => {
             try {
                 await HealthService.createNutritionEntry({
-                    date: Temporal.Now.plainDateISO().toString(),
+                    date: dateStr ?? Temporal.Now.plainDateISO().toString(),
                     ...entry,
                 });
                 navigate('#/health');
@@ -60,10 +63,12 @@ export class HealthRenderer {
         this.content.appendChild(scanner);
         this.content.appendChild(foodLog);
     }
-    showAiEstimate() {
+    showAiEstimate(dateStr, mealType) {
         this.dashboard.hidden = true;
         this.cleanUpSubViews();
         const aiEstimate = document.createElement('ai-estimate');
+        aiEstimate.defaultDate = dateStr ?? null;
+        aiEstimate.defaultMealType = mealType ?? null;
         aiEstimate.onEstimate = async (description, image) => {
             return HealthService.estimateNutrition(description, image);
         };
@@ -78,14 +83,31 @@ export class HealthRenderer {
         };
         this.content.appendChild(aiEstimate);
     }
-    showFoodSearch() {
+    showFoodSearch(dateStr, mealType) {
         this.dashboard.hidden = true;
         this.cleanUpSubViews();
         const foodLog = document.createElement('food-log');
+        if (mealType) {
+            foodLog.defaultMealType = mealType;
+        }
+        foodLog.onScanBarcode = () => {
+            if (dateStr && mealType) {
+                navigate(`#/health/scanner/${encodeURIComponent(dateStr)}/${encodeURIComponent(mealType)}`);
+                return;
+            }
+            navigate('#/health/scanner');
+        };
+        foodLog.onAiEstimate = () => {
+            if (dateStr && mealType) {
+                navigate(`#/health/ai-estimate/${encodeURIComponent(dateStr)}/${encodeURIComponent(mealType)}`);
+                return;
+            }
+            navigate('#/health/ai-estimate');
+        };
         foodLog.onLog = async (entry) => {
             try {
                 await HealthService.createNutritionEntry({
-                    date: Temporal.Now.plainDateISO().toString(),
+                    date: dateStr ?? Temporal.Now.plainDateISO().toString(),
                     ...entry,
                 });
                 navigate('#/health');
@@ -109,8 +131,7 @@ export class HealthRenderer {
             this.dashboard.openManualAddDialog(d);
         };
         detail.onAddFood = (d, meal) => {
-            // Navigate to food search, potentially passing meal/date context in future
-            navigate('#/health/food-search');
+            navigate(`#/health/food-search/${encodeURIComponent(d)}/${encodeURIComponent(meal)}`);
         };
         detail.onEditFood = (entry) => {
             detail.hidden = true;

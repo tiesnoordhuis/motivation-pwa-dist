@@ -35,6 +35,27 @@
     border-color: var(--health-color);
 }
 
+.alt-log-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.alt-log-btn {
+    flex: 1;
+    padding: 0.55rem 0.75rem;
+    border-radius: 8px;
+    border: 1px solid var(--card-border, #ddd);
+    background: var(--card-bg, #eaeaea);
+    color: var(--text-color, #000);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.alt-log-btn:active {
+    transform: scale(0.98);
+}
+
 /* Search results */
 .search-results {
     display: flex;

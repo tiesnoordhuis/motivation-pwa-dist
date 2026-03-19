@@ -56,7 +56,7 @@ test('NutritionWidget component', async (t) => {
     await t.test('weekSummary renders 7 bars', () => {
         const el = dom.window.document.createElement('nutrition-widget');
         dom.window.document.body.appendChild(el);
-        const today = new Date().toISOString().split('T')[0];
+        const today = Temporal.Now.plainDateISO().toString();
         const summaries = [
             { date: today, total_calories: 2500, total_protein_g: 80, total_carbs_g: 250, total_fat_g: 70, entry_count: 4 },
         ];
@@ -89,7 +89,7 @@ test('NutritionWidget component', async (t) => {
     await t.test('weekSummary renders target line', () => {
         const el = dom.window.document.createElement('nutrition-widget');
         dom.window.document.body.appendChild(el);
-        const today = new Date().toISOString().split('T')[0];
+        const today = Temporal.Now.plainDateISO().toString();
         const summaries = [
             { date: today, total_calories: 2500, total_protein_g: 100, total_carbs_g: 300, total_fat_g: 90, entry_count: 5 },
         ];
@@ -105,7 +105,7 @@ test('NutritionWidget component', async (t) => {
     await t.test('weekSummary marks bars over target', () => {
         const el = dom.window.document.createElement('nutrition-widget');
         dom.window.document.body.appendChild(el);
-        const today = new Date().toISOString().split('T')[0];
+        const today = Temporal.Now.plainDateISO().toString();
         const summaries = [
             { date: today, total_calories: 2800, total_protein_g: 100, total_carbs_g: 300, total_fat_g: 90, entry_count: 5 },
         ];

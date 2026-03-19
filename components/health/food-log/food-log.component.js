@@ -10,6 +10,10 @@ template.innerHTML = `
             <div class="search-bar">
                 <input type="text" id="search-input" placeholder="Search for food…">
             </div>
+            <div class="alt-log-actions" id="alt-log-actions" hidden>
+                <button class="alt-log-btn" id="scan-btn">📷 Scan Barcode</button>
+                <button class="alt-log-btn" id="ai-btn">🤖 AI Estimate</button>
+            </div>
             <div id="search-loading" class="loading-text" hidden>Searching…</div>
             <div id="search-error" class="error-text" hidden></div>
             <div id="search-results" class="search-results"></div>
@@ -95,10 +99,13 @@ template.innerHTML = `
 export class FoodLog extends HTMLElement {
     _product = null;
     _defaultGrams = 100;
+    _defaultMealType = null;
     _searchTimeout = null;
     _searchSeq = 0;
     _onLog = null;
     _onBack = null;
+    _onScanBarcode = null;
+    _onAiEstimate = null;
     constructor() {
         super();
         const shadow = this.attachShadow({ mode: 'open' });
@@ -124,12 +131,37 @@ export class FoodLog extends HTMLElement {
             if (this._onBack)
                 this._onBack();
         });
+        shadow.getElementById('scan-btn').addEventListener('click', () => {
+            if (this._onScanBarcode)
+                this._onScanBarcode();
+        });
+        shadow.getElementById('ai-btn').addEventListener('click', () => {
+            if (this._onAiEstimate)
+                this._onAiEstimate();
+        });
+        this.updateAltLogActionsVisibility();
     }
     set onLog(handler) {
         this._onLog = handler;
     }
     set onBack(handler) {
         this._onBack = handler;
+    }
+    set onScanBarcode(handler) {
+        this._onScanBarcode = handler;
+        this.updateAltLogActionsVisibility();
+    }
+    set onAiEstimate(handler) {
+        this._onAiEstimate = handler;
+        this.updateAltLogActionsVisibility();
+    }
+    set defaultMealType(mealType) {
+        if (!mealType || !MEAL_TYPES.includes(mealType)) {
+            this._defaultMealType = null;
+            return;
+        }
+        this._defaultMealType = mealType;
+        this.applyMealTypeSelection();
     }
     async lookupBarcode(barcode) {
         const shadow = this.shadowRoot;
@@ -171,8 +203,7 @@ export class FoodLog extends HTMLElement {
         this._defaultGrams = OpenFoodFactsService.getDefaultServing(product);
         const servingInput = shadow.getElementById('serving-size');
         servingInput.value = String(this._defaultGrams);
-        // Auto-select meal type based on time of day
-        shadow.getElementById('meal-type').value = getDefaultMealType();
+        this.applyMealTypeSelection();
         this.renderPortionPresets();
         this.updateServingDisplay();
     }
@@ -218,6 +249,24 @@ export class FoodLog extends HTMLElement {
             });
             container.appendChild(btn);
         }
+    }
+    applyMealTypeSelection() {
+        const shadow = this.shadowRoot;
+        if (!shadow)
+            return;
+        const mealSelect = shadow.getElementById('meal-type');
+        if (!mealSelect)
+            return;
+        mealSelect.value = this._defaultMealType ?? getDefaultMealType();
+    }
+    updateAltLogActionsVisibility() {
+        const shadow = this.shadowRoot;
+        if (!shadow)
+            return;
+        const actionsEl = shadow.getElementById('alt-log-actions');
+        if (!actionsEl)
+            return;
+        actionsEl.hidden = !(this._onScanBarcode || this._onAiEstimate);
     }
     handleLog() {
         if (!this._product || !this._onLog)

@@ -105,6 +105,8 @@ export class AiEstimate extends HTMLElement {
     static MIN_QUALITY = 0.4;
     _imageBase64 = null;
     _model = '';
+    _defaultDate = null;
+    _defaultMealType = null;
     _onLog = null;
     _onEstimate = null;
     constructor() {
@@ -146,7 +148,7 @@ export class AiEstimate extends HTMLElement {
         });
         // Set default date & meal type
         const dateInput = shadow.getElementById('log-date');
-        dateInput.value = new Date().toISOString().split('T')[0];
+        dateInput.value = Temporal.Now.plainDateISO().toString();
         this.setDefaultMealType();
     }
     set onLog(handler) {
@@ -155,6 +157,19 @@ export class AiEstimate extends HTMLElement {
     set onEstimate(handler) {
         this._onEstimate = handler;
     }
+    set defaultDate(dateStr) {
+        this._defaultDate = dateStr && dateStr.trim() ? dateStr : null;
+        this.applyDefaults();
+    }
+    set defaultMealType(mealType) {
+        if (!mealType || !MEAL_TYPES.includes(mealType)) {
+            this._defaultMealType = null;
+            this.applyDefaults();
+            return;
+        }
+        this._defaultMealType = mealType;
+        this.applyDefaults();
+    }
     async loadImage(file) {
         const shadow = this.shadowRoot;
         const bitmap = await createImageBitmap(file);
@@ -162,9 +177,18 @@ export class AiEstimate extends HTMLElement {
         this._imageBase64 = base64;
         // Show preview
         const preview = shadow.getElementById('photo-preview');
+        // Always revoke previous URL to avoid leaks
+        if (preview.src) {
+            URL.revokeObjectURL(preview.src);
+        }
         preview.src = URL.createObjectURL(blob);
-        preview.style.display = '';
-        shadow.getElementById('btn-remove-photo').style.display = '';
+        preview.alt = 'Selected meal photo';
+        preview.hidden = false;
+        shadow.getElementById('btn-remove-photo').hidden = false;
+        // Add a border or highlight for clarity
+        preview.classList.add('photo-selected');
+        // Optionally, scroll preview into view
+        preview.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
     async compressBitmapForUpload(bitmap) {
         const canvas = document.createElement('canvas');
@@ -237,17 +261,19 @@ export class AiEstimate extends HTMLElement {
         const preview = shadow.getElementById('photo-preview');
         if (preview.src)
             URL.revokeObjectURL(preview.src);
-        preview.style.display = 'none';
+        preview.hidden = true;
         preview.src = '';
-        shadow.getElementById('btn-remove-photo').style.display = 'none';
+        preview.alt = 'Preview';
+        preview.classList.remove('photo-selected');
+        shadow.getElementById('btn-remove-photo').hidden = true;
         shadow.getElementById('photo-input').value = '';
     }
     showInputView() {
         const shadow = this.shadowRoot;
-        shadow.getElementById('input-view').style.display = '';
-        shadow.getElementById('loading-view').style.display = 'none';
-        shadow.getElementById('result-view').style.display = 'none';
-        shadow.getElementById('error-view').style.display = 'none';
+        shadow.getElementById('input-view').hidden = false;
+        shadow.getElementById('loading-view').hidden = true;
+        shadow.getElementById('result-view').hidden = true;
+        shadow.getElementById('error-view').hidden = true;
     }
     async doEstimate() {
         const shadow = this.shadowRoot;
@@ -257,8 +283,8 @@ export class AiEstimate extends HTMLElement {
             return;
         }
         // Show loading
-        shadow.getElementById('input-view').style.display = 'none';
-        shadow.getElementById('loading-view').style.display = '';
+        shadow.getElementById('input-view').hidden = true;
+        shadow.getElementById('loading-view').hidden = false;
         const loadingText = shadow.getElementById('loading-text');
         loadingText.textContent = 'Analyzing your meal…';
         // Update loading message after a few seconds (cold start)
@@ -281,8 +307,8 @@ export class AiEstimate extends HTMLElement {
     }
     showResult(estimate) {
         const shadow = this.shadowRoot;
-        shadow.getElementById('loading-view').style.display = 'none';
-        shadow.getElementById('result-view').style.display = 'flex';
+        shadow.getElementById('loading-view').hidden = true;
+        shadow.getElementById('result-view').hidden = false;
         // Food name
         shadow.getElementById('food-name').value = estimate.food_name;
         // Main macros
@@ -300,12 +326,12 @@ export class AiEstimate extends HTMLElement {
         // Notes
         const notes = shadow.getElementById('notes-text');
         notes.textContent = estimate.notes || '';
-        notes.style.display = estimate.notes ? '' : 'none';
+        notes.hidden = !estimate.notes;
     }
     showError(message) {
         const shadow = this.shadowRoot;
-        shadow.getElementById('loading-view').style.display = 'none';
-        shadow.getElementById('error-view').style.display = '';
+        shadow.getElementById('loading-view').hidden = true;
+        shadow.getElementById('error-view').hidden = false;
         shadow.getElementById('error-text').textContent = message;
     }
     doSave() {
@@ -343,11 +369,29 @@ export class AiEstimate extends HTMLElement {
         const shadow = this.shadowRoot;
         shadow.getElementById('description').value = '';
         this.clearImage();
-        this.setDefaultMealType();
-        shadow.getElementById('log-date').value = new Date().toISOString().split('T')[0];
+        // Also ensure preview is hidden and cleared
+        const preview = shadow.getElementById('photo-preview');
+        preview.hidden = true;
+        preview.src = '';
+        preview.alt = 'Preview';
+        preview.classList.remove('photo-selected');
+        this.applyDefaults();
     }
     setDefaultMealType() {
         this.shadowRoot.getElementById('meal-type').value = getDefaultMealType();
+    }
+    applyDefaults() {
+        const shadow = this.shadowRoot;
+        if (!shadow)
+            return;
+        const dateInput = shadow.getElementById('log-date');
+        if (dateInput) {
+            dateInput.value = this._defaultDate ?? Temporal.Now.plainDateISO().toString();
+        }
+        const mealInput = shadow.getElementById('meal-type');
+        if (mealInput) {
+            mealInput.value = this._defaultMealType ?? getDefaultMealType();
+        }
     }
 }
 customElements.define('ai-estimate', AiEstimate);

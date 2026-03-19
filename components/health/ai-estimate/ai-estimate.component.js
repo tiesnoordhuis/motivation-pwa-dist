@@ -15,8 +15,8 @@ template.innerHTML = `
                 <div class="photo-row">
                     <button id="btn-photo" class="btn-photo">📷 Add Photo</button>
                     <input type="file" id="photo-input" class="photo-input" accept="image/*" capture="environment">
-                    <img id="photo-preview" class="photo-preview" alt="Preview">
-                    <button id="btn-remove-photo" class="btn-remove-photo" title="Remove photo">✕</button>
+                    <img id="photo-preview" class="photo-preview" alt="Preview" hidden>
+                    <button id="btn-remove-photo" class="btn-remove-photo" title="Remove photo" hidden>✕</button>
                 </div>
             </div>
 
@@ -177,18 +177,10 @@ export class AiEstimate extends HTMLElement {
         this._imageBase64 = base64;
         // Show preview
         const preview = shadow.getElementById('photo-preview');
-        // Always revoke previous URL to avoid leaks
-        if (preview.src) {
-            URL.revokeObjectURL(preview.src);
-        }
         preview.src = URL.createObjectURL(blob);
         preview.alt = 'Selected meal photo';
         preview.hidden = false;
         shadow.getElementById('btn-remove-photo').hidden = false;
-        // Add a border or highlight for clarity
-        preview.classList.add('photo-selected');
-        // Optionally, scroll preview into view
-        preview.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
     async compressBitmapForUpload(bitmap) {
         const canvas = document.createElement('canvas');
@@ -263,8 +255,6 @@ export class AiEstimate extends HTMLElement {
             URL.revokeObjectURL(preview.src);
         preview.hidden = true;
         preview.src = '';
-        preview.alt = 'Preview';
-        preview.classList.remove('photo-selected');
         shadow.getElementById('btn-remove-photo').hidden = true;
         shadow.getElementById('photo-input').value = '';
     }
@@ -371,10 +361,11 @@ export class AiEstimate extends HTMLElement {
         this.clearImage();
         // Also ensure preview is hidden and cleared
         const preview = shadow.getElementById('photo-preview');
+        if (preview.src)
+            URL.revokeObjectURL(preview.src);
         preview.hidden = true;
         preview.src = '';
         preview.alt = 'Preview';
-        preview.classList.remove('photo-selected');
         this.applyDefaults();
     }
     setDefaultMealType() {

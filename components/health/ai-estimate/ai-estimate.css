@@ -57,10 +57,6 @@
     align-items: center;
 }
 
-.photo-input {
-    display: none;
-}
-
 .btn-photo {
     padding: 8px 16px;
     border: 1px dashed var(--border-color, #444);

@@ -31,6 +31,10 @@ import './components/health/ai-estimate/ai-estimate.component.js';
 import './components/health/nutrition-edit/nutrition-edit.component.js';
 import './components/health/activity-edit/activity-edit.component.js';
 import './components/projects/server-status-pill/server-status-pill.component.js';
+import './components/vietnamese/review-card/review-card.component.js';
+import './components/vietnamese/review-session/review-session.component.js';
+import './components/vietnamese/review-session-summary/review-session-summary.component.js';
+import './components/vietnamese/vietnamese-dashboard/vietnamese-dashboard.component.js';
 import { handleStravaOAuthCallback } from './services/strava-callback.js';
 console.log('Motivation PWA Started');
 // Handle Strava OAuth callback (redirects back with ?code=xxx)

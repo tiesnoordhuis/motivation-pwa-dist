@@ -1,0 +1,59 @@
+:host {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.summary-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    padding: var(--spacing-xl);
+}
+
+.stat-box {
+    display: flex;
+    gap: var(--spacing-xl);
+    margin: var(--spacing-xl) 0;
+}
+
+[hidden] {
+    display: none;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #d32f2f;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary, #666);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-return {
+    display: inline-block;
+    padding: 12px 24px;
+    background: #d32f2f;
+    color: white;
+    text-decoration: none;
+    border-radius: 20px;
+    font-weight: 500;
+    margin-top: var(--spacing-lg);
+    transition: opacity 0.2s;
+}
+
+.btn-return:hover {
+    opacity: 0.9;
+}

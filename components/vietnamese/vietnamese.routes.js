@@ -1,15 +1,17 @@
-import { buildSectionPage } from '../../utils/section-page.utils.js';
+import { VietnameseRenderer } from './vietnamese.renderer.js';
+let instance = null;
 export function vietnameseRoutes() {
     return {
         '#/vietnamese': {
             view: '#vietnamese-view',
-            init: () => {
-                const container = document.getElementById('vietnamese-view');
-                const page = buildSectionPage(container, 'Learn', 'vietnamese', '#/vietnamese');
-                const p = document.createElement('p');
-                p.textContent = 'Coming soon — spaced repetition, progress tracking.';
-                page.content.appendChild(p);
-            },
+            init: () => { instance = new VietnameseRenderer(); },
+            onEnter: () => { instance?.showDashboard(); },
+            onLeave: () => { instance?.cleanup(); }
         },
+        '#/vietnamese/review': {
+            view: '#vietnamese-view',
+            parent: '#/vietnamese',
+            onEnter: () => { instance?.showReviewSession(); }
+        }
     };
 }

@@ -14,7 +14,7 @@ template.innerHTML = `
                 <span class="photo-label">Optional: add a photo for better accuracy</span>
                 <div class="photo-row">
                     <button id="btn-photo" class="btn-photo">📷 Add Photo</button>
-                    <input type="file" id="photo-input" class="photo-input" accept="image/*" capture="environment">
+                    <input type="file" id="photo-input" class="photo-input" accept="image/*" capture="environment" hidden>
                     <img id="photo-preview" class="photo-preview" alt="Preview" hidden>
                     <button id="btn-remove-photo" class="btn-remove-photo" title="Remove photo" hidden>✕</button>
                 </div>
@@ -24,13 +24,13 @@ template.innerHTML = `
         </div>
 
         <!-- Loading view -->
-        <div id="loading-view" class="loading-view">
+        <div id="loading-view" class="loading-view" hidden>
             <div class="loading-spinner"></div>
             <div class="loading-text" id="loading-text">Analyzing your meal…</div>
         </div>
 
         <!-- Result view -->
-        <div id="result-view" class="result-view">
+        <div id="result-view" class="result-view" hidden>
             <div class="result-header">
                 <div class="ai-badge">🤖 AI Estimate</div>
                 <span id="confidence-badge" class="confidence-badge"></span>
@@ -90,7 +90,7 @@ template.innerHTML = `
         </div>
 
         <!-- Error view -->
-        <div id="error-view" class="error-view">
+        <div id="error-view" class="error-view" hidden>
             <p>⚠️</p>
             <p id="error-text"></p>
             <button id="btn-error-back" class="btn-back">Try Again</button>

@@ -76,7 +76,6 @@
     height: 64px;
     border-radius: 8px;
     object-fit: cover;
-    display: none;
 }
 
 .btn-remove-photo {
@@ -86,7 +85,6 @@
     cursor: pointer;
     font-size: 1.2rem;
     padding: 4px 8px;
-    display: none;
 }
 
 .btn-estimate {
@@ -114,7 +112,6 @@
 /* --- Loading view --- */
 
 .loading-view {
-    display: none;
     text-align: center;
     padding: 48px 16px;
 }
@@ -141,7 +138,6 @@
 /* --- Result view --- */
 
 .result-view {
-    display: none;
     flex-direction: column;
     gap: 16px;
 }
@@ -337,14 +333,13 @@
 /* --- Error view --- */
 
 .error-view {
-    display: none;
     text-align: center;
     padding: 32px 16px;
     color: #f44336;
-}
 
-.error-view p {
-    margin: 8px 0;
+    p {
+        margin: 8px 0;
+    }
 }
 
 .btn-back {

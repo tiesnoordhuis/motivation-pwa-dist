@@ -88,11 +88,6 @@ export class HealthDayDetail extends HTMLElement {
     _activities = [];
     _nutrition = [];
     _summary = null;
-    // Handlers
-    _onAddWorkout = null;
-    _onAddFood = null;
-    _onEditFood = null;
-    _onEditWorkout = null;
     constructor() {
         super();
         const shadow = this.attachShadow({ mode: 'open' });
@@ -111,23 +106,20 @@ export class HealthDayDetail extends HTMLElement {
             navigate(`#/health/day/${nextDay}`);
         });
         shadow.getElementById('add-workout-btn').addEventListener('click', () => {
-            if (this._onAddWorkout && this._dateStr)
-                this._onAddWorkout(this._dateStr);
+            if (!this._dateStr)
+                return;
+            this.dispatchDayDetailEvent('health:add-workout', { date: this._dateStr });
         });
         const foodBtns = shadow.querySelectorAll('button[data-meal]');
         foodBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const mealType = e.currentTarget.dataset.meal;
-                if (this._onAddFood && this._dateStr && mealType) {
-                    this._onAddFood(this._dateStr, mealType);
+                if (this._dateStr && mealType) {
+                    this.dispatchDayDetailEvent('health:add-food', { date: this._dateStr, meal: mealType });
                 }
             });
         });
     }
-    set onAddWorkout(handler) { this._onAddWorkout = handler; }
-    set onAddFood(handler) { this._onAddFood = handler; }
-    set onEditFood(handler) { this._onEditFood = handler; }
-    set onEditWorkout(handler) { this._onEditWorkout = handler; }
     set dateContext(val) {
         this._dateStr = val;
         this.shadowRoot.getElementById('day-title').textContent = val;
@@ -204,8 +196,7 @@ export class HealthDayDetail extends HTMLElement {
             if (act.source === 'manual') {
                 card.style.cursor = 'pointer';
                 card.addEventListener('click', () => {
-                    if (this._onEditWorkout)
-                        this._onEditWorkout(act);
+                    this.dispatchDayDetailEvent('health:edit-workout', { activity: act });
                 });
             }
             container.appendChild(card);
@@ -237,12 +228,19 @@ export class HealthDayDetail extends HTMLElement {
                 item.appendChild(name);
                 item.appendChild(cals);
                 item.addEventListener('click', () => {
-                    if (this._onEditFood)
-                        this._onEditFood(entry);
+                    this.dispatchDayDetailEvent('health:edit-food', { entry });
                 });
                 container.appendChild(item);
             }
         }
+    }
+    dispatchDayDetailEvent(type, detail) {
+        const CustomEventCtor = this.ownerDocument.defaultView?.CustomEvent ?? CustomEvent;
+        this.dispatchEvent(new CustomEventCtor(type, {
+            bubbles: true,
+            composed: true,
+            detail,
+        }));
     }
 }
 customElements.define('health-day-detail', HealthDayDetail);

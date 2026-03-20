@@ -21,7 +21,7 @@ test('HealthService nutrition methods', async (t) => {
         const result = await HealthService.fetchNutritionByDate('2025-01-15');
         assert.deepStrictEqual(result, mockEntries);
         const url = global.fetch.mock.calls[0].arguments[0];
-        assert.strictEqual(url, 'http://localhost:3000/api/sections/health/nutrition?date=2025-01-15');
+        assert.strictEqual(url, 'http://localhost:3001/api/sections/health/nutrition?date=2025-01-15');
     });
     await t.test('fetchNutritionByDate throws on error', async () => {
         global.fetch = mock.fn(async () => ({
@@ -40,7 +40,7 @@ test('HealthService nutrition methods', async (t) => {
         const result = await HealthService.fetchNutritionSummary('2025-01-10', '2025-01-16');
         assert.deepStrictEqual(result, mockSummary);
         const url = global.fetch.mock.calls[0].arguments[0];
-        assert.strictEqual(url, 'http://localhost:3000/api/sections/health/nutrition/summary?from=2025-01-10&to=2025-01-16');
+        assert.strictEqual(url, 'http://localhost:3001/api/sections/health/nutrition/summary?from=2025-01-10&to=2025-01-16');
     });
     await t.test('createNutritionEntry sends POST with correct body', async () => {
         const newEntry = {
@@ -57,7 +57,7 @@ test('HealthService nutrition methods', async (t) => {
         assert.strictEqual(result.id, 5);
         const fetchMock = global.fetch;
         const [url, opts] = fetchMock.mock.calls[0].arguments;
-        assert.strictEqual(url, 'http://localhost:3000/api/sections/health/nutrition');
+        assert.strictEqual(url, 'http://localhost:3001/api/sections/health/nutrition');
         assert.strictEqual(opts.method, 'POST');
         assert.deepStrictEqual(JSON.parse(opts.body), newEntry);
     });
@@ -75,7 +75,7 @@ test('HealthService nutrition methods', async (t) => {
         await HealthService.deleteNutritionEntry(42);
         const fetchMock = global.fetch;
         const [url, opts] = fetchMock.mock.calls[0].arguments;
-        assert.strictEqual(url, 'http://localhost:3000/api/sections/health/nutrition/42');
+        assert.strictEqual(url, 'http://localhost:3001/api/sections/health/nutrition/42');
         assert.strictEqual(opts.method, 'DELETE');
     });
     await t.test('deleteNutritionEntry throws on error', async () => {
@@ -83,5 +83,80 @@ test('HealthService nutrition methods', async (t) => {
             ok: false, statusText: 'Not Found',
         }));
         await assert.rejects(() => HealthService.deleteNutritionEntry(999), /Failed to delete nutrition entry/);
+    });
+});
+test('HealthService activity methods', async (t) => {
+    const dom = new JSDOM('<!DOCTYPE html>', { url: 'http://localhost:8080' });
+    global.window = dom.window;
+    global.document = dom.window.document;
+    const { HealthService } = await import('./health.service.js');
+    await t.test('fetchDashboardActivities calls default dashboard URL', async () => {
+        const mockActivities = [
+            {
+                id: 'a1',
+                type: 'running',
+                source: 'manual',
+                title: 'Morning run',
+                date: '2025-01-15',
+                created_at: '2025-01-15T08:00:00Z',
+                updated_at: '2025-01-15T08:00:00Z',
+            },
+        ];
+        global.fetch = mock.fn(async () => ({
+            ok: true,
+            json: async () => mockActivities,
+        }));
+        const result = await HealthService.fetchDashboardActivities();
+        assert.deepStrictEqual(result, mockActivities);
+        const url = global.fetch.mock.calls[0].arguments[0];
+        assert.strictEqual(url, 'http://localhost:3001/api/sections/health/activities');
+    });
+    await t.test('fetchActivitiesByRange calls correct URL and returns data', async () => {
+        const mockActivities = [
+            {
+                id: 'a2',
+                type: 'swimming',
+                source: 'manual',
+                title: 'Pool session',
+                date: '2025-01-16',
+                created_at: '2025-01-16T08:00:00Z',
+                updated_at: '2025-01-16T08:00:00Z',
+            },
+        ];
+        global.fetch = mock.fn(async () => ({
+            ok: true,
+            json: async () => mockActivities,
+        }));
+        const result = await HealthService.fetchActivitiesByRange('2025-01-10', '2025-01-16');
+        assert.deepStrictEqual(result, mockActivities);
+        const url = global.fetch.mock.calls[0].arguments[0];
+        assert.strictEqual(url, 'http://localhost:3001/api/sections/health/activities?from=2025-01-10&to=2025-01-16');
+    });
+    await t.test('fetchActivitiesByDate calls correct URL and returns data', async () => {
+        const mockActivities = [
+            {
+                id: 'a1',
+                type: 'running',
+                source: 'manual',
+                title: 'Morning run',
+                date: '2025-01-15',
+                created_at: '2025-01-15T08:00:00Z',
+                updated_at: '2025-01-15T08:00:00Z',
+            },
+        ];
+        global.fetch = mock.fn(async () => ({
+            ok: true,
+            json: async () => mockActivities,
+        }));
+        const result = await HealthService.fetchActivitiesByDate('2025-01-15');
+        assert.deepStrictEqual(result, mockActivities);
+        const url = global.fetch.mock.calls[0].arguments[0];
+        assert.strictEqual(url, 'http://localhost:3001/api/sections/health/activities?date=2025-01-15');
+    });
+    await t.test('fetchActivitiesByDate throws on error', async () => {
+        global.fetch = mock.fn(async () => ({
+            ok: false, statusText: 'Bad Request',
+        }));
+        await assert.rejects(() => HealthService.fetchActivitiesByDate('bad'), /Failed to fetch activities/);
     });
 });

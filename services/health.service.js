@@ -1,8 +1,21 @@
 import { API_URL } from '../config.js';
 export class HealthService {
-    static async fetchActivities(from, to) {
-        const params = from && to ? `?from=${from}&to=${to}` : '';
-        const response = await fetch(`${API_URL}/api/sections/health/activities${params}`);
+    static async fetchDashboardActivities() {
+        const response = await fetch(`${API_URL}/api/sections/health/activities`);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch activities: ${response.statusText}`);
+        }
+        return response.json();
+    }
+    static async fetchActivitiesByRange(from, to) {
+        const response = await fetch(`${API_URL}/api/sections/health/activities?from=${from}&to=${to}`);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch activities: ${response.statusText}`);
+        }
+        return response.json();
+    }
+    static async fetchActivitiesByDate(date) {
+        const response = await fetch(`${API_URL}/api/sections/health/activities?date=${date}`);
         if (!response.ok) {
             throw new Error(`Failed to fetch activities: ${response.statusText}`);
         }

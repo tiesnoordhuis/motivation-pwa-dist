@@ -55,6 +55,7 @@ window.addEventListener('load', async () => {
 });
 // Each section defines its own routes — main.ts just merges them.
 const router = new Router({
+    target: document.getElementById('route-outlet'),
     routes: {
         ...homeRoutes(),
         ...goalRoutes(),

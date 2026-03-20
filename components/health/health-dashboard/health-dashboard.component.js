@@ -87,10 +87,6 @@ export class HealthDashboard extends HTMLElement {
     _weekActivities = [];
     _upcomingActivities = [];
     _allActivities = [];
-    _onSave = null;
-    _onScanBarcode = null;
-    _onSearchFood = null;
-    _onAiEstimate = null;
     _fabMenuOpen = false;
     constructor() {
         super();
@@ -122,18 +118,15 @@ export class HealthDashboard extends HTMLElement {
         shadow.getElementById('fab-btn').addEventListener('click', () => this.toggleFabMenu());
         shadow.getElementById('fab-scan').addEventListener('click', () => {
             this.closeFabMenu();
-            if (this._onScanBarcode)
-                this._onScanBarcode();
+            this.dispatchDashboardEvent('health:scan-barcode');
         });
         shadow.getElementById('fab-search').addEventListener('click', () => {
             this.closeFabMenu();
-            if (this._onSearchFood)
-                this._onSearchFood();
+            this.dispatchDashboardEvent('health:search-food');
         });
         shadow.getElementById('fab-ai').addEventListener('click', () => {
             this.closeFabMenu();
-            if (this._onAiEstimate)
-                this._onAiEstimate();
+            this.dispatchDashboardEvent('health:ai-estimate');
         });
         shadow.getElementById('fab-activity').addEventListener('click', () => {
             this.closeFabMenu();
@@ -142,14 +135,14 @@ export class HealthDashboard extends HTMLElement {
         const form = shadow.getElementById('activity-form');
         const dialog = shadow.getElementById('activity-dialog');
         dialog.addEventListener('close', () => {
-            if (dialog.returnValue === 'save' && this._onSave) {
+            if (dialog.returnValue === 'save') {
                 const title = shadow.getElementById('act-title').value;
                 const type = shadow.getElementById('act-type').value;
                 const date = shadow.getElementById('act-date').value;
                 const durationStr = shadow.getElementById('act-duration').value;
                 const duration_minutes = durationStr ? parseInt(durationStr, 10) : undefined;
                 if (title && date) {
-                    this._onSave({ title, type, date, duration_minutes });
+                    this.dispatchDashboardEvent('health:save-activity', { title, type, date, duration_minutes });
                 }
             }
             form.reset();
@@ -162,18 +155,6 @@ export class HealthDashboard extends HTMLElement {
         dateInput.value = dateStr;
         dialog.showModal();
     }
-    set onSave(handler) {
-        this._onSave = handler;
-    }
-    set onScanBarcode(handler) {
-        this._onScanBarcode = handler;
-    }
-    set onSearchFood(handler) {
-        this._onSearchFood = handler;
-    }
-    set onAiEstimate(handler) {
-        this._onAiEstimate = handler;
-    }
     toggleFabMenu() {
         this._fabMenuOpen = !this._fabMenuOpen;
         const shadow = this.shadowRoot;
@@ -185,6 +166,14 @@ export class HealthDashboard extends HTMLElement {
         const shadow = this.shadowRoot;
         shadow.getElementById('fab-menu').hidden = true;
         shadow.getElementById('fab-btn').textContent = '+';
+    }
+    dispatchDashboardEvent(type, detail) {
+        const CustomEventCtor = this.ownerDocument.defaultView?.CustomEvent ?? CustomEvent;
+        this.dispatchEvent(new CustomEventCtor(type, {
+            bubbles: true,
+            composed: true,
+            detail,
+        }));
     }
     showLoading() {
         const shadow = this.shadowRoot;

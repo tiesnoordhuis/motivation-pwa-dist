@@ -102,10 +102,8 @@ export class FoodLog extends HTMLElement {
     _defaultMealType = null;
     _searchTimeout = null;
     _searchSeq = 0;
-    _onLog = null;
-    _onBack = null;
-    _onScanBarcode = null;
-    _onAiEstimate = null;
+    _showScanBarcodeAction = false;
+    _showAiEstimateAction = false;
     constructor() {
         super();
         const shadow = this.attachShadow({ mode: 'open' });
@@ -128,31 +126,22 @@ export class FoodLog extends HTMLElement {
         shadow.getElementById('log-btn').addEventListener('click', () => this.handleLog());
         shadow.getElementById('back-btn').addEventListener('click', () => {
             this.showSearchView();
-            if (this._onBack)
-                this._onBack();
+            this.dispatchFoodLogEvent('health:food-log-back');
         });
         shadow.getElementById('scan-btn').addEventListener('click', () => {
-            if (this._onScanBarcode)
-                this._onScanBarcode();
+            this.dispatchFoodLogEvent('health:scan-barcode');
         });
         shadow.getElementById('ai-btn').addEventListener('click', () => {
-            if (this._onAiEstimate)
-                this._onAiEstimate();
+            this.dispatchFoodLogEvent('health:ai-estimate');
         });
         this.updateAltLogActionsVisibility();
     }
-    set onLog(handler) {
-        this._onLog = handler;
-    }
-    set onBack(handler) {
-        this._onBack = handler;
-    }
-    set onScanBarcode(handler) {
-        this._onScanBarcode = handler;
+    set showScanBarcodeAction(show) {
+        this._showScanBarcodeAction = show;
         this.updateAltLogActionsVisibility();
     }
-    set onAiEstimate(handler) {
-        this._onAiEstimate = handler;
+    set showAiEstimateAction(show) {
+        this._showAiEstimateAction = show;
         this.updateAltLogActionsVisibility();
     }
     set defaultMealType(mealType) {
@@ -266,16 +255,25 @@ export class FoodLog extends HTMLElement {
         const actionsEl = shadow.getElementById('alt-log-actions');
         if (!actionsEl)
             return;
-        actionsEl.hidden = !(this._onScanBarcode || this._onAiEstimate);
+        const hasAltActions = this._showScanBarcodeAction || this._showAiEstimateAction;
+        actionsEl.hidden = !hasAltActions;
+        const scanButton = shadow.getElementById('scan-btn');
+        if (scanButton) {
+            scanButton.hidden = !this._showScanBarcodeAction;
+        }
+        const aiButton = shadow.getElementById('ai-btn');
+        if (aiButton) {
+            aiButton.hidden = !this._showAiEstimateAction;
+        }
     }
     handleLog() {
-        if (!this._product || !this._onLog)
+        if (!this._product)
             return;
         const shadow = this.shadowRoot;
         const grams = parseInt(shadow.getElementById('serving-size').value, 10) || 100;
         const mealType = shadow.getElementById('meal-type').value;
         const serving = OpenFoodFactsService.calculateServing(this._product, grams);
-        this._onLog({
+        this.dispatchFoodLogEvent('health:log-food', {
             food_name: this._product.product_name,
             serving_size: `${grams}g`,
             meal_type: mealType,
@@ -283,6 +281,14 @@ export class FoodLog extends HTMLElement {
             source: 'openfoodfacts',
             source_ref: this._product.barcode,
         });
+    }
+    dispatchFoodLogEvent(type, detail) {
+        const CustomEventCtor = this.ownerDocument.defaultView?.CustomEvent ?? CustomEvent;
+        this.dispatchEvent(new CustomEventCtor(type, {
+            bubbles: true,
+            composed: true,
+            detail,
+        }));
     }
     async performSearch(query) {
         if (query.length < 2)

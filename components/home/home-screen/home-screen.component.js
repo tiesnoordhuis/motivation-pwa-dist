@@ -18,12 +18,16 @@ template.innerHTML = `
     <home-footer class="home-footer"></home-footer>
 `;
 export class HomeScreen extends HTMLElement {
-    connectedCallback() {
+    ensureContent() {
         if (!this.firstChild) {
             this.appendChild(template.content.cloneNode(true));
         }
     }
+    connectedCallback() {
+        this.ensureContent();
+    }
     async loadSummaries() {
+        this.ensureContent();
         const updates = Object.entries(SECTION_SUMMARIES).map(async ([id, getSummary]) => {
             const card = this.querySelector(`#${id}`);
             try {

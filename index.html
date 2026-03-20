@@ -21,38 +21,7 @@
 
 <body>
   <div id="app">
-    <!-- HOME VIEW: Populated by home-screen custom element -->
-    <div id="home-view" class="view-section home-screen">
-      <!-- Populated by home.renderer.ts via <home-screen> component -->
-    </div>
-
-    <!-- GOALS VIEW (mapped to #/goals, wired into Extra) -->
-    <div id="goals-view" class="view-section hidden">
-      <!-- Populated by goal.renderer.ts -->
-    </div>
-
-    <!-- AGENDA VIEW (mapped to #/agenda, wired into Extra) -->
-    <div id="agenda-view" class="view-section hidden">
-      <!-- Populated by agenda.renderer.ts -->
-    </div>
-
-    <!-- SECTION VIEWS -->
-    <!-- Health: HealthRenderer replaces inner content; the section-page wrapper stays -->
-    <div id="health-view" class="view-section section-page section-page--health hidden">
-    </div>
-
-    <div id="social-view" class="view-section hidden">
-    </div>
-
-    <div id="vietnamese-view" class="view-section hidden">
-    </div>
-
-    <div id="projects-view" class="view-section hidden">
-    </div>
-
-    <!-- EXTRA VIEW: Hub for goals, calendar, and other utilities -->
-    <div id="extra-view" class="view-section hidden">
-    </div>
+    <main id="route-outlet"></main>
 
     <div id="loading-indicator" class="hidden">Loading...</div>
 

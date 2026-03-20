@@ -2,13 +2,14 @@ import { GoalService } from '../../services/goal.service.js';
 import { GoalNavigator } from './goal-navigator/goal-navigator.js';
 import { GoalDialogController } from './goal-dialog/goal-dialog.controller.js';
 export class GoalRenderer {
+    container;
     navigator;
     dialogController;
     loadingIndicator;
     errorMessage;
     createBtn;
-    constructor() {
-        const container = document.getElementById('goals-view');
+    constructor(container) {
+        this.container = container;
         const header = document.createElement('goal-header-card');
         header.id = 'goal-header';
         this.errorMessage = document.createElement('p');
@@ -19,10 +20,10 @@ export class GoalRenderer {
         this.createBtn.className = 'fab';
         this.createBtn.title = 'New Goal';
         this.createBtn.textContent = '+';
-        container.appendChild(header);
-        container.appendChild(this.errorMessage);
-        container.appendChild(goalList);
-        container.appendChild(this.createBtn);
+        this.container.appendChild(header);
+        this.container.appendChild(this.errorMessage);
+        this.container.appendChild(goalList);
+        this.container.appendChild(this.createBtn);
         this.loadingIndicator = document.getElementById('loading-indicator');
         this.navigator = new GoalNavigator(goalList, header);
         this.dialogController = new GoalDialogController(() => this.refreshGoals());
@@ -33,24 +34,24 @@ export class GoalRenderer {
             this.dialogController.openGoalDialog(null, this.navigator.currentParentId);
         });
         // Event Delegation from Web Components
-        document.addEventListener('navigate', (e) => {
+        this.container.addEventListener('navigate', (e) => {
             const detail = e.detail;
             this.navigator.navigateTo(detail.id);
         });
-        document.addEventListener('nav-back', () => {
+        this.container.addEventListener('nav-back', () => {
             this.navigator.navigateUp();
         });
-        document.addEventListener('edit-goal', (e) => {
+        this.container.addEventListener('edit-goal', (e) => {
             const detail = e.detail;
             const goal = this.navigator.findGoal(this.navigator.allGoals, detail.id);
             if (goal)
                 this.dialogController.openGoalDialog(goal);
         });
-        document.addEventListener('delete-goal', (e) => {
+        this.container.addEventListener('delete-goal', (e) => {
             const detail = e.detail;
             this.dialogController.openConfirmDelete(detail.id);
         });
-        document.addEventListener('change-status', (e) => {
+        this.container.addEventListener('change-status', (e) => {
             const detail = e.detail;
             const goal = this.navigator.findGoal(this.navigator.allGoals, detail.id);
             if (goal)

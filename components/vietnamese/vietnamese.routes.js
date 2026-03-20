@@ -1,17 +1,13 @@
-import { VietnameseRenderer } from './vietnamese.renderer.js';
-let instance = null;
+import './vietnamese-dashboard-screen.component.js';
+import './vietnamese-review-screen.component.js';
 export function vietnameseRoutes() {
     return {
         '#/vietnamese': {
-            view: '#vietnamese-view',
-            init: () => { instance = new VietnameseRenderer(); },
-            onEnter: () => { instance?.showDashboard(); },
-            onLeave: () => { instance?.cleanup(); }
+            render: () => document.createElement('vietnamese-dashboard-screen'),
         },
         '#/vietnamese/review': {
-            view: '#vietnamese-view',
             parent: '#/vietnamese',
-            onEnter: () => { instance?.showReviewSession(); }
-        }
+            render: () => document.createElement('vietnamese-review-screen'),
+        },
     };
 }

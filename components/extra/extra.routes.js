@@ -2,9 +2,10 @@ import { buildSectionPage } from '../../utils/section-page.utils.js';
 export function extraRoutes() {
     return {
         '#/extra': {
-            view: '#extra-view',
-            init: () => {
-                const container = document.getElementById('extra-view');
+            render: () => {
+                const container = document.createElement('div');
+                container.className = 'view-section';
+                container.id = 'extra-view';
                 const page = buildSectionPage(container, 'Extra', 'extra', '#/extra');
                 const nav = document.createElement('nav');
                 nav.className = 'extra-nav';
@@ -20,6 +21,7 @@ export function extraRoutes() {
                     nav.appendChild(a);
                 }
                 page.content.appendChild(nav);
+                return container;
             },
         },
     };

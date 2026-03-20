@@ -1,27 +1,19 @@
-import { GoalService } from '../../services/goal.service.js';
 import { GoalRenderer } from './goal.renderer.js';
-let instance = null;
+function createGoalContainer() {
+    const container = document.createElement('div');
+    container.className = 'view-section';
+    container.id = 'goals-view';
+    return container;
+}
 export function goalRoutes() {
     return {
         '#/goals': {
-            view: '#goals-view',
-            init: async () => {
-                instance = new GoalRenderer();
-                try {
-                    instance.showLoading();
-                    const goals = await GoalService.fetchGoals();
-                    instance.renderGoals(goals);
-                    instance.hideError();
-                }
-                catch (err) {
-                    instance.showError('Failed to load goals. Is the server running?');
-                    console.error(err);
-                }
-                finally {
-                    instance.hideLoading();
-                }
+            render: async () => {
+                const container = createGoalContainer();
+                const renderer = new GoalRenderer(container);
+                await renderer.refreshGoals();
+                return container;
             },
-            onEnter: async () => { await instance?.refreshGoals(); },
         },
     };
 }

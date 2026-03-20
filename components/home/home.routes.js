@@ -1,13 +1,16 @@
-let homeScreen = null;
+function createHomeScreen() {
+    const screen = document.createElement('home-screen');
+    screen.className = 'home-screen';
+    return screen;
+}
 export function homeRoutes() {
     return {
         '#/': {
-            view: '#home-view',
-            init: () => {
-                homeScreen = document.createElement('home-screen');
-                document.getElementById('home-view').appendChild(homeScreen);
+            render: async () => {
+                const screen = createHomeScreen();
+                await screen.loadSummaries();
+                return screen;
             },
-            onEnter: async () => { await homeScreen?.loadSummaries(); },
         },
     };
 }

@@ -2,8 +2,8 @@ import { AgendaService } from '../../services/agenda.service.js';
 export class AgendaRenderer {
     container;
     agendaList;
-    constructor() {
-        this.container = document.getElementById('agenda-view');
+    constructor(container) {
+        this.container = container;
         this.agendaList = document.createElement('agenda-list');
         this.container.appendChild(this.agendaList);
     }

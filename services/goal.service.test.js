@@ -21,9 +21,9 @@ test('GoalService', async (t) => {
         global.fetch = fetchMock;
         const goals = await GoalService.fetchGoals();
         assert.deepStrictEqual(goals, mockGoals);
-        // Verify URL - since window.location is localhost, it should use localhost:3000
+        // Verify URL - since window.location is localhost, it should use localhost:3001
         const callArgs = fetchMock.mock.calls[0].arguments;
-        assert.strictEqual(callArgs[0], 'http://localhost:3000/api/goals');
+        assert.strictEqual(callArgs[0], 'http://localhost:3001/api/goals');
         // Restore? No need if we overwrite in next test or if we don't care about global state pollution in this isolated process
     });
     await t.test('fetchGoals throws on non-ok response', async () => {

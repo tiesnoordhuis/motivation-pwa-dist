@@ -82,7 +82,9 @@ test('FoodLog component', async (t) => {
         const el = dom.window.document.createElement('food-log');
         dom.window.document.body.appendChild(el);
         let loggedEntry = null;
-        el.onLog = (entry) => { loggedEntry = entry; };
+        el.addEventListener('health:log-food', (event) => {
+            loggedEntry = event.detail;
+        });
         el.showProduct(sampleProduct);
         const shadow = el.shadowRoot;
         // Set serving to 200g, meal to Lunch
@@ -103,12 +105,27 @@ test('FoodLog component', async (t) => {
         const el = dom.window.document.createElement('food-log');
         dom.window.document.body.appendChild(el);
         let backCalled = false;
-        el.onBack = () => { backCalled = true; };
+        el.addEventListener('health:food-log-back', () => { backCalled = true; });
         el.showProduct(sampleProduct);
         el.shadowRoot.getElementById('back-btn').click();
         assert.strictEqual(el.shadowRoot.getElementById('search-view').hidden, false);
         assert.strictEqual(el.shadowRoot.getElementById('detail-view').hidden, true);
         assert.ok(backCalled);
+        dom.window.document.body.removeChild(el);
+    });
+    await t.test('alt actions visibility follows screen flags', () => {
+        const el = dom.window.document.createElement('food-log');
+        dom.window.document.body.appendChild(el);
+        const actions = el.shadowRoot.getElementById('alt-log-actions');
+        const scanButton = el.shadowRoot.getElementById('scan-btn');
+        const aiButton = el.shadowRoot.getElementById('ai-btn');
+        assert.strictEqual(actions.hidden, true);
+        el.showScanBarcodeAction = true;
+        assert.strictEqual(actions.hidden, false);
+        assert.strictEqual(scanButton.hidden, false);
+        assert.strictEqual(aiButton.hidden, true);
+        el.showAiEstimateAction = true;
+        assert.strictEqual(aiButton.hidden, false);
         dom.window.document.body.removeChild(el);
     });
     await t.test('lookupBarcode shows error when product not found', async () => {

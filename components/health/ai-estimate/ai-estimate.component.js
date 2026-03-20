@@ -107,8 +107,6 @@ export class AiEstimate extends HTMLElement {
     _model = '';
     _defaultDate = null;
     _defaultMealType = null;
-    _onLog = null;
-    _onEstimate = null;
     constructor() {
         super();
         const shadow = this.attachShadow({ mode: 'open' });
@@ -146,16 +144,8 @@ export class AiEstimate extends HTMLElement {
         shadow.getElementById('btn-error-back').addEventListener('click', () => {
             this.showInputView();
         });
-        // Set default date & meal type
-        const dateInput = shadow.getElementById('log-date');
-        dateInput.value = Temporal.Now.plainDateISO().toString();
-        this.setDefaultMealType();
-    }
-    set onLog(handler) {
-        this._onLog = handler;
-    }
-    set onEstimate(handler) {
-        this._onEstimate = handler;
+        // Apply route-provided defaults if present; otherwise fall back to today/default meal.
+        this.applyDefaults();
     }
     set defaultDate(dateStr) {
         this._defaultDate = dateStr && dateStr.trim() ? dateStr : null;
@@ -282,9 +272,7 @@ export class AiEstimate extends HTMLElement {
             loadingText.textContent = 'Starting AI engine… this may take a moment';
         }, 5000);
         try {
-            if (!this._onEstimate)
-                throw new Error('Estimate handler not set');
-            const result = await this._onEstimate(description || 'meal in photo', this._imageBase64 ?? undefined);
+            const result = await this.requestEstimate(description || 'meal in photo', this._imageBase64 ?? undefined);
             clearTimeout(slowTimer);
             this._model = result.model;
             this.showResult(result.estimate);
@@ -325,8 +313,6 @@ export class AiEstimate extends HTMLElement {
         shadow.getElementById('error-text').textContent = message;
     }
     doSave() {
-        if (!this._onLog)
-            return;
         const shadow = this.shadowRoot;
         const food_name = shadow.getElementById('food-name').value.trim();
         const meal_type = shadow.getElementById('meal-type').value;
@@ -339,7 +325,7 @@ export class AiEstimate extends HTMLElement {
         const sugar_g = parseInt(shadow.getElementById('macro-sugar').value, 10) || 0;
         if (!food_name)
             return;
-        this._onLog({
+        this.dispatchEstimateEvent('health:log-ai-estimate', {
             food_name,
             meal_type,
             date,
@@ -352,6 +338,31 @@ export class AiEstimate extends HTMLElement {
             source: 'ai_estimate',
             source_ref: this._model,
         });
+    }
+    async requestEstimate(description, image) {
+        const CustomEventCtor = this.ownerDocument.defaultView?.CustomEvent ?? CustomEvent;
+        const event = new CustomEventCtor('health:estimate-nutrition', {
+            bubbles: true,
+            composed: true,
+            detail: {
+                description,
+                image,
+                respondWith: null,
+            },
+        });
+        this.dispatchEvent(event);
+        if (!event.detail.respondWith) {
+            throw new Error('Estimate handler not set');
+        }
+        return await event.detail.respondWith;
+    }
+    dispatchEstimateEvent(type, detail) {
+        const CustomEventCtor = this.ownerDocument.defaultView?.CustomEvent ?? CustomEvent;
+        this.dispatchEvent(new CustomEventCtor(type, {
+            bubbles: true,
+            composed: true,
+            detail,
+        }));
     }
     /** Reset to initial input state */
     reset() {
@@ -367,9 +378,6 @@ export class AiEstimate extends HTMLElement {
         preview.src = '';
         preview.alt = 'Preview';
         this.applyDefaults();
-    }
-    setDefaultMealType() {
-        this.shadowRoot.getElementById('meal-type').value = getDefaultMealType();
     }
     applyDefaults() {
         const shadow = this.shadowRoot;

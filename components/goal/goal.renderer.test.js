@@ -68,7 +68,7 @@ test('GoalRenderer', async (t) => {
     const { GoalRenderer } = await import('./goal.renderer.js');
     await t.test('renderGoals assigns goals to goal-list component', () => {
         setupDOM();
-        const renderer = new GoalRenderer();
+        const renderer = new GoalRenderer(document.getElementById('goals-view'));
         const goals = [
             { id: '1', title: 'Goal 1', status: 'ACTIVE', description: 'Desc 1', created_at: '', updated_at: '' },
             { id: '2', title: 'Goal 2', status: 'COMPLETED', description: 'Desc 2', created_at: '', updated_at: '' }
@@ -81,7 +81,7 @@ test('GoalRenderer', async (t) => {
     });
     await t.test('renderGoals handles empty list', () => {
         setupDOM();
-        const renderer = new GoalRenderer();
+        const renderer = new GoalRenderer(document.getElementById('goals-view'));
         const list = document.getElementById('goals-list');
         renderer.renderGoals([]);
         assert.strictEqual(list.goals.length, 0);

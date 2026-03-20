@@ -1,6 +1,6 @@
 export const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 export const API_URL = isLocal
-    ? 'http://localhost:3000'
+    ? 'http://localhost:3001'
     : 'http://192.168.178.170:3000';
 /**
  * Pi gateway — always-on Raspberry Pi at a fixed LAN IP.

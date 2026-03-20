@@ -1,0 +1,2 @@
+// --- Health Section Types ---
+export {};

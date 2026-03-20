@@ -1,69 +1,58 @@
-import { HealthRenderer } from './health.renderer.js';
-import { navigate } from '../../router.js';
-let instance = null;
+import './health-dashboard-screen.component.js';
+import './health-day-screen.component.js';
+import './health-scanner-screen.component.js';
+import './health-food-search-screen.component.js';
+import './health-ai-estimate-screen.component.js';
 export function healthRoutes() {
     return {
         '#/health': {
-            view: '#health-view',
-            init: () => { instance = new HealthRenderer(); },
-            onEnter: async () => {
-                instance?.showDashboard();
-                await instance?.loadData();
-            },
-            onLeave: () => { instance?.cleanup(); },
+            render: () => document.createElement('health-dashboard-screen'),
         },
         '#/health/scanner': {
-            view: '#health-view',
             parent: '#/health',
-            onEnter: () => { instance?.showScanner(); },
+            render: () => document.createElement('health-scanner-screen'),
         },
         '#/health/scanner/:date/:meal': {
-            view: '#health-view',
             parent: '#/health',
-            onEnter: (params) => {
-                const date = params?.date ? decodeURIComponent(params.date) : undefined;
-                const meal = params?.meal ? decodeURIComponent(params.meal) : undefined;
-                instance?.showScanner(date, meal);
+            render: (ctx) => {
+                const screen = document.createElement('health-scanner-screen');
+                screen.date = decodeURIComponent(ctx.params.date);
+                screen.meal = decodeURIComponent(ctx.params.meal);
+                return screen;
             },
         },
         '#/health/food-search': {
-            view: '#health-view',
             parent: '#/health',
-            onEnter: () => { instance?.showFoodSearch(); },
+            render: () => document.createElement('health-food-search-screen'),
         },
         '#/health/food-search/:date/:meal': {
-            view: '#health-view',
             parent: '#/health',
-            onEnter: (params) => {
-                const date = params?.date ? decodeURIComponent(params.date) : undefined;
-                const meal = params?.meal ? decodeURIComponent(params.meal) : undefined;
-                instance?.showFoodSearch(date, meal);
+            render: (ctx) => {
+                const screen = document.createElement('health-food-search-screen');
+                screen.date = decodeURIComponent(ctx.params.date);
+                screen.meal = decodeURIComponent(ctx.params.meal);
+                return screen;
             },
         },
         '#/health/ai-estimate': {
-            view: '#health-view',
             parent: '#/health',
-            onEnter: () => { instance?.showAiEstimate(); },
+            render: () => document.createElement('health-ai-estimate-screen'),
         },
         '#/health/ai-estimate/:date/:meal': {
-            view: '#health-view',
             parent: '#/health',
-            onEnter: (params) => {
-                const date = params?.date ? decodeURIComponent(params.date) : undefined;
-                const meal = params?.meal ? decodeURIComponent(params.meal) : undefined;
-                instance?.showAiEstimate(date, meal);
+            render: (ctx) => {
+                const screen = document.createElement('health-ai-estimate-screen');
+                screen.date = decodeURIComponent(ctx.params.date);
+                screen.meal = decodeURIComponent(ctx.params.meal);
+                return screen;
             },
         },
         '#/health/day/:date': {
-            view: '#health-view',
             parent: '#/health',
-            onEnter: async (params) => {
-                if (params && params.date) {
-                    await instance?.showDayDetail(params.date);
-                }
-                else {
-                    navigate('#/health');
-                }
+            render: (ctx) => {
+                const screen = document.createElement('health-day-screen');
+                screen.date = decodeURIComponent(ctx.params.date);
+                return screen;
             },
         },
     };

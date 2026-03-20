@@ -1,0 +1,2 @@
+// --- Vietnamese Section Types ---
+export {};

@@ -1,23 +1,66 @@
 import { API_URL } from '../config.js';
 export class VietnameseService {
+    static async request(path, init) {
+        const response = await fetch(`${API_URL}${path}`, init);
+        if (!response.ok) {
+            const data = await response.json().catch(() => ({}));
+            throw new Error(data.error ?? response.statusText ?? 'Request failed');
+        }
+        if (response.status === 204) {
+            return undefined;
+        }
+        return response.json();
+    }
     /**
      * Fetch FSRS cards that are due for review.
      * @param limit maximum number of cards to fetch
      * @returns list of cards ready to be reviewed
      */
     static async getDueReviewCards(limit = 20) {
-        const response = await fetch(`${API_URL}/api/sections/vietnamese/review?limit=${limit}`);
-        if (!response.ok) {
-            throw new Error(`Failed to fetch due review cards: ${response.statusText}`);
-        }
-        return response.json();
+        return this.request(`/api/sections/vietnamese/review?limit=${limit}`);
     }
     static async getDeckStats() {
-        const response = await fetch(`${API_URL}/api/sections/vietnamese/decks/stats`);
-        if (!response.ok) {
-            throw new Error(`Failed to fetch deck stats: ${response.statusText}`);
-        }
-        return response.json();
+        return this.request('/api/sections/vietnamese/decks/stats');
+    }
+    static async getDecks() {
+        return this.request('/api/sections/vietnamese/decks');
+    }
+    static async createDeck(payload) {
+        return this.request('/api/sections/vietnamese/decks', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+    }
+    static async updateDeck(id, payload) {
+        return this.request(`/api/sections/vietnamese/decks/${id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+    }
+    static async deleteDeck(id) {
+        await this.request(`/api/sections/vietnamese/decks/${id}`, { method: 'DELETE' });
+    }
+    static async getCardsByDeck(deckId) {
+        return this.request(`/api/sections/vietnamese/decks/${deckId}/cards`);
+    }
+    static async createCard(deckId, payload) {
+        return this.request(`/api/sections/vietnamese/decks/${deckId}/cards`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+    }
+    static async updateCard(id, payload) {
+        return this.request(`/api/sections/vietnamese/cards/${id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+    }
+    static async deleteCard(id) {
+        await this.request(`/api/sections/vietnamese/cards/${id}`, { method: 'DELETE' });
     }
     /**
      * Submit a rating (1-4) for a flashcard to update its FSRS scheduling.
@@ -26,15 +69,10 @@ export class VietnameseService {
      * @returns the updated review state
      */
     static async submitReview(cardId, rating) {
-        const response = await fetch(`${API_URL}/api/sections/vietnamese/review`, {
+        return this.request('/api/sections/vietnamese/review', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ card_id: cardId, rating }),
         });
-        if (!response.ok) {
-            const data = await response.json().catch(() => ({}));
-            throw new Error(data.error ?? `Submit review failed: ${response.statusText}`);
-        }
-        return response.json();
     }
 }

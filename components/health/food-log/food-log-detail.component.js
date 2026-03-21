@@ -13,24 +13,25 @@ template.innerHTML = `
             </div>
         </div>
 
-        <div class="nutrition-per100">
-            <div class="nutri-label" id="nutrition-reference-label">Per 100g</div>
-            <div class="nutri-item">
-                <div class="nutri-value" id="cal-100">0</div>
-                <div class="nutri-label">kcal</div>
-            </div>
-            <div class="nutri-item">
-                <div class="nutri-value" id="protein-100">0</div>
-                <div class="nutri-label">protein</div>
-            </div>
-            <div class="nutri-item">
-                <div class="nutri-value" id="carbs-100">0</div>
-                <div class="nutri-label">carbs</div>
-            </div>
-            <div class="nutri-item">
-                <div class="nutri-value" id="fat-100">0</div>
-                <div class="nutri-label">fat</div>
-            </div>
+        <div class="serving-highlight">
+             <div class="main-cal">
+                 <div id="cal-serving" class="huge-val">0</div>
+                 <div class="lbl">kcal</div>
+             </div>
+             <div class="macros">
+                 <div class="macro">
+                     <span class="macro-val" id="protein-serving">0</span>
+                     <span class="macro-lbl">protein</span>
+                 </div>
+                 <div class="macro">
+                     <span class="macro-val" id="carbs-serving">0</span>
+                     <span class="macro-lbl">carbs</span>
+                 </div>
+                 <div class="macro">
+                     <span class="macro-val" id="fat-serving">0</span>
+                     <span class="macro-lbl">fat</span>
+                 </div>
+             </div>
         </div>
 
         <div class="form-row">
@@ -51,21 +52,22 @@ template.innerHTML = `
             </div>
         </div>
 
-        <div class="serving-nutrition">
+        <div class="nutrition-per100">
+            <div class="nutri-label" id="nutrition-reference-label">Per 100g</div>
             <div class="nutri-item">
-                <div class="nutri-value" id="cal-serving">0</div>
+                <div class="nutri-value" id="cal-100">0</div>
                 <div class="nutri-label">kcal</div>
             </div>
             <div class="nutri-item">
-                <div class="nutri-value" id="protein-serving">0</div>
+                <div class="nutri-value" id="protein-100">0</div>
                 <div class="nutri-label">protein</div>
             </div>
             <div class="nutri-item">
-                <div class="nutri-value" id="carbs-serving">0</div>
+                <div class="nutri-value" id="carbs-100">0</div>
                 <div class="nutri-label">carbs</div>
             </div>
             <div class="nutri-item">
-                <div class="nutri-value" id="fat-serving">0</div>
+                <div class="nutri-value" id="fat-100">0</div>
                 <div class="nutri-label">fat</div>
             </div>
         </div>
@@ -174,10 +176,10 @@ export class FoodLogDetail extends HTMLElement {
         const serving = this.calculateServing(amount);
         if (!serving)
             return;
-        shadow.getElementById('cal-serving').textContent = String(serving.calories);
-        shadow.getElementById('protein-serving').textContent = String(serving.protein_g);
-        shadow.getElementById('carbs-serving').textContent = String(serving.carbs_g);
-        shadow.getElementById('fat-serving').textContent = String(serving.fat_g);
+        shadow.getElementById('cal-serving').textContent = String(Math.round(serving.calories));
+        shadow.getElementById('protein-serving').textContent = Number(serving.protein_g).toFixed(1);
+        shadow.getElementById('carbs-serving').textContent = Number(serving.carbs_g).toFixed(1);
+        shadow.getElementById('fat-serving').textContent = Number(serving.fat_g).toFixed(1);
     }
     calculateServing(amount) {
         if (this.productValue) {
@@ -239,10 +241,10 @@ export class FoodLogDetail extends HTMLElement {
     }
     renderNutritionReference(values) {
         const shadow = this.shadowRoot;
-        shadow.getElementById('cal-100').textContent = String(values.calories);
-        shadow.getElementById('protein-100').textContent = String(values.protein_g);
-        shadow.getElementById('carbs-100').textContent = String(values.carbs_g);
-        shadow.getElementById('fat-100').textContent = String(values.fat_g);
+        shadow.getElementById('cal-100').textContent = String(Math.round(values.calories));
+        shadow.getElementById('protein-100').textContent = Number(values.protein_g).toFixed(1);
+        shadow.getElementById('carbs-100').textContent = Number(values.carbs_g).toFixed(1);
+        shadow.getElementById('fat-100').textContent = Number(values.fat_g).toFixed(1);
     }
     renderPortionPresets() {
         const container = this.shadowRoot.getElementById('portion-presets');

@@ -5,7 +5,9 @@
     --health-color-dark: #d4ac0d;
 }
 
-[hidden] { display: none !important; }
+[hidden] {
+    display: none !important;
+}
 
 .food-log-container {
     display: flex;
@@ -119,9 +121,9 @@
 }
 
 .product-image {
-    width: 64px;
-    height: 64px;
-    border-radius: 8px;
+    width: 100px;
+    height: 100px;
+    border-radius: 12px;
     object-fit: cover;
     background: var(--card-bg, #eaeaea);
     flex-shrink: 0;
@@ -141,16 +143,22 @@
 
 /* Nutrition per 100g */
 .nutrition-per100 {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     gap: 0.5rem;
     text-align: center;
-}
 
-.nutrition-per100 .nutri-item {
-    background: var(--card-bg, #eaeaea);
-    border-radius: 8px;
-    padding: 0.5rem 0.25rem;
+    .nutri-label {
+        flex: 1 0 100%;
+    }
+
+    .nutri-item {
+        flex: 1 1 0;
+        background: var(--card-bg, #eaeaea);
+        border-radius: 8px;
+        padding: 0.5rem 0.25rem;
+    }
 }
 
 .nutri-value {
@@ -239,16 +247,17 @@
     display: flex;
     gap: 0.25rem;
     margin-top: 0.35rem;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 }
 
 .preset-btn {
-    padding: 0.25rem 0.5rem;
-    border: 1px solid var(--health-color-dark);
-    border-radius: 6px;
-    background: var(--health-color-light);
-    color: var(--health-color-dark);
-    font-size: 0.7rem;
+    flex: 1 1 0;
+    padding: 0.35rem 0.6rem;
+    border: 1px solid var(--card-border, #ddd);
+    border-radius: 8px;
+    background: var(--card-bg, #eaeaea);
+    color: var(--text-color, #000);
+    font-size: 0.75rem;
     font-weight: 600;
     cursor: pointer;
     white-space: nowrap;
@@ -275,27 +284,66 @@
     border-color: var(--health-color);
 }
 
-/* Calculated serving display */
-.serving-nutrition {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.5rem;
-    text-align: center;
+/* Calculated serving highlight */
+.serving-highlight {
     background: var(--health-color);
-    border-radius: 10px;
-    padding: 0.75rem;
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    color: #000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.serving-nutrition .nutri-item {
-    padding: 0.25rem;
+.main-cal {
+    text-align: center;
 }
 
-.serving-nutrition .nutri-value {
+.main-cal .huge-val {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.05em;
     color: #000;
 }
 
-.serving-nutrition .nutri-label {
-    color: rgba(0, 0, 0, 0.7);
+.main-cal .lbl {
+    font-size: 1rem;
+    font-weight: 600;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.25rem;
+    color: #000;
+}
+
+.macros {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.macro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.macro-val {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #000;
+}
+
+.macro-lbl {
+    font-size: 0.75rem;
+    font-weight: 600;
+    opacity: 0.7;
+    text-transform: uppercase;
+    color: #000;
 }
 
 /* Buttons */
@@ -355,7 +403,9 @@
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .error-text {
@@ -380,18 +430,6 @@
 
     .nutri-label {
         color: rgba(255, 255, 255, 0.6);
-    }
-
-    .serving-nutrition {
-        background: var(--health-color);
-    }
-
-    .serving-nutrition .nutri-value {
-        color: #000;
-    }
-
-    .serving-nutrition .nutri-label {
-        color: rgba(0, 0, 0, 0.7);
     }
 
     .result-cal {

@@ -193,7 +193,6 @@ export class OpenFoodFactsService {
     static getPortionPresets(defaultGrams) {
         return [
             { label: '½', grams: Math.round(defaultGrams * 0.5) },
-            { label: '1', grams: defaultGrams },
             { label: '1½', grams: Math.round(defaultGrams * 1.5) },
             { label: '2', grams: defaultGrams * 2 },
         ];

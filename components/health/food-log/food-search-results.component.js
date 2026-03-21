@@ -68,7 +68,7 @@ export class FoodSearchResults extends HTMLElement {
         brand.textContent = item.brands ?? item.serving_label ?? '';
         const cal = document.createElement('div');
         cal.className = 'result-cal';
-        cal.textContent = `${item.calories ?? 0} kcal`;
+        cal.textContent = `${Math.round(item.calories ?? 0)} kcal`;
         info.appendChild(name);
         info.appendChild(brand);
         row.appendChild(info);
@@ -89,7 +89,7 @@ export class FoodSearchResults extends HTMLElement {
         brand.textContent = item.brands ?? '';
         const cal = document.createElement('div');
         cal.className = 'result-cal';
-        cal.textContent = `${item.calories_per_100g} kcal`;
+        cal.textContent = `${Math.round(item.calories_per_100g ?? 0)} kcal`;
         info.appendChild(name);
         info.appendChild(brand);
         row.appendChild(info);

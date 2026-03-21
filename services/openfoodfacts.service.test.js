@@ -132,6 +132,17 @@ test('OpenFoodFactsService', async (t) => {
         const results = await OpenFoodFactsService.searchFood('nonexistent');
         assert.deepStrictEqual(results, []);
     });
+    await t.test('searchFood returns empty array when aborted', async () => {
+        global.fetch = mock.fn(async () => {
+            const error = new Error('Aborted');
+            error.name = 'AbortError';
+            throw error;
+        });
+        const controller = new AbortController();
+        controller.abort();
+        const results = await OpenFoodFactsService.searchFood('banana', { signal: controller.signal });
+        assert.deepStrictEqual(results, []);
+    });
     await t.test('searchFood returns empty array when no products', async () => {
         global.fetch = mock.fn(async () => ({
             ok: true,

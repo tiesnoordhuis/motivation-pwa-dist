@@ -18,7 +18,7 @@ export interface Activity {
     updated_at: string;
 }
 export type NewActivity = Omit<Activity, 'id' | 'created_at' | 'updated_at'>;
-export type NutritionSource = 'manual' | 'openfoodfacts' | 'ai_estimate';
+export type NutritionSource = 'manual' | 'openfoodfacts' | 'ai_estimate' | 'mfp_import';
 export interface NutritionEntry {
     id: number;
     date: string;
@@ -56,3 +56,31 @@ export interface NutritionEstimate {
     confidence: 'high' | 'medium' | 'low';
     notes: string;
 }
+export interface FoodLibraryItem {
+    id: number;
+    canonical_name: string;
+    display_name: string;
+    brands?: string;
+    barcode?: string;
+    serving_label?: string;
+    serving_quantity?: number;
+    calories?: number;
+    protein_g?: number;
+    carbs_g?: number;
+    fat_g?: number;
+    fiber_g?: number;
+    sugar_g?: number;
+    sodium_mg?: number;
+    per_100g_json?: string;
+    default_amount_json?: string;
+    source: NutritionSource;
+    source_ref?: string;
+    raw_json?: string;
+    use_count: number;
+    last_used_at: string;
+    created_at: string;
+    updated_at: string;
+}
+export type NewFoodLibraryItem = Omit<FoodLibraryItem, 'id' | 'created_at' | 'updated_at' | 'last_used_at'> & {
+    last_used_at?: string;
+};

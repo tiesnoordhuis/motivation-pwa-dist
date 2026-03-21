@@ -72,7 +72,7 @@ export class HealthDayScreen extends HTMLElement {
         });
         this.detail.addEventListener('health:add-food', (event) => {
             const { detail } = event;
-            navigate(`#/health/food-search/${encodeURIComponent(detail.date)}/${encodeURIComponent(detail.meal)}`);
+            navigate(`#/health/food-entry/${encodeURIComponent(detail.date)}/${encodeURIComponent(detail.meal)}`);
         });
         this.detail.addEventListener('health:edit-food', (event) => {
             const { detail } = event;

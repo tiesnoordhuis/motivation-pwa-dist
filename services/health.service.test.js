@@ -84,6 +84,37 @@ test('HealthService nutrition methods', async (t) => {
         }));
         await assert.rejects(() => HealthService.deleteNutritionEntry(999), /Failed to delete nutrition entry/);
     });
+    await t.test('fetchFoodLibrarySearch calls correct URL and returns items', async () => {
+        const mockItems = [
+            {
+                id: 1,
+                canonical_name: 'banana',
+                display_name: 'Banana',
+                source: 'mfp_import',
+                use_count: 4,
+                last_used_at: '2025-01-15T08:00:00Z',
+                created_at: '2025-01-15T08:00:00Z',
+                updated_at: '2025-01-15T08:00:00Z',
+            },
+        ];
+        global.fetch = mock.fn(async () => ({
+            ok: true,
+            json: async () => mockItems,
+        }));
+        const result = await HealthService.fetchFoodLibrarySearch('banana');
+        assert.deepStrictEqual(result, mockItems);
+        const url = global.fetch.mock.calls[0].arguments[0];
+        assert.strictEqual(url, 'http://localhost:3001/api/sections/health/food-library/search?q=banana&limit=10');
+    });
+    await t.test('fetchFoodLibraryByBarcode returns null on 404', async () => {
+        global.fetch = mock.fn(async () => ({
+            ok: false,
+            status: 404,
+            statusText: 'Not Found',
+        }));
+        const result = await HealthService.fetchFoodLibraryByBarcode('123456');
+        assert.strictEqual(result, null);
+    });
 });
 test('HealthService activity methods', async (t) => {
     const dom = new JSDOM('<!DOCTYPE html>', { url: 'http://localhost:8080' });

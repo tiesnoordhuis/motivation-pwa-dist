@@ -1,7 +1,7 @@
 import './health-dashboard-screen.component.js';
 import './health-day-screen.component.js';
 import './health-scanner-screen.component.js';
-import './health-food-search-screen.component.js';
+import './health-food-entry-screen.component.js';
 import './health-ai-estimate-screen.component.js';
 export function healthRoutes() {
     return {
@@ -21,14 +21,27 @@ export function healthRoutes() {
                 return screen;
             },
         },
+        '#/health/food-entry': {
+            parent: '#/health',
+            render: () => document.createElement('health-food-entry-screen'),
+        },
+        '#/health/food-entry/:date/:meal': {
+            parent: '#/health',
+            render: (ctx) => {
+                const screen = document.createElement('health-food-entry-screen');
+                screen.date = decodeURIComponent(ctx.params.date);
+                screen.meal = decodeURIComponent(ctx.params.meal);
+                return screen;
+            },
+        },
         '#/health/food-search': {
             parent: '#/health',
-            render: () => document.createElement('health-food-search-screen'),
+            render: () => document.createElement('health-food-entry-screen'),
         },
         '#/health/food-search/:date/:meal': {
             parent: '#/health',
             render: (ctx) => {
-                const screen = document.createElement('health-food-search-screen');
+                const screen = document.createElement('health-food-entry-screen');
                 screen.date = decodeURIComponent(ctx.params.date);
                 screen.meal = decodeURIComponent(ctx.params.meal);
                 return screen;

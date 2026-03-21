@@ -125,4 +125,36 @@ export class HealthService {
             return { running: false };
         return response.json();
     }
+    // --- Food Library ---
+    static async fetchFoodLibrarySearch(query, limit = 10) {
+        const response = await fetch(`${API_URL}/api/sections/health/food-library/search?q=${encodeURIComponent(query)}&limit=${limit}`);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch food library search: ${response.statusText}`);
+        }
+        return response.json();
+    }
+    static async fetchFoodLibraryRecent(limit = 10) {
+        const response = await fetch(`${API_URL}/api/sections/health/food-library/recent?limit=${limit}`);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch recent food library items: ${response.statusText}`);
+        }
+        return response.json();
+    }
+    static async fetchFoodLibraryFrequent(limit = 10) {
+        const response = await fetch(`${API_URL}/api/sections/health/food-library/frequent?limit=${limit}`);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch frequent food library items: ${response.statusText}`);
+        }
+        return response.json();
+    }
+    static async fetchFoodLibraryByBarcode(barcode) {
+        const response = await fetch(`${API_URL}/api/sections/health/food-library/barcode/${encodeURIComponent(barcode)}`);
+        if (response.status === 404) {
+            return null;
+        }
+        if (!response.ok) {
+            throw new Error(`Failed to fetch food library barcode: ${response.statusText}`);
+        }
+        return response.json();
+    }
 }

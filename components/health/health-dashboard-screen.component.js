@@ -30,9 +30,7 @@ export class HealthDashboardScreen extends HTMLElement {
                 this.dashboard?.showError('Failed to save activity.');
             }
         });
-        this.dashboard.addEventListener('health:scan-barcode', () => { navigate('#/health/scanner'); });
-        this.dashboard.addEventListener('health:search-food', () => { navigate('#/health/food-search'); });
-        this.dashboard.addEventListener('health:ai-estimate', () => { navigate('#/health/ai-estimate'); });
+        this.dashboard.addEventListener('health:add-food', () => { navigate('#/health/food-entry'); });
     }
     async loadData() {
         if (!this.dashboard)

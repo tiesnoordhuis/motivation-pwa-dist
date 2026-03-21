@@ -35,22 +35,42 @@ test('FoodLog component', async (t) => {
         sugar_per_100g: 10.5,
         sodium_per_100g: 0.05,
     };
+    const sampleLibraryItem = {
+        id: 1,
+        canonical_name: 'breakfast bread',
+        display_name: 'Breakfast bread',
+        serving_label: '1 serving',
+        calories: 740.05,
+        protein_g: 41.97,
+        carbs_g: 61.93,
+        fat_g: 33.64,
+        fiber_g: 11.25,
+        sugar_g: 0.28,
+        sodium_mg: 225.98,
+        source: 'mfp_import',
+        source_ref: '90037322296549',
+        use_count: 3,
+        last_used_at: '2026-03-21T10:00:00Z',
+        created_at: '2026-03-21T10:00:00Z',
+        updated_at: '2026-03-21T10:00:00Z',
+    };
     await t.test('showProduct displays product details', () => {
         const el = dom.window.document.createElement('food-log');
         dom.window.document.body.appendChild(el);
         el.showProduct(sampleProduct);
         const shadow = el.shadowRoot;
-        assert.strictEqual(shadow.getElementById('product-name').textContent, 'Chocomel');
-        assert.strictEqual(shadow.getElementById('product-brand').textContent, 'Chocomel');
-        assert.strictEqual(shadow.getElementById('cal-100').textContent, '82');
-        assert.strictEqual(shadow.getElementById('protein-100').textContent, '3.1');
-        assert.strictEqual(shadow.getElementById('carbs-100').textContent, '11');
-        assert.strictEqual(shadow.getElementById('fat-100').textContent, '2.7');
+        const detailShadow = getDetailShadow(el);
+        assert.strictEqual(detailShadow.getElementById('product-name').textContent, 'Chocomel');
+        assert.strictEqual(detailShadow.getElementById('product-brand').textContent, 'Chocomel');
+        assert.strictEqual(detailShadow.getElementById('cal-100').textContent, '82');
+        assert.strictEqual(detailShadow.getElementById('protein-100').textContent, '3.1');
+        assert.strictEqual(detailShadow.getElementById('carbs-100').textContent, '11');
+        assert.strictEqual(detailShadow.getElementById('fat-100').textContent, '2.7');
         // Detail view visible, search hidden
         assert.strictEqual(shadow.getElementById('detail-view').hidden, false);
         assert.strictEqual(shadow.getElementById('search-view').hidden, true);
         // Image shown
-        const img = shadow.getElementById('product-image');
+        const img = detailShadow.getElementById('product-image');
         assert.strictEqual(img.hidden, false);
         assert.strictEqual(img.src, 'https://example.com/img.jpg');
         dom.window.document.body.removeChild(el);
@@ -59,7 +79,7 @@ test('FoodLog component', async (t) => {
         const el = dom.window.document.createElement('food-log');
         dom.window.document.body.appendChild(el);
         el.showProduct({ ...sampleProduct, image_url: undefined });
-        const img = el.shadowRoot.getElementById('product-image');
+        const img = getDetailShadow(el).getElementById('product-image');
         assert.strictEqual(img.hidden, true);
         dom.window.document.body.removeChild(el);
     });
@@ -67,15 +87,15 @@ test('FoodLog component', async (t) => {
         const el = dom.window.document.createElement('food-log');
         dom.window.document.body.appendChild(el);
         el.showProduct(sampleProduct);
-        const shadow = el.shadowRoot;
+        const detailShadow = getDetailShadow(el);
         // Default 100g → same as per 100g
-        assert.strictEqual(shadow.getElementById('cal-serving').textContent, '82');
+        assert.strictEqual(detailShadow.getElementById('cal-serving').textContent, '82');
         // Change to 250g
-        const servingInput = shadow.getElementById('serving-size');
+        const servingInput = detailShadow.getElementById('serving-size');
         servingInput.value = '250';
         servingInput.dispatchEvent(new dom.window.Event('input'));
-        assert.strictEqual(shadow.getElementById('cal-serving').textContent, '205');
-        assert.strictEqual(shadow.getElementById('protein-serving').textContent, '7.75');
+        assert.strictEqual(detailShadow.getElementById('cal-serving').textContent, '205');
+        assert.strictEqual(detailShadow.getElementById('protein-serving').textContent, '7.75');
         dom.window.document.body.removeChild(el);
     });
     await t.test('log button fires onLog with correct data', () => {
@@ -86,12 +106,12 @@ test('FoodLog component', async (t) => {
             loggedEntry = event.detail;
         });
         el.showProduct(sampleProduct);
-        const shadow = el.shadowRoot;
+        const detailShadow = getDetailShadow(el);
         // Set serving to 200g, meal to Lunch
-        shadow.getElementById('serving-size').value = '200';
-        shadow.getElementById('meal-type').value = 'Lunch';
-        servingInput_dispatchEvent(shadow, dom);
-        shadow.getElementById('log-btn').click();
+        detailShadow.getElementById('serving-size').value = '200';
+        detailShadow.getElementById('meal-type').value = 'Lunch';
+        servingInput_dispatchEvent(detailShadow, dom);
+        detailShadow.getElementById('log-btn').click();
         assert.ok(loggedEntry);
         assert.strictEqual(loggedEntry.food_name, 'Chocomel');
         assert.strictEqual(loggedEntry.serving_size, '200g');
@@ -107,7 +127,7 @@ test('FoodLog component', async (t) => {
         let backCalled = false;
         el.addEventListener('health:food-log-back', () => { backCalled = true; });
         el.showProduct(sampleProduct);
-        el.shadowRoot.getElementById('back-btn').click();
+        getDetailShadow(el).getElementById('back-btn').click();
         assert.strictEqual(el.shadowRoot.getElementById('search-view').hidden, false);
         assert.strictEqual(el.shadowRoot.getElementById('detail-view').hidden, true);
         assert.ok(backCalled);
@@ -131,10 +151,19 @@ test('FoodLog component', async (t) => {
     await t.test('lookupBarcode shows error when product not found', async () => {
         const el = dom.window.document.createElement('food-log');
         dom.window.document.body.appendChild(el);
-        global.fetch = mock.fn(async () => ({
-            ok: true,
-            json: async () => ({ status: 0 }),
-        }));
+        global.fetch = mock.fn(async (url) => {
+            if (url.includes('/food-library/barcode/')) {
+                return {
+                    ok: false,
+                    status: 404,
+                    statusText: 'Not Found',
+                };
+            }
+            return {
+                ok: true,
+                json: async () => ({ status: 0 }),
+            };
+        });
         await el.lookupBarcode('0000000000000');
         const shadow = el.shadowRoot;
         assert.strictEqual(shadow.getElementById('search-view').hidden, false);
@@ -146,32 +175,69 @@ test('FoodLog component', async (t) => {
     await t.test('lookupBarcode shows product on success', async () => {
         const el = dom.window.document.createElement('food-log');
         dom.window.document.body.appendChild(el);
-        global.fetch = mock.fn(async () => ({
-            ok: true,
-            json: async () => ({
-                status: 1,
-                product: {
-                    product_name: 'Test Product',
-                    brands: 'Brand',
-                    nutriments: {
-                        'energy-kcal_100g': 100,
-                        'proteins_100g': 5,
-                        'carbohydrates_100g': 20,
-                        'fat_100g': 3,
-                        'fiber_100g': 1,
-                        'sugars_100g': 2,
-                        'sodium_100g': 0.01,
+        global.fetch = mock.fn(async (url) => {
+            if (url.includes('/food-library/barcode/')) {
+                return {
+                    ok: false,
+                    status: 404,
+                    statusText: 'Not Found',
+                };
+            }
+            return {
+                ok: true,
+                json: async () => ({
+                    status: 1,
+                    product: {
+                        product_name: 'Test Product',
+                        brands: 'Brand',
+                        nutriments: {
+                            'energy-kcal_100g': 100,
+                            'proteins_100g': 5,
+                            'carbohydrates_100g': 20,
+                            'fat_100g': 3,
+                            'fiber_100g': 1,
+                            'sugars_100g': 2,
+                            'sodium_100g': 0.01,
+                        },
                     },
-                },
-            }),
-        }));
+                }),
+            };
+        });
         await el.lookupBarcode('1234567890123');
         const shadow = el.shadowRoot;
         assert.strictEqual(shadow.getElementById('detail-view').hidden, false);
-        assert.strictEqual(shadow.getElementById('product-name').textContent, 'Test Product');
+        assert.strictEqual(getDetailShadow(el).getElementById('product-name').textContent, 'Test Product');
+        dom.window.document.body.removeChild(el);
+    });
+    await t.test('showLibraryItem displays fixed-serving library item and logs it', () => {
+        const el = dom.window.document.createElement('food-log');
+        dom.window.document.body.appendChild(el);
+        let loggedEntry = null;
+        el.addEventListener('health:log-food', (event) => {
+            loggedEntry = event.detail;
+        });
+        el.showLibraryItem(sampleLibraryItem);
+        const detailShadow = getDetailShadow(el);
+        assert.strictEqual(detailShadow.getElementById('product-name').textContent, 'Breakfast bread');
+        assert.strictEqual(detailShadow.getElementById('serving-size-label').textContent, 'Servings');
+        assert.strictEqual(detailShadow.getElementById('nutrition-reference-label').textContent, 'Per serving');
+        detailShadow.getElementById('serving-size').value = '2';
+        detailShadow.getElementById('log-btn').click();
+        assert.ok(loggedEntry);
+        assert.strictEqual(loggedEntry.food_name, 'Breakfast bread');
+        assert.strictEqual(loggedEntry.serving_size, '2 x 1 serving');
+        assert.strictEqual(loggedEntry.calories, 1480.1);
+        assert.strictEqual(loggedEntry.source, 'mfp_import');
         dom.window.document.body.removeChild(el);
     });
 });
+function getDetailShadow(el) {
+    const detail = el.shadowRoot.getElementById('detail-component');
+    if (!detail.shadowRoot) {
+        throw new Error('Expected nested detail component shadow root');
+    }
+    return detail.shadowRoot;
+}
 function servingInput_dispatchEvent(shadow, dom) {
     const servingInput = shadow.getElementById('serving-size');
     servingInput.dispatchEvent(new dom.window.Event('input'));

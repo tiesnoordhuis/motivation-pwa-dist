@@ -48,9 +48,7 @@ template.innerHTML = `
         <button class="health-fab" id="fab-btn" title="Log">+</button>
 
         <div class="fab-menu" id="fab-menu" hidden>
-            <button class="fab-option" id="fab-scan">📷 Scan Barcode</button>
-            <button class="fab-option" id="fab-search">🔍 Search Food</button>
-            <button class="fab-option" id="fab-ai">🤖 AI Estimate</button>
+            <button class="fab-option" id="fab-food">🍽 Add Food</button>
             <button class="fab-option" id="fab-activity">🏃 Log Activity</button>
         </div>
 
@@ -116,17 +114,9 @@ export class HealthDashboard extends HTMLElement {
             }
         });
         shadow.getElementById('fab-btn').addEventListener('click', () => this.toggleFabMenu());
-        shadow.getElementById('fab-scan').addEventListener('click', () => {
+        shadow.getElementById('fab-food').addEventListener('click', () => {
             this.closeFabMenu();
-            this.dispatchDashboardEvent('health:scan-barcode');
-        });
-        shadow.getElementById('fab-search').addEventListener('click', () => {
-            this.closeFabMenu();
-            this.dispatchDashboardEvent('health:search-food');
-        });
-        shadow.getElementById('fab-ai').addEventListener('click', () => {
-            this.closeFabMenu();
-            this.dispatchDashboardEvent('health:ai-estimate');
+            this.dispatchDashboardEvent('health:add-food');
         });
         shadow.getElementById('fab-activity').addEventListener('click', () => {
             this.closeFabMenu();

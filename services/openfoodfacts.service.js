@@ -40,10 +40,12 @@ export class OpenFoodFactsService {
             return null;
         }
     }
-    static async searchFood(query) {
+    static async searchFood(query, options) {
         try {
             const fetchProducts = async (params) => {
-                const response = await fetch(`${OFF_PROXY_BASE}/search?${params}`);
+                const response = await fetch(`${OFF_PROXY_BASE}/search?${params}`, {
+                    signal: options?.signal,
+                });
                 if (!response.ok)
                     return [];
                 const data = await response.json();
@@ -86,7 +88,10 @@ export class OpenFoodFactsService {
             // Re-rank by query relevance: score by how many query words appear in product_name
             return this.rankByRelevance(fallbackProducts, query).slice(0, 10);
         }
-        catch {
+        catch (error) {
+            if (error instanceof Error && error.name === 'AbortError') {
+                return [];
+            }
             return [];
         }
     }

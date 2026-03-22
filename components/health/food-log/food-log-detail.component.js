@@ -39,7 +39,7 @@ template.innerHTML = `
                 <label for="serving-size" id="serving-size-label">Serving (g)</label>
                 <div class="serving-controls">
                     <button class="btn-step" id="step-down">−</button>
-                    <input type="number" id="serving-size" min="1" value="100">
+                    <input type="number" id="serving-size" min="0.1" step="0.1" value="100">
                     <button class="btn-step" id="step-up">+</button>
                 </div>
                 <div class="portion-presets" id="portion-presets"></div>
@@ -172,7 +172,7 @@ export class FoodLogDetail extends HTMLElement {
     }
     updateServingDisplay() {
         const shadow = this.shadowRoot;
-        const amount = parseInt(shadow.getElementById('serving-size').value, 10) || 0;
+        const amount = this.getServingAmount();
         const serving = this.calculateServing(amount);
         if (!serving)
             return;
@@ -186,7 +186,7 @@ export class FoodLogDetail extends HTMLElement {
             const serving = OpenFoodFactsService.calculateServing(this.productValue, amount);
             return {
                 food_name: this.productValue.product_name,
-                serving_size: `${amount}g`,
+                serving_size: `${this.formatAmount(amount)}g`,
                 meal_type: this.getSelectedMealType(),
                 ...serving,
                 source: 'openfoodfacts',
@@ -208,17 +208,19 @@ export class FoodLogDetail extends HTMLElement {
             }, amount);
             return {
                 food_name: this.libraryItemValue.display_name,
-                serving_size: `${amount}g`,
+                serving_size: `${this.formatAmount(amount)}g`,
                 meal_type: this.getSelectedMealType(),
                 ...serving,
                 source: this.libraryItemValue.source,
                 source_ref: this.libraryItemValue.barcode ?? this.libraryItemValue.source_ref,
             };
         }
-        const multiplier = Math.max(1, amount);
+        const multiplier = Math.max(0.1, amount);
         return {
             food_name: this.libraryItemValue.display_name,
-            serving_size: multiplier === 1 ? (this.libraryItemValue.serving_label ?? '1 serving') : `${multiplier} x ${this.libraryItemValue.serving_label ?? 'serving'}`,
+            serving_size: multiplier === 1
+                ? (this.libraryItemValue.serving_label ?? '1 serving')
+                : `${this.formatAmount(multiplier)} x ${this.libraryItemValue.serving_label ?? 'serving'}`,
             meal_type: this.getSelectedMealType(),
             calories: (this.libraryItemValue.calories ?? 0) * multiplier,
             protein_g: (this.libraryItemValue.protein_g ?? 0) * multiplier,
@@ -232,8 +234,7 @@ export class FoodLogDetail extends HTMLElement {
         };
     }
     handleLog() {
-        const shadow = this.shadowRoot;
-        const amount = parseInt(shadow.getElementById('serving-size').value, 10) || 1;
+        const amount = this.getServingAmount();
         const detail = this.calculateServing(amount);
         if (detail) {
             this.dispatchEventWithDetail('health:log-food', detail);
@@ -257,9 +258,9 @@ export class FoodLogDetail extends HTMLElement {
             btn.textContent = `x${preset.multiplier} (${preset.grams}g)`;
             btn.addEventListener('click', () => {
                 const input = this.shadowRoot.getElementById('serving-size');
-                const current = parseInt(input.value, 10) || this.defaultGrams;
-                const next = Math.max(1, Math.round(current * preset.multiplier));
-                input.value = String(next);
+                const current = Number.parseFloat(input.value) || this.defaultGrams;
+                const next = Math.max(0.1, current * preset.multiplier);
+                input.value = this.formatAmount(next);
                 this.updateServingDisplay();
             });
             container.appendChild(btn);
@@ -268,14 +269,21 @@ export class FoodLogDetail extends HTMLElement {
     adjustServing(direction) {
         const shadow = this.shadowRoot;
         const input = shadow.getElementById('serving-size');
-        const current = parseInt(input.value, 10) || 0;
+        const current = Number.parseFloat(input.value) || 0;
         const hasVariableWeight = Boolean(this.productValue || this.getLibraryPer100(this.libraryItemValue));
         const step = hasVariableWeight ? OpenFoodFactsService.getServingStep(current) : 1;
-        input.value = String(Math.max(1, current + direction * step));
+        input.value = this.formatAmount(Math.max(0.1, current + direction * step));
         this.updateServingDisplay();
     }
     formatNutritionValue(value) {
         return Number(value.toFixed(2)).toString();
+    }
+    formatAmount(value) {
+        return Number(value.toFixed(2)).toString();
+    }
+    getServingAmount() {
+        const input = this.shadowRoot.getElementById('serving-size');
+        return Math.max(0.1, Number.parseFloat(input.value) || 0.1);
     }
     applyMealTypeSelection() {
         const mealSelect = this.shadowRoot?.getElementById('meal-type');

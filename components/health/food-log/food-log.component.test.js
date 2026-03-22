@@ -260,6 +260,9 @@ test('FoodLog component', async (t) => {
         assert.strictEqual(servingInput.value, '400');
         halfButton.click();
         assert.strictEqual(servingInput.value, '200');
+        servingInput.value = '1';
+        halfButton.click();
+        assert.strictEqual(servingInput.value, '0.5');
         dom.window.document.body.removeChild(el);
     });
     await t.test('library search result selection opens item detail', async () => {

@@ -7,8 +7,8 @@ export class HealthAiEstimateScreen extends HTMLElement {
     dateValue = null;
     mealValue = null;
     returnToPreviousScreen() {
-        if (window.history.length > 1) {
-            window.history.back();
+        if (this.dateValue) {
+            navigate(`#/health/day/${encodeURIComponent(this.dateValue)}`, { history: 'replace' });
             return;
         }
         navigate('#/health', { history: 'replace' });

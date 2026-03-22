@@ -62,8 +62,8 @@ export class HealthScannerScreen extends HTMLElement {
         this.scanner?.stopCamera();
     }
     returnToPreviousScreen() {
-        if (window.history.length > 1) {
-            window.history.back();
+        if (this.dateValue) {
+            navigate(`#/health/day/${encodeURIComponent(this.dateValue)}`, { history: 'replace' });
             return;
         }
         navigate('#/health', { history: 'replace' });

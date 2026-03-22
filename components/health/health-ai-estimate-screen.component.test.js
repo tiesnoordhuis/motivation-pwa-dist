@@ -58,9 +58,6 @@ test('HealthAiEstimateScreen saves estimates and returns to previous screen', as
         created_at: '2026-03-21T12:00:00Z',
         ...entry,
     }));
-    const originalBack = window.history.back.bind(window.history);
-    let backCalls = 0;
-    window.history.back = () => { backCalls++; };
     try {
         window.history.pushState(null, '', '#/health');
         window.history.pushState(null, '', '#/health/ai-estimate');
@@ -89,10 +86,9 @@ test('HealthAiEstimateScreen saves estimates and returns to previous screen', as
         }));
         await flush();
         assert.strictEqual(createMock.mock.callCount(), 1);
-        assert.strictEqual(backCalls, 1);
+        assert.strictEqual(window.location.hash, '#/health');
     }
     finally {
-        window.history.back = originalBack;
         window.history.replaceState(null, '', '/');
         mock.restoreAll();
         document.body.replaceChildren();

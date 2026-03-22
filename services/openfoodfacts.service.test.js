@@ -274,15 +274,13 @@ test('OpenFoodFactsService', async (t) => {
     });
     await t.test('getPortionPresets returns correct presets', () => {
         const presets = OpenFoodFactsService.getPortionPresets(100);
-        assert.strictEqual(presets.length, 4);
+        assert.strictEqual(presets.length, 3);
         assert.strictEqual(presets[0].grams, 50);
-        assert.strictEqual(presets[0].label, '½');
-        assert.strictEqual(presets[1].grams, 100);
-        assert.strictEqual(presets[1].label, '1');
-        assert.strictEqual(presets[2].grams, 150);
-        assert.strictEqual(presets[2].label, '1½');
-        assert.strictEqual(presets[3].grams, 200);
-        assert.strictEqual(presets[3].label, '2');
+        assert.strictEqual(presets[0].multiplier, 0.5);
+        assert.strictEqual(presets[1].grams, 150);
+        assert.strictEqual(presets[1].multiplier, 1.5);
+        assert.strictEqual(presets[2].grams, 200);
+        assert.strictEqual(presets[2].multiplier, 2);
     });
     await t.test('rankByRelevance prioritizes products with most query matches', () => {
         const products = [

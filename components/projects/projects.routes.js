@@ -1,17 +1,23 @@
-import { buildSectionPage } from '../../utils/section-page.utils.js';
+import './projects-dashboard-screen.component.js';
+import './projects-scrumboard-screen.component.js';
+import './projects-stories-screen.component.js';
+import './projects-git-log-screen.component.js';
 export function projectsRoutes() {
     return {
         '#/projects': {
-            render: () => {
-                const container = document.createElement('div');
-                container.className = 'view-section';
-                container.id = 'projects-view';
-                const page = buildSectionPage(container, 'Projects', 'projects', '#/projects');
-                const p = document.createElement('p');
-                p.textContent = 'Coming soon - scrumboard, git activity, server control.';
-                page.content.appendChild(p);
-                return container;
-            },
+            render: () => document.createElement('projects-dashboard-screen'),
+        },
+        '#/projects/scrumboard': {
+            parent: '#/projects',
+            render: () => document.createElement('projects-scrumboard-screen'),
+        },
+        '#/projects/stories': {
+            parent: '#/projects',
+            render: () => document.createElement('projects-stories-screen'),
+        },
+        '#/projects/git-log': {
+            parent: '#/projects',
+            render: () => document.createElement('projects-git-log-screen'),
         },
     };
 }

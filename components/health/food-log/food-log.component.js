@@ -55,10 +55,6 @@ export class FoodLog extends HTMLElement {
         shadow.getElementById('ai-btn').addEventListener('click', () => this.dispatchFoodLogEvent('health:ai-estimate'));
         detail.addEventListener('health:food-log-back', () => {
             this.showSearchView();
-            this.dispatchFoodLogEvent('health:food-log-back');
-        });
-        detail.addEventListener('health:log-food', (event) => {
-            this.dispatchFoodLogEvent('health:log-food', event.detail);
         });
         results.addEventListener('health:select-library-item', (event) => {
             this.abortOffSearch();

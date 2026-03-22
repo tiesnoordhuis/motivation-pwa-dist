@@ -121,6 +121,18 @@ test('FoodLog component', async (t) => {
         assert.strictEqual(loggedEntry.source_ref, '8710400500247');
         dom.window.document.body.removeChild(el);
     });
+    await t.test('log event is emitted only once from detail interactions', () => {
+        const el = dom.window.document.createElement('food-log');
+        dom.window.document.body.appendChild(el);
+        let logCount = 0;
+        el.addEventListener('health:log-food', () => {
+            logCount += 1;
+        });
+        el.showProduct(sampleProduct);
+        getDetailShadow(el).getElementById('log-btn').click();
+        assert.strictEqual(logCount, 1);
+        dom.window.document.body.removeChild(el);
+    });
     await t.test('back button returns to search view', () => {
         const el = dom.window.document.createElement('food-log');
         dom.window.document.body.appendChild(el);
@@ -228,6 +240,57 @@ test('FoodLog component', async (t) => {
         assert.strictEqual(loggedEntry.serving_size, '2 x 1 serving');
         assert.strictEqual(loggedEntry.calories, 1480.1);
         assert.strictEqual(loggedEntry.source, 'mfp_import');
+        dom.window.document.body.removeChild(el);
+    });
+    await t.test('portion presets apply relative scaling repeatedly', () => {
+        const el = dom.window.document.createElement('food-log');
+        dom.window.document.body.appendChild(el);
+        el.showProduct(sampleProduct);
+        const detailShadow = getDetailShadow(el);
+        const presetButtons = Array.from(detailShadow.querySelectorAll('.preset-btn'));
+        const doubleButton = presetButtons.find((button) => button.textContent?.startsWith('x2'));
+        const halfButton = presetButtons.find((button) => button.textContent?.startsWith('x0.5'));
+        const servingInput = detailShadow.getElementById('serving-size');
+        assert.ok(doubleButton);
+        assert.ok(halfButton);
+        assert.strictEqual(servingInput.value, '100');
+        doubleButton.click();
+        assert.strictEqual(servingInput.value, '200');
+        doubleButton.click();
+        assert.strictEqual(servingInput.value, '400');
+        halfButton.click();
+        assert.strictEqual(servingInput.value, '200');
+        dom.window.document.body.removeChild(el);
+    });
+    await t.test('library search result selection opens item detail', async () => {
+        const el = dom.window.document.createElement('food-log');
+        dom.window.document.body.appendChild(el);
+        global.fetch = mock.fn(async (url) => {
+            if (url.includes('/food-library/search')) {
+                return {
+                    ok: true,
+                    json: async () => [sampleLibraryItem],
+                };
+            }
+            if (url.includes('/openfoodfacts/search')) {
+                return {
+                    ok: true,
+                    json: async () => ({ products: [] }),
+                };
+            }
+            throw new Error(`Unexpected fetch: ${url}`);
+        });
+        const searchInput = el.shadowRoot.getElementById('search-input');
+        searchInput.value = 'bread';
+        searchInput.dispatchEvent(new dom.window.Event('input'));
+        await new Promise((resolve) => setTimeout(resolve, 350));
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        const resultsComponent = el.shadowRoot.getElementById('search-results-component');
+        const libraryRow = resultsComponent.shadowRoot.querySelector('.search-result-item');
+        assert.ok(libraryRow);
+        libraryRow.click();
+        assert.strictEqual(el.shadowRoot.getElementById('detail-view').hidden, false);
+        assert.strictEqual(getDetailShadow(el).getElementById('product-name').textContent, 'Breakfast bread');
         dom.window.document.body.removeChild(el);
     });
 });

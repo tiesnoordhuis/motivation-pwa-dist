@@ -1,0 +1,70 @@
+:host { display: block; }
+
+.state {
+    padding: 0.8rem 0.85rem;
+    border-radius: 16px;
+    background: rgba(19, 87, 166, 0.06);
+    color: #47698e;
+}
+
+.git-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.7rem;
+}
+
+.git-entry {
+    list-style: none;
+}
+
+.git-item {
+    border-radius: 16px;
+    background: rgba(19, 87, 166, 0.06);
+    overflow: hidden;
+}
+
+.item-summary {
+    display: flex;
+    gap: 0.7rem;
+    align-items: start;
+    justify-content: space-between;
+    padding: 0.8rem 0.85rem;
+    cursor: pointer;
+    list-style: none;
+}
+
+.item-summary::-webkit-details-marker {
+    display: none;
+}
+
+.item-text {
+    display: grid;
+    gap: 0.15rem;
+}
+
+.item-id {
+    font-size: 0.75rem;
+    color: #47698e;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.item-title {
+    font-weight: 700;
+    color: #0c2442;
+}
+
+.item-body {
+    padding: 0 0.85rem 0.85rem;
+}
+
+.item-meta,
+.item-detail {
+    margin: 0.45rem 0 0;
+    color: #47698e;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    word-break: break-word;
+}

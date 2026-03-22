@@ -177,9 +177,9 @@ export class FoodLogDetail extends HTMLElement {
         if (!serving)
             return;
         shadow.getElementById('cal-serving').textContent = String(Math.round(serving.calories));
-        shadow.getElementById('protein-serving').textContent = Number(serving.protein_g).toFixed(1);
-        shadow.getElementById('carbs-serving').textContent = Number(serving.carbs_g).toFixed(1);
-        shadow.getElementById('fat-serving').textContent = Number(serving.fat_g).toFixed(1);
+        shadow.getElementById('protein-serving').textContent = this.formatNutritionValue(serving.protein_g);
+        shadow.getElementById('carbs-serving').textContent = this.formatNutritionValue(serving.carbs_g);
+        shadow.getElementById('fat-serving').textContent = this.formatNutritionValue(serving.fat_g);
     }
     calculateServing(amount) {
         if (this.productValue) {
@@ -242,9 +242,9 @@ export class FoodLogDetail extends HTMLElement {
     renderNutritionReference(values) {
         const shadow = this.shadowRoot;
         shadow.getElementById('cal-100').textContent = String(Math.round(values.calories));
-        shadow.getElementById('protein-100').textContent = Number(values.protein_g).toFixed(1);
-        shadow.getElementById('carbs-100').textContent = Number(values.carbs_g).toFixed(1);
-        shadow.getElementById('fat-100').textContent = Number(values.fat_g).toFixed(1);
+        shadow.getElementById('protein-100').textContent = this.formatNutritionValue(values.protein_g);
+        shadow.getElementById('carbs-100').textContent = this.formatNutritionValue(values.carbs_g);
+        shadow.getElementById('fat-100').textContent = this.formatNutritionValue(values.fat_g);
     }
     renderPortionPresets() {
         const container = this.shadowRoot.getElementById('portion-presets');
@@ -253,9 +253,13 @@ export class FoodLogDetail extends HTMLElement {
         for (const preset of presets) {
             const btn = document.createElement('button');
             btn.className = 'preset-btn';
-            btn.textContent = `${preset.label}× (${preset.grams}g)`;
+            btn.type = 'button';
+            btn.textContent = `x${preset.multiplier} (${preset.grams}g)`;
             btn.addEventListener('click', () => {
-                this.shadowRoot.getElementById('serving-size').value = String(preset.grams);
+                const input = this.shadowRoot.getElementById('serving-size');
+                const current = parseInt(input.value, 10) || this.defaultGrams;
+                const next = Math.max(1, Math.round(current * preset.multiplier));
+                input.value = String(next);
                 this.updateServingDisplay();
             });
             container.appendChild(btn);
@@ -269,6 +273,9 @@ export class FoodLogDetail extends HTMLElement {
         const step = hasVariableWeight ? OpenFoodFactsService.getServingStep(current) : 1;
         input.value = String(Math.max(1, current + direction * step));
         this.updateServingDisplay();
+    }
+    formatNutritionValue(value) {
+        return Number(value.toFixed(2)).toString();
     }
     applyMealTypeSelection() {
         const mealSelect = this.shadowRoot?.getElementById('meal-type');

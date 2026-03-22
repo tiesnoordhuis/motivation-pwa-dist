@@ -1,0 +1,113 @@
+:host {
+    display: block;
+}
+
+.state {
+    padding: 0.8rem 0.85rem;
+    border-radius: 16px;
+    background: rgba(19, 87, 166, 0.06);
+    color: #47698e;
+}
+
+.story-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.7rem;
+}
+
+.story-entry {
+    list-style: none;
+}
+
+.story-item {
+    border-radius: 16px;
+    background: rgba(19, 87, 166, 0.06);
+    overflow: hidden;
+}
+
+.item-summary {
+    display: flex;
+    gap: 0.7rem;
+    align-items: start;
+    justify-content: space-between;
+    padding: 0.8rem 0.85rem;
+    cursor: pointer;
+    list-style: none;
+    background-color: #e8f0f7;
+}
+
+.item-summary::-webkit-details-marker {
+    display: none;
+}
+
+.item-text {
+    display: grid;
+    gap: 0.15rem;
+}
+
+.item-id {
+    font-size: 0.75rem;
+    color: #224c7c;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.item-title {
+    font-weight: 700;
+    color: #0c2442;
+}
+
+.item-body {
+    padding: 0 0.85rem 0.85rem;
+    background: rgba(255, 255, 255, 0.78);
+    border-top: 1px solid rgba(103, 149, 214, 0.16);
+}
+
+.item-copy,
+.item-meta {
+    margin: 0.45rem 0 0;
+    color: #18385f;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.item-copy[hidden] {
+    display: none;
+}
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 5.5rem;
+    padding: 0.28rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.status--todo {
+    background: rgba(19, 87, 166, 0.18);
+    color: #0f4d95;
+}
+
+.status--in-progress {
+    background: rgba(222, 143, 18, 0.22);
+    color: #7a4700;
+}
+
+.status--done {
+    background: rgba(26, 135, 84, 0.2);
+    color: #0d5a35;
+}
+
+.status--superseded,
+.status--unknown {
+    background: rgba(70, 105, 142, 0.18);
+    color: #2f557d;
+}

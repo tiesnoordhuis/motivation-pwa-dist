@@ -67,6 +67,7 @@ test('HealthDashboardScreen renders fetched dashboard data', async () => {
 test('HealthDashboardScreen shows an error when dashboard loading fails', async () => {
     const { HealthDashboardScreen } = await import('./health-dashboard-screen.component.js');
     const { HealthService } = await import('../../services/health.service.js');
+    mock.method(console, 'error', () => { });
     mock.method(HealthService, 'fetchDashboardActivities', async () => {
         throw new Error('boom');
     });

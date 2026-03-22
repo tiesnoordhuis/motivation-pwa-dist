@@ -1,2 +1,0 @@
-// --- Social Section Types ---
-export {};

@@ -113,7 +113,7 @@
     ]
   },
   "app.ts": {
-    "file": "assets/app-D4fvnAI7.js",
+    "file": "assets/app-D07C__g6.js",
     "name": "app",
     "src": "app.ts",
     "isDynamicEntry": true,
@@ -161,7 +161,7 @@
     ]
   },
   "components/extra/debug-screen.component.ts": {
-    "file": "assets/debug-screen.component-DR5O8oUe.js",
+    "file": "assets/debug-screen.component-rwX37des.js",
     "name": "debug-screen.component",
     "src": "components/extra/debug-screen.component.ts",
     "isDynamicEntry": true,
@@ -409,7 +409,7 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-BAyKN8hI.js",
+    "file": "assets/app-BZs1ASNT.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,

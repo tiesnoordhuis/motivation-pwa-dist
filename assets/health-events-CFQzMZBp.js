@@ -1,0 +1,2 @@
+var e={ADD_WORKOUT:`health:add-workout`,ADD_FOOD:`health:add-food`,EDIT_FOOD:`health:edit-food`,EDIT_WORKOUT:`health:edit-workout`,SCAN_BARCODE:`health:scan-barcode`,AI_ESTIMATE:`health:ai-estimate`,LOG_FOOD:`health:log-food`,FOOD_LOG_BACK:`health:food-log-back`,SELECT_LIBRARY_ITEM:`health:select-library-item`,SELECT_OFF_ITEM:`health:select-off-item`,LOAD_MORE_OFF:`health:load-more-off`};export{e as t};
+//# sourceMappingURL=health-events-CFQzMZBp.js.map

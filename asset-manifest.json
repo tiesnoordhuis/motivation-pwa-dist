@@ -42,8 +42,8 @@
       "_config-DWYOVQ7m.js"
     ]
   },
-  "_log-viewer.component-CPS8m15_.js": {
-    "file": "assets/log-viewer.component-CPS8m15_.js",
+  "_log-viewer.component-GNzBwHEA.js": {
+    "file": "assets/log-viewer.component-GNzBwHEA.js",
     "name": "log-viewer.component",
     "imports": [
       "_css-Dm_coJsa.js"
@@ -121,7 +121,7 @@
     ]
   },
   "app.ts": {
-    "file": "assets/app-CuwoXuza.js",
+    "file": "assets/app-D63uCsQb.js",
     "name": "app",
     "src": "app.ts",
     "isDynamicEntry": true,
@@ -170,14 +170,14 @@
     ]
   },
   "components/extra/debug-screen.component.ts": {
-    "file": "assets/debug-screen.component-RDQhECd2.js",
+    "file": "assets/debug-screen.component-B76HUBlU.js",
     "name": "debug-screen.component",
     "src": "components/extra/debug-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
       "_db.service-4GERwPil.js",
       "_preload-helper-D4M6sveU.js",
-      "_log-viewer.component-CPS8m15_.js",
+      "_log-viewer.component-GNzBwHEA.js",
       "_config-DWYOVQ7m.js",
       "_sync.service-BiOjorLB.js",
       "_client-log-buffer-C0zmyD5M.js",
@@ -361,12 +361,12 @@
     ]
   },
   "components/projects/projects-logs-screen.component.ts": {
-    "file": "assets/projects-logs-screen.component-D5GEc1ZP.js",
+    "file": "assets/projects-logs-screen.component-ClfT67nh.js",
     "name": "projects-logs-screen.component",
     "src": "components/projects/projects-logs-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
-      "_log-viewer.component-CPS8m15_.js",
+      "_log-viewer.component-GNzBwHEA.js",
       "_config-DWYOVQ7m.js",
       "_projects.service-C5CglAJR.js",
       "_section-page.utils-rjB2QeLS.js"
@@ -425,7 +425,7 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-8aONu2Pv.js",
+    "file": "assets/app-B4F1ZvC8.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,

@@ -11,8 +11,8 @@
     "file": "assets/css-Dm_coJsa.js",
     "name": "css"
   },
-  "_db.service-4GERwPil.js": {
-    "file": "assets/db.service-4GERwPil.js",
+  "_db.service-BWrGBYnt.js": {
+    "file": "assets/db.service-BWrGBYnt.js",
     "name": "db.service"
   },
   "_food-serving-form.component-CW1L4K2h.js": {
@@ -49,11 +49,11 @@
       "_css-Dm_coJsa.js"
     ]
   },
-  "_notifications.service-CKGeyZla.js": {
-    "file": "assets/notifications.service-CKGeyZla.js",
+  "_notifications.service-BN2jtJ3a.js": {
+    "file": "assets/notifications.service-BN2jtJ3a.js",
     "name": "notifications.service",
     "imports": [
-      "_db.service-4GERwPil.js",
+      "_db.service-BWrGBYnt.js",
       "_config-DWYOVQ7m.js"
     ]
   },
@@ -72,15 +72,15 @@
       "_config-DWYOVQ7m.js"
     ]
   },
-  "_router-DygVHiHh.js": {
-    "file": "assets/router-DygVHiHh.js",
+  "_router-C1LAFBmV.js": {
+    "file": "assets/router-C1LAFBmV.js",
     "name": "router"
   },
-  "_section-page.utils-rjB2QeLS.js": {
-    "file": "assets/section-page.utils-rjB2QeLS.js",
+  "_section-page.utils-plUj1ULn.js": {
+    "file": "assets/section-page.utils-plUj1ULn.js",
     "name": "section-page.utils",
     "imports": [
-      "_router-DygVHiHh.js"
+      "_router-C1LAFBmV.js"
     ]
   },
   "_services-section.component-YeGBdZe4.js": {
@@ -91,13 +91,13 @@
       "_css-Dm_coJsa.js"
     ]
   },
-  "_status-pill.component-GYmKDZ2f.js": {
-    "file": "assets/status-pill.component-GYmKDZ2f.js",
+  "_status-pill.component-CFXBnAmW.js": {
+    "file": "assets/status-pill.component-CFXBnAmW.js",
     "name": "status-pill.component",
     "imports": [
       "_services-section.component-YeGBdZe4.js",
-      "_sync.service-BiOjorLB.js",
-      "_router-DygVHiHh.js",
+      "_sync.service-CUhuhJya.js",
+      "_router-C1LAFBmV.js",
       "_css-Dm_coJsa.js"
     ]
   },
@@ -105,11 +105,11 @@
     "file": "assets/sw-controls-BNEL7O4t.js",
     "name": "sw-controls"
   },
-  "_sync.service-BiOjorLB.js": {
-    "file": "assets/sync.service-BiOjorLB.js",
+  "_sync.service-CUhuhJya.js": {
+    "file": "assets/sync.service-CUhuhJya.js",
     "name": "sync.service",
     "imports": [
-      "_db.service-4GERwPil.js",
+      "_db.service-BWrGBYnt.js",
       "_config-DWYOVQ7m.js"
     ]
   },
@@ -121,26 +121,26 @@
     ]
   },
   "app.ts": {
-    "file": "assets/app-D63uCsQb.js",
+    "file": "assets/app-DhAPc52U.js",
     "name": "app",
     "src": "app.ts",
     "isDynamicEntry": true,
     "imports": [
-      "_db.service-4GERwPil.js",
+      "_db.service-BWrGBYnt.js",
       "_preload-helper-D4M6sveU.js",
       "_health-BxVwVwL4.js",
-      "_notifications.service-CKGeyZla.js",
+      "_notifications.service-BN2jtJ3a.js",
       "_services-section.component-YeGBdZe4.js",
       "_config-DWYOVQ7m.js",
-      "_sync.service-BiOjorLB.js",
-      "_router-DygVHiHh.js",
+      "_sync.service-CUhuhJya.js",
+      "_router-C1LAFBmV.js",
       "_css-Dm_coJsa.js",
-      "_section-page.utils-rjB2QeLS.js"
+      "_section-page.utils-plUj1ULn.js"
     ],
     "dynamicImports": [
       "components/home/home-screen/home-screen.component.ts",
-      "components/goal/goal.renderer.ts",
-      "components/agenda/agenda.renderer.ts",
+      "components/goal/goals-screen.component.ts",
+      "components/agenda/agenda-screen.component.ts",
       "components/health/health-dashboard-screen.component.ts",
       "components/health/health-day-screen.component.ts",
       "components/health/health-scanner-screen.component.ts",
@@ -159,10 +159,10 @@
       "components/extra/debug-screen.component.ts"
     ]
   },
-  "components/agenda/agenda.renderer.ts": {
-    "file": "assets/agenda.renderer-lX7NPeBy.js",
-    "name": "agenda.renderer",
-    "src": "components/agenda/agenda.renderer.ts",
+  "components/agenda/agenda-screen.component.ts": {
+    "file": "assets/agenda-screen.component-D-C10fcR.js",
+    "name": "agenda-screen.component",
+    "src": "components/agenda/agenda-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
       "_config-DWYOVQ7m.js",
@@ -170,40 +170,40 @@
     ]
   },
   "components/extra/debug-screen.component.ts": {
-    "file": "assets/debug-screen.component-B76HUBlU.js",
+    "file": "assets/debug-screen.component-BdtE4LO1.js",
     "name": "debug-screen.component",
     "src": "components/extra/debug-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
-      "_db.service-4GERwPil.js",
+      "_db.service-BWrGBYnt.js",
       "_preload-helper-D4M6sveU.js",
       "_log-viewer.component-GNzBwHEA.js",
       "_config-DWYOVQ7m.js",
-      "_sync.service-BiOjorLB.js",
+      "_sync.service-CUhuhJya.js",
       "_client-log-buffer-C0zmyD5M.js",
       "_sw-controls-BNEL7O4t.js",
-      "_section-page.utils-rjB2QeLS.js"
+      "_section-page.utils-plUj1ULn.js"
     ],
     "dynamicImports": [
       "_sw-controls-BNEL7O4t.js"
     ]
   },
   "components/extra/notification-settings-screen.component.ts": {
-    "file": "assets/notification-settings-screen.component-DueChx4A.js",
+    "file": "assets/notification-settings-screen.component-BquG_r3i.js",
     "name": "notification-settings-screen.component",
     "src": "components/extra/notification-settings-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
-      "_db.service-4GERwPil.js",
-      "_notifications.service-CKGeyZla.js",
+      "_db.service-BWrGBYnt.js",
+      "_notifications.service-BN2jtJ3a.js",
       "_config-DWYOVQ7m.js",
-      "_section-page.utils-rjB2QeLS.js"
+      "_section-page.utils-plUj1ULn.js"
     ]
   },
-  "components/goal/goal.renderer.ts": {
-    "file": "assets/goal.renderer-D10ar8vl.js",
-    "name": "goal.renderer",
-    "src": "components/goal/goal.renderer.ts",
+  "components/goal/goals-screen.component.ts": {
+    "file": "assets/goals-screen.component-Cqb4s0jc.js",
+    "name": "goals-screen.component",
+    "src": "components/goal/goals-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
       "_config-DWYOVQ7m.js",
@@ -211,21 +211,21 @@
     ]
   },
   "components/health/health-activity-edit-screen.component.ts": {
-    "file": "assets/health-activity-edit-screen.component-D9z3LQ8O.js",
+    "file": "assets/health-activity-edit-screen.component-50cEm4Vw.js",
     "name": "health-activity-edit-screen.component",
     "src": "components/health/health-activity-edit-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
       "_health-BxVwVwL4.js",
       "_config-DWYOVQ7m.js",
-      "_router-DygVHiHh.js",
+      "_router-C1LAFBmV.js",
       "_health.service-DomvKb9v.js",
       "_css-Dm_coJsa.js",
-      "_section-page.utils-rjB2QeLS.js"
+      "_section-page.utils-plUj1ULn.js"
     ]
   },
   "components/health/health-ai-estimate-screen.component.ts": {
-    "file": "assets/health-ai-estimate-screen.component-Bvl9Ohse.js",
+    "file": "assets/health-ai-estimate-screen.component-pqR24O6y.js",
     "name": "health-ai-estimate-screen.component",
     "src": "components/health/health-ai-estimate-screen.component.ts",
     "isDynamicEntry": true,
@@ -234,14 +234,14 @@
       "_food-serving-form.component-CW1L4K2h.js",
       "_health-utils-1k2w_0ni.js",
       "_config-DWYOVQ7m.js",
-      "_router-DygVHiHh.js",
+      "_router-C1LAFBmV.js",
       "_health.service-DomvKb9v.js",
       "_css-Dm_coJsa.js",
-      "_section-page.utils-rjB2QeLS.js"
+      "_section-page.utils-plUj1ULn.js"
     ]
   },
   "components/health/health-dashboard-screen.component.ts": {
-    "file": "assets/health-dashboard-screen.component-Cqwu06Uu.js",
+    "file": "assets/health-dashboard-screen.component-BqJ9G5Sa.js",
     "name": "health-dashboard-screen.component",
     "src": "components/health/health-dashboard-screen.component.ts",
     "isDynamicEntry": true,
@@ -249,14 +249,14 @@
       "_health-BxVwVwL4.js",
       "_health-utils-1k2w_0ni.js",
       "_config-DWYOVQ7m.js",
-      "_router-DygVHiHh.js",
+      "_router-C1LAFBmV.js",
       "_health.service-DomvKb9v.js",
       "_css-Dm_coJsa.js",
-      "_section-page.utils-rjB2QeLS.js"
+      "_section-page.utils-plUj1ULn.js"
     ]
   },
   "components/health/health-day-screen.component.ts": {
-    "file": "assets/health-day-screen.component-IpeVU_K5.js",
+    "file": "assets/health-day-screen.component-C3P0c8LW.js",
     "name": "health-day-screen.component",
     "src": "components/health/health-day-screen.component.ts",
     "isDynamicEntry": true,
@@ -265,14 +265,14 @@
       "_health-utils-1k2w_0ni.js",
       "_health-events-s7m7xzol.js",
       "_config-DWYOVQ7m.js",
-      "_router-DygVHiHh.js",
+      "_router-C1LAFBmV.js",
       "_health.service-DomvKb9v.js",
       "_css-Dm_coJsa.js",
-      "_section-page.utils-rjB2QeLS.js"
+      "_section-page.utils-plUj1ULn.js"
     ]
   },
   "components/health/health-food-entry-screen.component.ts": {
-    "file": "assets/health-food-entry-screen.component-BqcD-NnV.js",
+    "file": "assets/health-food-entry-screen.component-CPHqZAI9.js",
     "name": "health-food-entry-screen.component",
     "src": "components/health/health-food-entry-screen.component.ts",
     "isDynamicEntry": true,
@@ -282,14 +282,14 @@
       "_health-utils-1k2w_0ni.js",
       "_health-events-s7m7xzol.js",
       "_config-DWYOVQ7m.js",
-      "_router-DygVHiHh.js",
+      "_router-C1LAFBmV.js",
       "_health.service-DomvKb9v.js",
       "_css-Dm_coJsa.js",
-      "_section-page.utils-rjB2QeLS.js"
+      "_section-page.utils-plUj1ULn.js"
     ]
   },
   "components/health/health-nutrition-edit-screen.component.ts": {
-    "file": "assets/health-nutrition-edit-screen.component-DmdvjeWw.js",
+    "file": "assets/health-nutrition-edit-screen.component-CXrIk0Pa.js",
     "name": "health-nutrition-edit-screen.component",
     "src": "components/health/health-nutrition-edit-screen.component.ts",
     "isDynamicEntry": true,
@@ -297,59 +297,59 @@
       "_health-BxVwVwL4.js",
       "_food-serving-form.component-CW1L4K2h.js",
       "_config-DWYOVQ7m.js",
-      "_router-DygVHiHh.js",
+      "_router-C1LAFBmV.js",
       "_health.service-DomvKb9v.js",
       "_css-Dm_coJsa.js",
-      "_section-page.utils-rjB2QeLS.js"
+      "_section-page.utils-plUj1ULn.js"
     ]
   },
   "components/health/health-scanner-screen.component.ts": {
-    "file": "assets/health-scanner-screen.component-DGRai-Lk.js",
+    "file": "assets/health-scanner-screen.component-BlGtpcFZ.js",
     "name": "health-scanner-screen.component",
     "src": "components/health/health-scanner-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
       "_config-DWYOVQ7m.js",
-      "_router-DygVHiHh.js",
+      "_router-C1LAFBmV.js",
       "_health.service-DomvKb9v.js",
       "_css-Dm_coJsa.js",
-      "_section-page.utils-rjB2QeLS.js"
+      "_section-page.utils-plUj1ULn.js"
     ]
   },
   "components/home/home-screen/home-screen.component.ts": {
-    "file": "assets/home-screen.component-qLvF8bnz.js",
+    "file": "assets/home-screen.component-cbcFZsIv.js",
     "name": "home-screen.component",
     "src": "components/home/home-screen/home-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
-      "_db.service-4GERwPil.js",
+      "_db.service-BWrGBYnt.js",
       "_services-section.component-YeGBdZe4.js",
-      "_status-pill.component-GYmKDZ2f.js",
+      "_status-pill.component-CFXBnAmW.js",
       "_config-DWYOVQ7m.js",
-      "_sync.service-BiOjorLB.js",
-      "_router-DygVHiHh.js",
+      "_sync.service-CUhuhJya.js",
+      "_router-C1LAFBmV.js",
       "_css-Dm_coJsa.js"
     ]
   },
   "components/projects/projects-dashboard-screen.component.ts": {
-    "file": "assets/projects-dashboard-screen.component-CMQ5wvrZ.js",
+    "file": "assets/projects-dashboard-screen.component-eVCuaqAQ.js",
     "name": "projects-dashboard-screen.component",
     "src": "components/projects/projects-dashboard-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
-      "_db.service-4GERwPil.js",
+      "_db.service-BWrGBYnt.js",
       "_services-section.component-YeGBdZe4.js",
-      "_status-pill.component-GYmKDZ2f.js",
+      "_status-pill.component-CFXBnAmW.js",
       "_config-DWYOVQ7m.js",
-      "_sync.service-BiOjorLB.js",
-      "_router-DygVHiHh.js",
+      "_sync.service-CUhuhJya.js",
+      "_router-C1LAFBmV.js",
       "_projects.service-C5CglAJR.js",
       "_css-Dm_coJsa.js",
-      "_section-page.utils-rjB2QeLS.js"
+      "_section-page.utils-plUj1ULn.js"
     ]
   },
   "components/projects/projects-git-log-screen.component.ts": {
-    "file": "assets/projects-git-log-screen.component-byU182cJ.js",
+    "file": "assets/projects-git-log-screen.component-B-ASSJBS.js",
     "name": "projects-git-log-screen.component",
     "src": "components/projects/projects-git-log-screen.component.ts",
     "isDynamicEntry": true,
@@ -357,11 +357,11 @@
       "_config-DWYOVQ7m.js",
       "_projects.service-C5CglAJR.js",
       "_css-Dm_coJsa.js",
-      "_section-page.utils-rjB2QeLS.js"
+      "_section-page.utils-plUj1ULn.js"
     ]
   },
   "components/projects/projects-logs-screen.component.ts": {
-    "file": "assets/projects-logs-screen.component-ClfT67nh.js",
+    "file": "assets/projects-logs-screen.component-DCcO8lA-.js",
     "name": "projects-logs-screen.component",
     "src": "components/projects/projects-logs-screen.component.ts",
     "isDynamicEntry": true,
@@ -369,11 +369,11 @@
       "_log-viewer.component-GNzBwHEA.js",
       "_config-DWYOVQ7m.js",
       "_projects.service-C5CglAJR.js",
-      "_section-page.utils-rjB2QeLS.js"
+      "_section-page.utils-plUj1ULn.js"
     ]
   },
   "components/projects/projects-scrumboard-screen.component.ts": {
-    "file": "assets/projects-scrumboard-screen.component-COEkhJJQ.js",
+    "file": "assets/projects-scrumboard-screen.component-Bsiwrrws.js",
     "name": "projects-scrumboard-screen.component",
     "src": "components/projects/projects-scrumboard-screen.component.ts",
     "isDynamicEntry": true,
@@ -382,11 +382,11 @@
       "_config-DWYOVQ7m.js",
       "_projects.service-C5CglAJR.js",
       "_css-Dm_coJsa.js",
-      "_section-page.utils-rjB2QeLS.js"
+      "_section-page.utils-plUj1ULn.js"
     ]
   },
   "components/projects/projects-stories-screen.component.ts": {
-    "file": "assets/projects-stories-screen.component-CGa01MeC.js",
+    "file": "assets/projects-stories-screen.component-B3v1s4Ep.js",
     "name": "projects-stories-screen.component",
     "src": "components/projects/projects-stories-screen.component.ts",
     "isDynamicEntry": true,
@@ -395,37 +395,37 @@
       "_config-DWYOVQ7m.js",
       "_projects.service-C5CglAJR.js",
       "_css-Dm_coJsa.js",
-      "_section-page.utils-rjB2QeLS.js"
+      "_section-page.utils-plUj1ULn.js"
     ]
   },
   "components/vietnamese/vietnamese-dashboard-screen.component.ts": {
-    "file": "assets/vietnamese-dashboard-screen.component-BG-1CMrX.js",
+    "file": "assets/vietnamese-dashboard-screen.component-YHzCuY-h.js",
     "name": "vietnamese-dashboard-screen.component",
     "src": "components/vietnamese/vietnamese-dashboard-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
       "_config-DWYOVQ7m.js",
-      "_router-DygVHiHh.js",
+      "_router-C1LAFBmV.js",
       "_vietnamese.service-DYW4G9b_.js",
       "_css-Dm_coJsa.js",
-      "_section-page.utils-rjB2QeLS.js"
+      "_section-page.utils-plUj1ULn.js"
     ]
   },
   "components/vietnamese/vietnamese-review-screen.component.ts": {
-    "file": "assets/vietnamese-review-screen.component-CCWmNJDr.js",
+    "file": "assets/vietnamese-review-screen.component-C-cu-t-X.js",
     "name": "vietnamese-review-screen.component",
     "src": "components/vietnamese/vietnamese-review-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
       "_config-DWYOVQ7m.js",
-      "_router-DygVHiHh.js",
+      "_router-C1LAFBmV.js",
       "_vietnamese.service-DYW4G9b_.js",
       "_css-Dm_coJsa.js",
-      "_section-page.utils-rjB2QeLS.js"
+      "_section-page.utils-plUj1ULn.js"
     ]
   },
   "index.html": {
-    "file": "assets/app-B4F1ZvC8.js",
+    "file": "assets/app-SqLGtDoY.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,
@@ -437,7 +437,7 @@
       "app.ts"
     ],
     "css": [
-      "assets/app-D_MBoxoA.css"
+      "assets/app-DkR7q-f0.css"
     ]
   },
   "service-worker.ts": {

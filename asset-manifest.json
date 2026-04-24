@@ -15,8 +15,8 @@
     "file": "assets/db.service-BWrGBYnt.js",
     "name": "db.service"
   },
-  "_food-serving-form.component-CW1L4K2h.js": {
-    "file": "assets/food-serving-form.component-CW1L4K2h.js",
+  "_food-serving-form.component-C8eb2qcu.js": {
+    "file": "assets/food-serving-form.component-C8eb2qcu.js",
     "name": "food-serving-form.component",
     "imports": [
       "_config-DWYOVQ7m.js",
@@ -121,7 +121,7 @@
     ]
   },
   "app.ts": {
-    "file": "assets/app-DhAPc52U.js",
+    "file": "assets/app-TLZEZ1ZF.js",
     "name": "app",
     "src": "app.ts",
     "isDynamicEntry": true,
@@ -225,13 +225,13 @@
     ]
   },
   "components/health/health-ai-estimate-screen.component.ts": {
-    "file": "assets/health-ai-estimate-screen.component-pqR24O6y.js",
+    "file": "assets/health-ai-estimate-screen.component-DT2ewmrh.js",
     "name": "health-ai-estimate-screen.component",
     "src": "components/health/health-ai-estimate-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
       "_health-BxVwVwL4.js",
-      "_food-serving-form.component-CW1L4K2h.js",
+      "_food-serving-form.component-C8eb2qcu.js",
       "_health-utils-1k2w_0ni.js",
       "_config-DWYOVQ7m.js",
       "_router-C1LAFBmV.js",
@@ -272,13 +272,13 @@
     ]
   },
   "components/health/health-food-entry-screen.component.ts": {
-    "file": "assets/health-food-entry-screen.component-CPHqZAI9.js",
+    "file": "assets/health-food-entry-screen.component-D3iCtJ8q.js",
     "name": "health-food-entry-screen.component",
     "src": "components/health/health-food-entry-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
       "_health-BxVwVwL4.js",
-      "_food-serving-form.component-CW1L4K2h.js",
+      "_food-serving-form.component-C8eb2qcu.js",
       "_health-utils-1k2w_0ni.js",
       "_health-events-s7m7xzol.js",
       "_config-DWYOVQ7m.js",
@@ -289,13 +289,13 @@
     ]
   },
   "components/health/health-nutrition-edit-screen.component.ts": {
-    "file": "assets/health-nutrition-edit-screen.component-CXrIk0Pa.js",
+    "file": "assets/health-nutrition-edit-screen.component-BLS8rol6.js",
     "name": "health-nutrition-edit-screen.component",
     "src": "components/health/health-nutrition-edit-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
       "_health-BxVwVwL4.js",
-      "_food-serving-form.component-CW1L4K2h.js",
+      "_food-serving-form.component-C8eb2qcu.js",
       "_config-DWYOVQ7m.js",
       "_router-C1LAFBmV.js",
       "_health.service-DomvKb9v.js",
@@ -425,7 +425,7 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-SqLGtDoY.js",
+    "file": "assets/app-CiyCvk0n.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,

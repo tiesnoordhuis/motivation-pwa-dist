@@ -1,0 +1,2 @@
+function e(e){return e===`in_progress`?`In progress`:e===`done`?`Done`:e===`superseded`?`Superseded`:e===`unknown`?`Unknown`:`Todo`}function t(e){return`status status--${e.replace(`_`,`-`)}`}export{t as n,e as t};
+//# sourceMappingURL=project-shared-DihJ2Gy-.js.map

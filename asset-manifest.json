@@ -85,12 +85,12 @@
     "file": "assets/preload-helper-Dd-HcVz_.js",
     "name": "preload-helper"
   },
-  "_project-shared-sSZ2OQ56.js": {
-    "file": "assets/project-shared-sSZ2OQ56.js",
+  "_project-shared-DUCxn5er.js": {
+    "file": "assets/project-shared-DUCxn5er.js",
     "name": "project-shared"
   },
-  "_projects.service-CX3n0f3j.js": {
-    "file": "assets/projects.service-CX3n0f3j.js",
+  "_projects.service-DAa0ekbH.js": {
+    "file": "assets/projects.service-DAa0ekbH.js",
     "name": "projects.service",
     "imports": [
       "_config-Bo0XAlpd.js"
@@ -123,8 +123,8 @@
       "_css-DykrH9zC.js"
     ]
   },
-  "_status-pill.component-D5zsSpYW.js": {
-    "file": "assets/status-pill.component-D5zsSpYW.js",
+  "_status-pill.component-9O_Rthzi.js": {
+    "file": "assets/status-pill.component-9O_Rthzi.js",
     "name": "status-pill.component",
     "imports": [
       "_services-section.component-q5QAUyum.js",
@@ -149,15 +149,15 @@
     "file": "assets/uuid-Rm5biSUJ.js",
     "name": "uuid"
   },
-  "_vietnamese.service-CLON4I4N.js": {
-    "file": "assets/vietnamese.service-CLON4I4N.js",
+  "_vietnamese.service-CGlqzeAQ.js": {
+    "file": "assets/vietnamese.service-CGlqzeAQ.js",
     "name": "vietnamese.service",
     "imports": [
       "_config-Bo0XAlpd.js"
     ]
   },
   "app.ts": {
-    "file": "assets/app-BTXCLOVl.js",
+    "file": "assets/app-CLmcPEW0.js",
     "name": "app",
     "src": "app.ts",
     "isDynamicEntry": true,
@@ -378,22 +378,27 @@
     ]
   },
   "components/home/home-screen/home-screen.component.ts": {
-    "file": "assets/home-screen.component-Bg5eKcMZ.js",
+    "file": "assets/home-screen.component-CyfKTU3s.js",
     "name": "home-screen.component",
     "src": "components/home/home-screen/home-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
       "_uuid-Rm5biSUJ.js",
       "_services-section.component-q5QAUyum.js",
-      "_status-pill.component-D5zsSpYW.js",
+      "_status-pill.component-9O_Rthzi.js",
       "_config-Bo0XAlpd.js",
       "_sync.service-BjSQA0d7.js",
       "_router-BC-3T2GD.js",
-      "_css-DykrH9zC.js"
+      "_health.service-CAE60ueN.js",
+      "_projects.service-DAa0ekbH.js",
+      "_vietnamese.service-CGlqzeAQ.js",
+      "_component-logger-Dci6SRV3.js",
+      "_css-DykrH9zC.js",
+      "_safe-exec-BI_xF1Oi.js"
     ]
   },
   "components/projects/projects-client-logs-screen.component.ts": {
-    "file": "assets/projects-client-logs-screen.component-CsxbdgBb.js",
+    "file": "assets/projects-client-logs-screen.component-By5MjJzN.js",
     "name": "projects-client-logs-screen.component",
     "src": "components/projects/projects-client-logs-screen.component.ts",
     "isDynamicEntry": true,
@@ -402,13 +407,13 @@
       "_log-viewer.component-BtAQM_DR.js",
       "_config-Bo0XAlpd.js",
       "_client-log-buffer-BzFhAvci.js",
-      "_projects.service-CX3n0f3j.js",
+      "_projects.service-DAa0ekbH.js",
       "_component-logger-Dci6SRV3.js",
       "_section-page.utils-_6IKhrsM.js"
     ]
   },
   "components/projects/projects-dashboard-screen.component.ts": {
-    "file": "assets/projects-dashboard-screen.component-CCjh6cz_.js",
+    "file": "assets/projects-dashboard-screen.component-BUwdR0rt.js",
     "name": "projects-dashboard-screen.component",
     "src": "components/projects/projects-dashboard-screen.component.ts",
     "isDynamicEntry": true,
@@ -416,70 +421,70 @@
       "_uuid-Rm5biSUJ.js",
       "_screen-status-Diq-k2Gm.js",
       "_services-section.component-q5QAUyum.js",
-      "_status-pill.component-D5zsSpYW.js",
+      "_status-pill.component-9O_Rthzi.js",
       "_config-Bo0XAlpd.js",
       "_sync.service-BjSQA0d7.js",
       "_router-BC-3T2GD.js",
-      "_projects.service-CX3n0f3j.js",
+      "_projects.service-DAa0ekbH.js",
       "_css-DykrH9zC.js",
       "_section-page.utils-_6IKhrsM.js"
     ]
   },
   "components/projects/projects-git-log-screen.component.ts": {
-    "file": "assets/projects-git-log-screen.component-DlFdSDlm.js",
+    "file": "assets/projects-git-log-screen.component-C59FeMJR.js",
     "name": "projects-git-log-screen.component",
     "src": "components/projects/projects-git-log-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
       "_config-Bo0XAlpd.js",
-      "_projects.service-CX3n0f3j.js",
+      "_projects.service-DAa0ekbH.js",
       "_component-logger-Dci6SRV3.js",
       "_css-DykrH9zC.js",
       "_section-page.utils-_6IKhrsM.js"
     ]
   },
   "components/projects/projects-logs-screen.component.ts": {
-    "file": "assets/projects-logs-screen.component-D8_qLlcu.js",
+    "file": "assets/projects-logs-screen.component-CL6ItFUs.js",
     "name": "projects-logs-screen.component",
     "src": "components/projects/projects-logs-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
       "_log-viewer.component-BtAQM_DR.js",
       "_config-Bo0XAlpd.js",
-      "_projects.service-CX3n0f3j.js",
+      "_projects.service-DAa0ekbH.js",
       "_section-page.utils-_6IKhrsM.js"
     ]
   },
   "components/projects/projects-scrumboard-screen.component.ts": {
-    "file": "assets/projects-scrumboard-screen.component-BdMygzcY.js",
+    "file": "assets/projects-scrumboard-screen.component-DWDnfQ6B.js",
     "name": "projects-scrumboard-screen.component",
     "src": "components/projects/projects-scrumboard-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
-      "_project-shared-sSZ2OQ56.js",
+      "_project-shared-DUCxn5er.js",
       "_config-Bo0XAlpd.js",
-      "_projects.service-CX3n0f3j.js",
+      "_projects.service-DAa0ekbH.js",
       "_component-logger-Dci6SRV3.js",
       "_css-DykrH9zC.js",
       "_section-page.utils-_6IKhrsM.js"
     ]
   },
   "components/projects/projects-stories-screen.component.ts": {
-    "file": "assets/projects-stories-screen.component-BDCxMSHA.js",
+    "file": "assets/projects-stories-screen.component-D0HfB0KG.js",
     "name": "projects-stories-screen.component",
     "src": "components/projects/projects-stories-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
-      "_project-shared-sSZ2OQ56.js",
+      "_project-shared-DUCxn5er.js",
       "_config-Bo0XAlpd.js",
-      "_projects.service-CX3n0f3j.js",
+      "_projects.service-DAa0ekbH.js",
       "_component-logger-Dci6SRV3.js",
       "_css-DykrH9zC.js",
       "_section-page.utils-_6IKhrsM.js"
     ]
   },
   "components/vietnamese/vietnamese-dashboard-screen.component.ts": {
-    "file": "assets/vietnamese-dashboard-screen.component-Bo3_WgWH.js",
+    "file": "assets/vietnamese-dashboard-screen.component-CLdxcqJL.js",
     "name": "vietnamese-dashboard-screen.component",
     "src": "components/vietnamese/vietnamese-dashboard-screen.component.ts",
     "isDynamicEntry": true,
@@ -487,13 +492,13 @@
       "_screen-status-Diq-k2Gm.js",
       "_config-Bo0XAlpd.js",
       "_router-BC-3T2GD.js",
-      "_vietnamese.service-CLON4I4N.js",
+      "_vietnamese.service-CGlqzeAQ.js",
       "_css-DykrH9zC.js",
       "_section-page.utils-_6IKhrsM.js"
     ]
   },
   "components/vietnamese/vietnamese-review-screen.component.ts": {
-    "file": "assets/vietnamese-review-screen.component-B5BOuyMb.js",
+    "file": "assets/vietnamese-review-screen.component-cl5-yMa7.js",
     "name": "vietnamese-review-screen.component",
     "src": "components/vietnamese/vietnamese-review-screen.component.ts",
     "isDynamicEntry": true,
@@ -501,13 +506,13 @@
       "_screen-status-Diq-k2Gm.js",
       "_config-Bo0XAlpd.js",
       "_router-BC-3T2GD.js",
-      "_vietnamese.service-CLON4I4N.js",
+      "_vietnamese.service-CGlqzeAQ.js",
       "_css-DykrH9zC.js",
       "_section-page.utils-_6IKhrsM.js"
     ]
   },
   "index.html": {
-    "file": "assets/app-DJV8zr3m.js",
+    "file": "assets/app-BqFxldEW.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,

@@ -1,0 +1,2 @@
+function e(){if(typeof crypto.randomUUIDv7==`function`)return crypto.randomUUIDv7();let e=new Uint8Array(16);crypto.getRandomValues(e);let t=Temporal.Now.instant().epochMilliseconds;e[0]=t/2**40&255,e[1]=t/2**32&255,e[2]=t/2**24&255,e[3]=t/2**16&255,e[4]=t/2**8&255,e[5]=t&255,e[6]=e[6]&15|112,e[8]=e[8]&63|128;let n=Array.from(e,e=>e.toString(16).padStart(2,`0`)).join(``);return`${n.slice(0,8)}-${n.slice(8,12)}-${n.slice(12,16)}-${n.slice(16,20)}-${n.slice(20)}`}export{e as t};
+//# sourceMappingURL=uuid-BrMWvI7i.js.map

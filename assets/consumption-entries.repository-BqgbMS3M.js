@@ -1,0 +1,26 @@
+import{t as e}from"./uuid-BrMWvI7i.js";var t={"Content-Type":`application/json`},n=class extends Error{constructor(e){super(e),this.name=`NotFoundError`}},r=class{ok(e){return{status:200,body:e,headers:t}}created(e){return{status:201,body:e,headers:t}}noContent(){return{status:204}}badRequest(e){return{status:400,body:{error:e},headers:t}}notFound(e){return{status:404,body:{error:e},headers:t}}unavailable(e){return{status:503,body:{error:e},headers:t}}forbidden(e){return{status:403,body:{error:e},headers:t}}},i=`
+    id, date, meal_type, food_item_id, amount,
+    calories, protein_g, carbs_g, fat_g, fiber_g, sugar_g, sodium_mg,
+    source_meal_id, meal_occurrence_id, created_at, updated_at
+`,a=10;function o(e){let t=[...e].sort((e,t)=>e-t),n=t.length,r=Math.floor(n/2);return n%2==1?t[r]:(t[r-1]+t[r])/2}async function s(t,n){let r=e();return await t.execute(`
+            INSERT INTO consumption_entries (
+                id, date, meal_type, food_item_id, amount,
+                calories, protein_g, carbs_g, fat_g, fiber_g, sugar_g, sodium_mg,
+                source_meal_id, meal_occurrence_id
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `,r,n.date,n.meal_type,n.food_item_id,n.amount,n.calories??null,n.protein_g??null,n.carbs_g??null,n.fat_g??null,n.fiber_g??null,n.sugar_g??null,n.sodium_mg??null,n.source_meal_id??null,n.meal_occurrence_id??null),await c(t,n.food_item_id),r}async function c(e,t){let n=await e.query(`SELECT amount FROM consumption_entries
+         WHERE food_item_id = ?
+         ORDER BY rowid DESC
+         LIMIT ${a}`,t);if(n.length===0)return;let r=n.length<=2?n[0].amount:o(n.map(e=>e.amount));await e.execute(`UPDATE food_items SET default_serving_amount = ?, updated_at = datetime('now') WHERE id = ?`,r,t)}function l(e,t){let n=e.base_amount;if(!Number.isFinite(n)||n<=0||!Number.isFinite(t))return{calories:null,protein_g:null,carbs_g:null,fat_g:null,fiber_g:null,sugar_g:null,sodium_mg:null};let r=t/n,i=e=>typeof e!=`number`||!Number.isFinite(e)?null:e*r;return{calories:i(e.calories_per_base),protein_g:i(e.protein_g_per_base),carbs_g:i(e.carbs_g_per_base),fat_g:i(e.fat_g_per_base),fiber_g:i(e.fiber_g_per_base),sugar_g:i(e.sugar_g_per_base),sodium_mg:i(e.sodium_mg_per_base)}}function u(e){let t={async findById(t){return e.queryOne(`SELECT ${i} FROM consumption_entries WHERE id = ?`,[t])},async getById(t){return e.queryOne(`SELECT ${i} FROM consumption_entries WHERE id = ?`,[t],{notFound:()=>new n(`Consumption entry ${t} not found`)})},async getByDate(t){return e.query(`SELECT ${i} FROM consumption_entries WHERE date = ? ORDER BY meal_type, created_at`,t)},async getByDateRange(t,n){return e.query(`SELECT ${i} FROM consumption_entries WHERE date >= ? AND date <= ? ORDER BY date DESC, meal_type, created_at`,t,n)},async getDateRangeSummary(t,n){return e.query(`
+                    SELECT date,
+                           COALESCE(SUM(calories), 0) AS total_calories,
+                           COALESCE(SUM(protein_g), 0) AS total_protein_g,
+                           COALESCE(SUM(carbs_g), 0) AS total_carbs_g,
+                           COALESCE(SUM(fat_g), 0) AS total_fat_g,
+                           COUNT(*) AS entry_count
+                    FROM consumption_entries
+                    WHERE date >= ? AND date <= ?
+                    GROUP BY date
+                    ORDER BY date DESC
+                `,t,n)},async create(n){await e.execute(`BEGIN TRANSACTION`);try{let r=await s(e,n);return await e.execute(`COMMIT`),t.getById(r)}catch(t){throw await e.execute(`ROLLBACK`),t}},async createForFoodItem(e,n){let r=l(e,n.amount);return t.create({date:n.date,meal_type:n.meal_type,food_item_id:e.id,amount:n.amount,calories:n.overrides?.calories??r.calories??void 0,protein_g:n.overrides?.protein_g??r.protein_g??void 0,carbs_g:n.overrides?.carbs_g??r.carbs_g??void 0,fat_g:n.overrides?.fat_g??r.fat_g??void 0,fiber_g:n.overrides?.fiber_g??r.fiber_g??void 0,sugar_g:n.overrides?.sugar_g??r.sugar_g??void 0,sodium_mg:n.overrides?.sodium_mg??r.sodium_mg??void 0,source_meal_id:n.overrides?.source_meal_id,meal_occurrence_id:n.overrides?.meal_occurrence_id})},async update(n,r){let i=await t.getById(n),a=[],o=[];for(let e of[`date`,`meal_type`,`food_item_id`,`amount`,`calories`,`protein_g`,`carbs_g`,`fat_g`,`fiber_g`,`sugar_g`,`sodium_mg`,`source_meal_id`,`meal_occurrence_id`])e in r&&(a.push(`${e} = ?`),o.push(r[e]??null));if(a.length===0)return i;a.push(`updated_at = datetime('now')`),o.push(n);let s=r.food_item_id??i.food_item_id,l=`amount`in r&&r.amount!==i.amount,u=s!==i.food_item_id;await e.execute(`BEGIN TRANSACTION`);try{await e.execute(`UPDATE consumption_entries SET ${a.join(`, `)} WHERE id = ?`,...o),(l||u)&&(await c(e,s),u&&await c(e,i.food_item_id)),await e.execute(`COMMIT`)}catch(t){throw await e.execute(`ROLLBACK`),t}return t.getById(n)},async delete(n){let r=await t.findById(n);if(!r)return!1;await e.execute(`BEGIN TRANSACTION`);try{await e.execute(`DELETE FROM consumption_entries WHERE id = ?`,n),await c(e,r.food_item_id),await e.execute(`COMMIT`)}catch(t){throw await e.execute(`ROLLBACK`),t}return!0}};return t}export{n as a,r as i,u as n,s as r,l as t};
+//# sourceMappingURL=consumption-entries.repository-BqgbMS3M.js.map

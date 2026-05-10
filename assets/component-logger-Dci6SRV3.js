@@ -1,2 +1,0 @@
-var e=Symbol.for(`motivation:log-module`);function t(t){let n=n=>[{[e]:t},...n];return{info:(...e)=>console.info(...n(e)),warn:(...e)=>console.warn(...n(e)),error:(...e)=>console.error(...n(e)),debug:(...e)=>console.debug(...n(e))}}function n(t,n){return t.length>0&&typeof t[0]==`object`&&t[0]!==null&&e in t[0]?{module:t[0][e],cleanArgs:t.slice(1)}:{module:n,cleanArgs:t}}export{n,t};
-//# sourceMappingURL=component-logger-Dci6SRV3.js.map

@@ -1,0 +1,2 @@
+function e(e){if(!Number.isFinite(e)||e===0)return`0`;let t=Math.abs(e);if(t>=100)return String(Math.round(e));let n=t>=10?1:2;return Number(e.toFixed(n)).toString()}export{e as t};
+//# sourceMappingURL=format-macro-UPYxuYs7.js.map

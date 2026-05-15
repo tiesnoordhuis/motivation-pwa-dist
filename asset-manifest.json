@@ -203,7 +203,7 @@
     ]
   },
   "app.ts": {
-    "file": "assets/app-QOnKsHDn.js",
+    "file": "assets/app-C9hgmm9V.js",
     "name": "app",
     "src": "app.ts",
     "isDynamicEntry": true,
@@ -362,7 +362,7 @@
     ]
   },
   "components/health/health-day-screen.component.ts": {
-    "file": "assets/health-day-screen.component-C_dvv1Un.js",
+    "file": "assets/health-day-screen.component-BTqgkoAg.js",
     "name": "health-day-screen.component",
     "src": "components/health/health-day-screen.component.ts",
     "isDynamicEntry": true,
@@ -411,18 +411,20 @@
     ]
   },
   "components/health/health-meals-screen/health-meals-screen.component.ts": {
-    "file": "assets/health-meals-screen.component-z_yd7kAW.js",
+    "file": "assets/health-meals-screen.component-CBsFOb27.js",
     "name": "health-meals-screen.component",
     "src": "components/health/health-meals-screen/health-meals-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
       "_consumption-entries.repository-BqgbMS3M.js",
+      "_uuid-BrMWvI7i.js",
       "_screen-status-D6_-owPD.js",
       "_food-log-detail.component-B7czXAxL.js",
       "_food-serving-form.component-nHLgE4Xk.js",
       "_food-thumbnail.component-C0GTmbsX.js",
       "_health-events-BZ0fwkgn.js",
       "_config-CYlp5G0A.js",
+      "_router-BlddGjxW.js",
       "_files.service-BhhajLzq.js",
       "_health.service-BFciFZ4L.js",
       "_component-logger-B1LLe88N.js",
@@ -432,7 +434,7 @@
       "_section-page.utils-DCrsRG_e.js"
     ],
     "css": [
-      "assets/health-meals-screen-QVShIOUz.css"
+      "assets/health-meals-screen-D-R8N_t1.css"
     ]
   },
   "components/health/health-nutrition-edit-screen.component.ts": {
@@ -600,7 +602,7 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-BW5N0zBC.js",
+    "file": "assets/app-Dj7hjZxi.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,

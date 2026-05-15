@@ -203,7 +203,7 @@
     ]
   },
   "app.ts": {
-    "file": "assets/app-C-25qD7A.js",
+    "file": "assets/app-QT7PghP4.js",
     "name": "app",
     "src": "app.ts",
     "isDynamicEntry": true,
@@ -260,7 +260,7 @@
     ]
   },
   "components/extra/debug-screen/debug-screen.component.ts": {
-    "file": "assets/debug-screen.component-CkC8L5Sw.js",
+    "file": "assets/debug-screen.component-CFTsV8Hx.js",
     "name": "debug-screen.component",
     "src": "components/extra/debug-screen/debug-screen.component.ts",
     "isDynamicEntry": true,
@@ -324,7 +324,7 @@
     ]
   },
   "components/health/health-ai-estimate-screen.component.ts": {
-    "file": "assets/health-ai-estimate-screen.component-Cmjb1ZHs.js",
+    "file": "assets/health-ai-estimate-screen.component-B8UbzeKX.js",
     "name": "health-ai-estimate-screen.component",
     "src": "components/health/health-ai-estimate-screen.component.ts",
     "isDynamicEntry": true,
@@ -411,7 +411,7 @@
     ]
   },
   "components/health/health-meals-screen/health-meals-screen.component.ts": {
-    "file": "assets/health-meals-screen.component-DeLsOUNn.js",
+    "file": "assets/health-meals-screen.component-Kq68Bm34.js",
     "name": "health-meals-screen.component",
     "src": "components/health/health-meals-screen/health-meals-screen.component.ts",
     "isDynamicEntry": true,
@@ -458,7 +458,7 @@
     ]
   },
   "components/health/health-scanner-screen.component.ts": {
-    "file": "assets/health-scanner-screen.component-OSVliSKB.js",
+    "file": "assets/health-scanner-screen.component-B1B15bHg.js",
     "name": "health-scanner-screen.component",
     "src": "components/health/health-scanner-screen.component.ts",
     "isDynamicEntry": true,
@@ -602,7 +602,7 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-C6sZkIUL.js",
+    "file": "assets/app-BxrZqH9w.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,

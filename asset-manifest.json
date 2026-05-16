@@ -57,13 +57,13 @@
       "_config-CYlp5G0A.js"
     ]
   },
-  "_food-log-detail.component-DiBRrUaP.js": {
-    "file": "assets/food-log-detail.component-DiBRrUaP.js",
+  "_food-log-detail.component-VS2q5xXY.js": {
+    "file": "assets/food-log-detail.component-VS2q5xXY.js",
     "name": "food-log-detail.component",
     "imports": [
       "_health-DubEGM-_.js",
       "_food-serving-form.component-rUwyrLvp.js",
-      "_health-events-BZ0fwkgn.js",
+      "_health-events-D_tMp6-G.js",
       "_health-utils-BbmWRFXC.js",
       "_files.service-BhhajLzq.js",
       "_health.service-BFciFZ4L.js",
@@ -97,8 +97,8 @@
     "file": "assets/health-DubEGM-_.js",
     "name": "health"
   },
-  "_health-events-BZ0fwkgn.js": {
-    "file": "assets/health-events-BZ0fwkgn.js",
+  "_health-events-D_tMp6-G.js": {
+    "file": "assets/health-events-D_tMp6-G.js",
     "name": "health-events"
   },
   "_health-utils-BbmWRFXC.js": {
@@ -203,7 +203,7 @@
     ]
   },
   "app.ts": {
-    "file": "assets/app-QT7PghP4.js",
+    "file": "assets/app-BM76EOva.js",
     "name": "app",
     "src": "app.ts",
     "isDynamicEntry": true,
@@ -324,14 +324,14 @@
     ]
   },
   "components/health/health-ai-estimate-screen.component.ts": {
-    "file": "assets/health-ai-estimate-screen.component-B8UbzeKX.js",
+    "file": "assets/health-ai-estimate-screen.component-HRfIKGZy.js",
     "name": "health-ai-estimate-screen.component",
     "src": "components/health/health-ai-estimate-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
       "_health-DubEGM-_.js",
       "_food-serving-form.component-rUwyrLvp.js",
-      "_health-events-BZ0fwkgn.js",
+      "_health-events-D_tMp6-G.js",
       "_health-utils-BbmWRFXC.js",
       "_config-CYlp5G0A.js",
       "_router-BlddGjxW.js",
@@ -362,14 +362,14 @@
     ]
   },
   "components/health/health-day-screen.component.ts": {
-    "file": "assets/health-day-screen.component-BZ72WyWB.js",
+    "file": "assets/health-day-screen.component-CTDQcaCK.js",
     "name": "health-day-screen.component",
     "src": "components/health/health-day-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
       "_health-DubEGM-_.js",
       "_food-thumbnail.component-DXByJIYY.js",
-      "_health-events-BZ0fwkgn.js",
+      "_health-events-D_tMp6-G.js",
       "_health-utils-BbmWRFXC.js",
       "_config-CYlp5G0A.js",
       "_router-BlddGjxW.js",
@@ -383,7 +383,7 @@
     ]
   },
   "components/health/health-food-entry-screen.component.ts": {
-    "file": "assets/health-food-entry-screen.component-V3ZMZPS9.js",
+    "file": "assets/health-food-entry-screen.component-BREws30E.js",
     "name": "health-food-entry-screen.component",
     "src": "components/health/health-food-entry-screen.component.ts",
     "isDynamicEntry": true,
@@ -391,10 +391,10 @@
       "_consumption-entries.repository-BqgbMS3M.js",
       "_health-DubEGM-_.js",
       "_screen-status-D6_-owPD.js",
-      "_food-log-detail.component-DiBRrUaP.js",
+      "_food-log-detail.component-VS2q5xXY.js",
       "_food-serving-form.component-rUwyrLvp.js",
       "_food-thumbnail.component-DXByJIYY.js",
-      "_health-events-BZ0fwkgn.js",
+      "_health-events-D_tMp6-G.js",
       "_health-utils-BbmWRFXC.js",
       "_config-CYlp5G0A.js",
       "_router-BlddGjxW.js",
@@ -411,7 +411,7 @@
     ]
   },
   "components/health/health-meals-screen/health-meals-screen.component.ts": {
-    "file": "assets/health-meals-screen.component-Kq68Bm34.js",
+    "file": "assets/health-meals-screen.component-CpUxPCWo.js",
     "name": "health-meals-screen.component",
     "src": "components/health/health-meals-screen/health-meals-screen.component.ts",
     "isDynamicEntry": true,
@@ -419,10 +419,10 @@
       "_consumption-entries.repository-BqgbMS3M.js",
       "_uuid-BrMWvI7i.js",
       "_screen-status-D6_-owPD.js",
-      "_food-log-detail.component-DiBRrUaP.js",
+      "_food-log-detail.component-VS2q5xXY.js",
       "_food-serving-form.component-rUwyrLvp.js",
       "_food-thumbnail.component-DXByJIYY.js",
-      "_health-events-BZ0fwkgn.js",
+      "_health-events-D_tMp6-G.js",
       "_config-CYlp5G0A.js",
       "_router-BlddGjxW.js",
       "_files.service-BhhajLzq.js",
@@ -602,7 +602,7 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-BxrZqH9w.js",
+    "file": "assets/app-CbPtaMLy.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,

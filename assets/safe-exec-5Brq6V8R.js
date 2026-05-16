@@ -1,0 +1,2 @@
+async function e(e,t,n,r){r?.silent||e.setLoading();try{await n(),e.clearStatus()}catch(n){let i=r?.errorMessage??`Operation failed`;if(t.error(i,n),r?.errorMessage){let t=n instanceof Error?Error(`${r.errorMessage}: ${n.message}`):Error(`${r.errorMessage}: ${n}`);n instanceof Error&&n.stack&&(t.stack=`${t.name}: ${t.message}\n${n.stack}`),e.setError(t)}else e.setError(n)}}export{e as t};
+//# sourceMappingURL=safe-exec-5Brq6V8R.js.map

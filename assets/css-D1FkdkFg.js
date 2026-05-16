@@ -1,2 +1,0 @@
-var e=new Map,t=`[hidden]{display:none!important}`;function n(n){let r=t+n,i=e.get(r);if(i)return i;let a=new CSSStyleSheet;return a.replaceSync(r),e.set(r,a),a}export{n as t};
-//# sourceMappingURL=css-D1FkdkFg.js.map

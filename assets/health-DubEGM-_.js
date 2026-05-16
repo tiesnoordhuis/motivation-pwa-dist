@@ -1,2 +1,0 @@
-var e=[`Breakfast`,`Lunch`,`Dinner`,`Snacks`],t=[`workout`,`running`,`cycling`,`swimming`,`gym`,`tennis`,`ice-skating`,`walking`],n=[`g`,`ml`,`piece`];export{n,e as r,t};
-//# sourceMappingURL=health-DubEGM-_.js.map

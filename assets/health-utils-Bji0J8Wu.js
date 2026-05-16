@@ -1,2 +1,0 @@
-function e(e){switch(e){case`gym`:return`🏋️`;case`tennis`:return`🎾`;case`ice-skating`:return`⛸️`;case`running`:return`🏃`;case`cycling`:return`🚴`;case`swimming`:return`🏊`;case`walking`:return`🚶`;default:return`💪`}}function t(){let e=Temporal.Now.plainTimeISO().hour;return e<11?`Breakfast`:e<15?`Lunch`:e<21?`Dinner`:`Snacks`}export{t as n,e as t};
-//# sourceMappingURL=health-utils-Bji0J8Wu.js.map

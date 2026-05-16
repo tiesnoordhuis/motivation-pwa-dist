@@ -1,0 +1,2 @@
+import{t as e}from"./config-BpX6pvZx.js";var t=`${e}/api/files`,n=class{static async uploadImage(e,n,r=`photo`){let i=new FormData;i.set(`image`,n,r);let a=await fetch(`${t}/images?scope=${encodeURIComponent(e)}`,{method:`POST`,body:i});if(!a.ok){let e=await a.json().catch(()=>({}));throw Error(e.error??`Image upload failed: ${a.statusText}`)}return a.json()}static variantUrl(t,n){return`${e}/api/files/${t}/${n}`}};export{n as t};
+//# sourceMappingURL=files.service-BN9GGLrD.js.map

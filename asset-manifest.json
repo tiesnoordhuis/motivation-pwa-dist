@@ -50,8 +50,8 @@
       "_config-BpX6pvZx.js"
     ]
   },
-  "_food-log-detail.component-B0NIWb0g.js": {
-    "file": "assets/food-log-detail.component-B0NIWb0g.js",
+  "_food-log-detail.component-Ct_TH0jE.js": {
+    "file": "assets/food-log-detail.component-Ct_TH0jE.js",
     "name": "food-log-detail.component",
     "imports": [
       "_src-r8crFemM.js",
@@ -200,7 +200,7 @@
     ]
   },
   "app.ts": {
-    "file": "assets/app-Dc3Raf7e.js",
+    "file": "assets/app-CCKl_sDi.js",
     "name": "app",
     "src": "app.ts",
     "isDynamicEntry": true,
@@ -382,14 +382,14 @@
     ]
   },
   "components/health/health-food-entry-screen.component.ts": {
-    "file": "assets/health-food-entry-screen.component-Ck1arBjA.js",
+    "file": "assets/health-food-entry-screen.component-Ba2K6___.js",
     "name": "health-food-entry-screen.component",
     "src": "components/health/health-food-entry-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
       "_src-r8crFemM.js",
       "_screen-status-Diq-k2Gm.js",
-      "_food-log-detail.component-B0NIWb0g.js",
+      "_food-log-detail.component-Ct_TH0jE.js",
       "_food-serving-form.component-Cl0KqiFa.js",
       "_food-thumbnail.component-D1zp5X9F.js",
       "_health-events-tp1rnvCc.js",
@@ -409,14 +409,14 @@
     ]
   },
   "components/health/health-meals-screen/health-meals-screen.component.ts": {
-    "file": "assets/health-meals-screen.component-CxqiMa_s.js",
+    "file": "assets/health-meals-screen.component-GuGk9C8r.js",
     "name": "health-meals-screen.component",
     "src": "components/health/health-meals-screen/health-meals-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
       "_src-r8crFemM.js",
       "_screen-status-Diq-k2Gm.js",
-      "_food-log-detail.component-B0NIWb0g.js",
+      "_food-log-detail.component-Ct_TH0jE.js",
       "_food-serving-form.component-Cl0KqiFa.js",
       "_food-thumbnail.component-D1zp5X9F.js",
       "_health-events-tp1rnvCc.js",
@@ -608,7 +608,7 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-Jp6ZLwTq.js",
+    "file": "assets/app-CFf6G_tq.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,

@@ -1,5 +1,5 @@
 const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/sw-controls-BzNBKgej.js","assets/sw-controls-BzWdawzK.js"])))=>i.map(i=>d[i]);
-import"./src-r8crFemM.js";import{n as e,r as t}from"./client-log-store-Qed9keQy.js";import{a as n,i as r,o as i,r as a,s as o,t as s}from"./client-log-buffer-p3qNFYTw.js";import"./component-logger-W0F-i0z-.js";import{t as c}from"./preload-helper-ca-nBW7U.js";import{t as l}from"./config-BpX6pvZx.js";import{n as u}from"./client-log-shipping-uEeRof4S.js";import{t as d}from"./db.service-ZRUNeUbB.js";import{i as f,n as ee,r as p}from"./snapshot-refresh.service-DqTh5ywj.js";import{t as m}from"./section-page.utils-WpiUR5OX.js";import"./log-viewer.component-RHTf-_ak.js";import{i as h,n as g,r as _,t as v}from"./sw-controls-BzWdawzK.js";var y=document.createElement(`template`);y.innerHTML=`
+import"./src-r8crFemM.js";import{n as e,r as t}from"./client-log-store-Qed9keQy.js";import{a as n,i as r,o as i,r as a,s as o,t as s}from"./client-log-buffer-p3qNFYTw.js";import"./component-logger-W0F-i0z-.js";import{t as c}from"./preload-helper-ca-nBW7U.js";import{t as l}from"./config-BpX6pvZx.js";import{n as u}from"./client-log-shipping-uEeRof4S.js";import{t as d}from"./db.service-DDVDfqfh.js";import{i as f,n as ee,r as p}from"./snapshot-refresh.service-B-TkGQ4P.js";import{t as m}from"./section-page.utils-WpiUR5OX.js";import"./log-viewer.component-RHTf-_ak.js";import{i as h,n as g,r as _,t as v}from"./sw-controls-BzWdawzK.js";var y=document.createElement(`template`);y.innerHTML=`
 <details class="debug-panel" open>
     <summary>Client Logs</summary>
     <div class="debug-shipping-status" data-testid="logs-shipping-status"></div>
@@ -87,4 +87,4 @@ import"./src-r8crFemM.js";import{n as e,r as t}from"./client-log-store-Qed9keQy.
 <debug-sw-panel></debug-sw-panel>
 <debug-storage-panel></debug-storage-panel>
 `;var $=class extends HTMLElement{setLoading(){}setError(e){}clearStatus(){}initialized=!1;connectedCallback(){this.initialized||(this.initialized=!0,m(this,`Debug`,`extra`,`/debug`).content.appendChild(Q.content.cloneNode(!0)))}};customElements.get(`debug-screen`)||customElements.define(`debug-screen`,$);export{$ as DebugScreen};
-//# sourceMappingURL=debug-screen.component-Byz9zXXq.js.map
+//# sourceMappingURL=debug-screen.component-CNRGwrNh.js.map

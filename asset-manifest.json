@@ -125,8 +125,8 @@
     "file": "assets/project-shared-DG9wyNmL.js",
     "name": "project-shared"
   },
-  "_projects.service-BTqu8fe2.js": {
-    "file": "assets/projects.service-BTqu8fe2.js",
+  "_projects.service-B8duxK12.js": {
+    "file": "assets/projects.service-B8duxK12.js",
     "name": "projects.service",
     "imports": [
       "_config-BpX6pvZx.js",
@@ -200,7 +200,7 @@
     ]
   },
   "app.ts": {
-    "file": "assets/app-XRRaMfMP.js",
+    "file": "assets/app-DhDdi3F4.js",
     "name": "app",
     "src": "app.ts",
     "isDynamicEntry": true,
@@ -468,7 +468,7 @@
     ]
   },
   "components/home/home-screen/home-screen.component.ts": {
-    "file": "assets/home-screen.component-Z-3GzwyX.js",
+    "file": "assets/home-screen.component-BjcqvQRb.js",
     "name": "home-screen.component",
     "src": "components/home/home-screen/home-screen.component.ts",
     "isDynamicEntry": true,
@@ -481,7 +481,7 @@
       "_db.service-DDVDfqfh.js",
       "_router-Bq0W02iW.js",
       "_health.service-TBu5ZqjB.js",
-      "_projects.service-BTqu8fe2.js",
+      "_projects.service-B8duxK12.js",
       "_vietnamese.service-D3Eaty4p.js",
       "_component-logger-W0F-i0z-.js",
       "_css-DYuO5VTb.js",
@@ -490,7 +490,7 @@
     ]
   },
   "components/projects/projects-client-logs-screen.component.ts": {
-    "file": "assets/projects-client-logs-screen.component-BzA-hmom.js",
+    "file": "assets/projects-client-logs-screen.component-BJaNgYbU.js",
     "name": "projects-client-logs-screen.component",
     "src": "components/projects/projects-client-logs-screen.component.ts",
     "isDynamicEntry": true,
@@ -499,13 +499,13 @@
       "_log-viewer.component-RHTf-_ak.js",
       "_config-BpX6pvZx.js",
       "_client-log-buffer-p3qNFYTw.js",
-      "_projects.service-BTqu8fe2.js",
+      "_projects.service-B8duxK12.js",
       "_component-logger-W0F-i0z-.js",
       "_section-page.utils-WpiUR5OX.js"
     ]
   },
   "components/projects/projects-dashboard-screen.component.ts": {
-    "file": "assets/projects-dashboard-screen.component-DYPaMgDt.js",
+    "file": "assets/projects-dashboard-screen.component-BL979i67.js",
     "name": "projects-dashboard-screen.component",
     "src": "components/projects/projects-dashboard-screen.component.ts",
     "isDynamicEntry": true,
@@ -518,54 +518,54 @@
       "_snapshot-refresh.service-B-TkGQ4P.js",
       "_db.service-DDVDfqfh.js",
       "_router-Bq0W02iW.js",
-      "_projects.service-BTqu8fe2.js",
+      "_projects.service-B8duxK12.js",
       "_component-logger-W0F-i0z-.js",
       "_css-DYuO5VTb.js",
       "_section-page.utils-WpiUR5OX.js"
     ]
   },
   "components/projects/projects-git-log-screen.component.ts": {
-    "file": "assets/projects-git-log-screen.component-RtAf4plA.js",
+    "file": "assets/projects-git-log-screen.component-XJVxRW6S.js",
     "name": "projects-git-log-screen.component",
     "src": "components/projects/projects-git-log-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
       "_config-BpX6pvZx.js",
-      "_projects.service-BTqu8fe2.js",
+      "_projects.service-B8duxK12.js",
       "_component-logger-W0F-i0z-.js",
       "_css-DYuO5VTb.js",
       "_section-page.utils-WpiUR5OX.js"
     ]
   },
   "components/projects/projects-logs-screen.component.ts": {
-    "file": "assets/projects-logs-screen.component-Ccs3sHGJ.js",
+    "file": "assets/projects-logs-screen.component-CwRD4CWa.js",
     "name": "projects-logs-screen.component",
     "src": "components/projects/projects-logs-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
       "_log-viewer.component-RHTf-_ak.js",
       "_config-BpX6pvZx.js",
-      "_projects.service-BTqu8fe2.js",
+      "_projects.service-B8duxK12.js",
       "_component-logger-W0F-i0z-.js",
       "_section-page.utils-WpiUR5OX.js"
     ]
   },
   "components/projects/projects-scrumboard-screen.component.ts": {
-    "file": "assets/projects-scrumboard-screen.component-CGjapsbd.js",
+    "file": "assets/projects-scrumboard-screen.component-DG8zWt7W.js",
     "name": "projects-scrumboard-screen.component",
     "src": "components/projects/projects-scrumboard-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
       "_project-shared-DG9wyNmL.js",
       "_config-BpX6pvZx.js",
-      "_projects.service-BTqu8fe2.js",
+      "_projects.service-B8duxK12.js",
       "_component-logger-W0F-i0z-.js",
       "_css-DYuO5VTb.js",
       "_section-page.utils-WpiUR5OX.js"
     ]
   },
   "components/projects/projects-stories-screen.component.ts": {
-    "file": "assets/projects-stories-screen.component-CBmfR8yG.js",
+    "file": "assets/projects-stories-screen.component-BeYGbpiE.js",
     "name": "projects-stories-screen.component",
     "src": "components/projects/projects-stories-screen.component.ts",
     "isDynamicEntry": true,
@@ -574,7 +574,7 @@
       "_screen-status-Diq-k2Gm.js",
       "_project-shared-DG9wyNmL.js",
       "_config-BpX6pvZx.js",
-      "_projects.service-BTqu8fe2.js",
+      "_projects.service-B8duxK12.js",
       "_component-logger-W0F-i0z-.js",
       "_css-DYuO5VTb.js",
       "_section-page.utils-WpiUR5OX.js"
@@ -609,7 +609,7 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-My5tlgD5.js",
+    "file": "assets/app-BqzWY91T.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,

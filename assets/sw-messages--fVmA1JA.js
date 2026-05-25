@@ -1,0 +1,2 @@
+var e={SNAPSHOT_MARK_DIRTY:`snapshot:mark-dirty`,SNAPSHOT_REFRESH:`snapshot:refresh`,NOTIFICATION_CLICK:`notification:click`},t=()=>({action:e.SNAPSHOT_MARK_DIRTY,detail:void 0}),n=()=>({action:e.SNAPSHOT_REFRESH,detail:void 0}),r=t=>({action:e.NOTIFICATION_CLICK,detail:t}),i=new Set(Object.values(e));function a(e){if(!e||typeof e!=`object`)return!1;let t=e.action;return typeof t==`string`&&i.has(t)}export{a,n as i,r as n,t as r,e as t};
+//# sourceMappingURL=sw-messages--fVmA1JA.js.map

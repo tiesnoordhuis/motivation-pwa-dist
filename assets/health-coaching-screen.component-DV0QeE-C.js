@@ -1,0 +1,35 @@
+import{t as e}from"./db.service-CkJO-AZj.js";import{i as t,r as n}from"./app-timezone.service-DMbLb8C0.js";import{t as r}from"./component-logger-vUiJPJw3.js";import{t as i}from"./section-page.utils-C-zZVD0e.js";import{n as a,t as o}from"./screen-status-Bh8yMGWy.js";import{t as s}from"./health.service-D_uL1prX.js";var c=`coaching.goals`,l=`coaching.tone`;async function u(){let t=e.getInstance();return await t.init(),t.driver}var d=new class{driverFn;constructor(e={}){this.driverFn=e.driver??u}async get(){let e=await this.driverFn(),[t,n]=await Promise.all([e.query(`SELECT value FROM settings WHERE key = ?`,c),e.query(`SELECT value FROM settings WHERE key = ?`,l)]);return{goals:t[0]?.value??``,tone:n[0]?.value??``}}async set(e){let t=await this.driverFn();e.goals!==void 0&&await t.execute(`INSERT INTO settings (key, value) VALUES (?, ?)
+                 ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = datetime('now')`,c,e.goals),e.tone!==void 0&&await t.execute(`INSERT INTO settings (key, value) VALUES (?, ?)
+                 ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = datetime('now')`,l,e.tone)}},f=document.createElement(`template`);f.innerHTML=`
+    <section class="coaching" data-testid="coaching-section">
+        <header class="coaching__meta">
+            <p class="coaching__stamp" data-testid="coaching-generated-at" hidden></p>
+            <button type="button" class="coaching__regen" data-testid="coaching-regenerate" hidden>Re-queue coaching</button>
+        </header>
+        <article class="coaching__body" data-testid="coaching-advice" hidden></article>
+        <p class="coaching__pending" data-testid="coaching-pending" hidden>
+            Coaching is queued. The next overnight run will generate a fresh note.
+        </p>
+        <p class="coaching__empty" data-testid="coaching-empty" hidden>
+            No coaching yet. The first overnight run will populate this screen.
+        </p>
+        <details class="coaching__settings" data-testid="coaching-settings">
+            <summary>Tune your coach</summary>
+            <form class="coaching__settings-form" data-testid="coaching-settings-form">
+                <label class="coaching__field">
+                    <span>Goals</span>
+                    <textarea name="goals" data-testid="coaching-goals-input" rows="3" placeholder="e.g. lose 5kg by August, sub-22 5k"></textarea>
+                </label>
+                <label class="coaching__field">
+                    <span>Tone</span>
+                    <textarea name="tone" data-testid="coaching-tone-input" rows="3" placeholder="e.g. blunt, no fluff"></textarea>
+                </label>
+                <div class="coaching__settings-actions">
+                    <button type="submit" data-testid="coaching-settings-save">Save</button>
+                    <span class="coaching__settings-status" data-testid="coaching-settings-status" hidden>Saved</span>
+                </div>
+            </form>
+        </details>
+    </section>
+`;function p(e,n){if(!e)return``;try{let r=Temporal.Instant.from(e),i=r.toZonedDateTimeISO(t()).toPlainDate().toString();return i===n?`Generated today at ${r.toZonedDateTimeISO(t()).toPlainTime().toString({smallestUnit:`minute`})}`:`Generated on ${i}`}catch{return`Generated at ${e}`}}var m=class extends HTMLElement{initialized=!1;content=null;status=null;statusNodes=null;adviceEl=null;stampEl=null;regenBtn=null;pendingEl=null;emptyEl=null;goalsInput=null;toneInput=null;settingsForm=null;settingsStatus=null;log=r(`health-coaching-screen`);setLoading(){this.status?.setLoading()}setError(e){this.status?.setError(e)}clearStatus(){this.status?.clearStatus()}connectedCallback(){if(this.initialized){this.load();return}this.initialized=!0;let e=i(this,`Coaching`,`health`,`/health`);this.content=e.content;let t=f.content.cloneNode(!0);e.content.appendChild(t),this.adviceEl=e.content.querySelector(`[data-testid="coaching-advice"]`),this.stampEl=e.content.querySelector(`[data-testid="coaching-generated-at"]`),this.regenBtn=e.content.querySelector(`[data-testid="coaching-regenerate"]`),this.pendingEl=e.content.querySelector(`[data-testid="coaching-pending"]`),this.emptyEl=e.content.querySelector(`[data-testid="coaching-empty"]`),this.goalsInput=e.content.querySelector(`[data-testid="coaching-goals-input"]`),this.toneInput=e.content.querySelector(`[data-testid="coaching-tone-input"]`),this.settingsForm=e.content.querySelector(`[data-testid="coaching-settings-form"]`),this.settingsStatus=e.content.querySelector(`[data-testid="coaching-settings-status"]`),this.statusNodes=a(),e.content.appendChild(this.statusNodes.loadingNode),e.content.appendChild(this.statusNodes.errorNode),e.content.appendChild(this.statusNodes.retryNode),this.status=o(this.statusNodes.loadingNode,this.statusNodes.errorNode,this.statusNodes.retryNode),this.statusNodes.retryNode.addEventListener(`click`,()=>{this.requeue()}),this.regenBtn?.addEventListener(`click`,()=>{this.requeue()}),this.settingsForm?.addEventListener(`submit`,e=>{e.preventDefault(),this.savePreferences()}),this.loadPreferences(),this.load()}async loadPreferences(){try{let e=await d.get();this.goalsInput&&(this.goalsInput.value=e.goals),this.toneInput&&(this.toneInput.value=e.tone)}catch(e){this.log.error(`coachingPreferencesService.get failed:`,e)}}async savePreferences(){if(!(!this.goalsInput||!this.toneInput))try{await d.set({goals:this.goalsInput.value,tone:this.toneInput.value}),this.settingsStatus&&(this.settingsStatus.hidden=!1,this.settingsStatus.textContent=`Saved`)}catch(e){this.log.error(`coachingPreferencesService.set failed:`,e),this.settingsStatus&&(this.settingsStatus.hidden=!1,this.settingsStatus.textContent=e instanceof Error?`Save failed: ${e.message}`:`Save failed`)}}hideAll(){this.adviceEl&&(this.adviceEl.hidden=!0),this.stampEl&&(this.stampEl.hidden=!0),this.regenBtn&&(this.regenBtn.hidden=!0),this.pendingEl&&(this.pendingEl.hidden=!0),this.emptyEl&&(this.emptyEl.hidden=!0)}renderRow(e){if(this.hideAll(),this.clearStatus(),!e){this.emptyEl&&(this.emptyEl.hidden=!1);return}if(e.status===`failed`){this.setError(e.error??`Coaching generation failed without an error message.`);return}if(e.status===`pending`){this.pendingEl&&(this.pendingEl.hidden=!1),this.regenBtn&&(this.regenBtn.hidden=!1);return}if(this.adviceEl&&(this.adviceEl.textContent=e.advice??``,this.adviceEl.hidden=!1),this.stampEl&&e.generated_at){let t=n();this.stampEl.textContent=p(e.generated_at,t),this.stampEl.hidden=!1}this.regenBtn&&(this.regenBtn.hidden=!1)}async load(){this.setLoading();try{let e=await s.fetchCoaching();this.renderRow(e)}catch(e){this.log.error(`fetchCoaching failed:`,e),this.setError(e)}}async requeue(){try{await s.requestCoachingGeneration(),await this.load()}catch(e){this.log.error(`requestCoachingGeneration failed:`,e),this.setError(e)}}};customElements.get(`health-coaching-screen`)||customElements.define(`health-coaching-screen`,m);export{m as HealthCoachingScreen};
+//# sourceMappingURL=health-coaching-screen.component-DV0QeE-C.js.map

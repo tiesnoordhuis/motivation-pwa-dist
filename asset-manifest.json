@@ -31,6 +31,13 @@
     "file": "assets/client-log-store-YQoiEp5r.js",
     "name": "client-log-store"
   },
+  "_coaching-format-D_XfvBZB.js": {
+    "file": "assets/coaching-format-D_XfvBZB.js",
+    "name": "coaching-format",
+    "imports": [
+      "_app-timezone.service-DMbLb8C0.js"
+    ]
+  },
   "_component-logger-vUiJPJw3.js": {
     "file": "assets/component-logger-vUiJPJw3.js",
     "name": "component-logger"
@@ -246,7 +253,7 @@
     ]
   },
   "app.ts": {
-    "file": "assets/app-CUGlBKOJ.js",
+    "file": "assets/app-a2DSx8KM.js",
     "name": "app",
     "src": "app.ts",
     "isDynamicEntry": true,
@@ -401,7 +408,7 @@
     ]
   },
   "components/health/health-coaching-screen/health-coaching-screen.component.ts": {
-    "file": "assets/health-coaching-screen.component-DV0QeE-C.js",
+    "file": "assets/health-coaching-screen.component-D2FSXYCq.js",
     "name": "health-coaching-screen.component",
     "src": "components/health/health-coaching-screen/health-coaching-screen.component.ts",
     "isDynamicEntry": true,
@@ -410,12 +417,13 @@
       "_app-timezone.service-DMbLb8C0.js",
       "_screen-status-Bh8yMGWy.js",
       "_health.service-D_uL1prX.js",
+      "_coaching-format-D_XfvBZB.js",
       "_component-logger-vUiJPJw3.js",
       "_section-page.utils-C-zZVD0e.js"
     ]
   },
   "components/health/health-dashboard-screen.component.ts": {
-    "file": "assets/health-dashboard-screen.component-6-kxT3Lk.js",
+    "file": "assets/health-dashboard-screen.component-CWLlS0Ef.js",
     "name": "health-dashboard-screen.component",
     "src": "components/health/health-dashboard-screen.component.ts",
     "isDynamicEntry": true,
@@ -425,6 +433,7 @@
       "_health-utils-BWNs3sSg.js",
       "_router-GiPH-W_5.js",
       "_health.service-D_uL1prX.js",
+      "_coaching-format-D_XfvBZB.js",
       "_component-logger-vUiJPJw3.js",
       "_css-BDiUZ623.js",
       "_format-macro-vvbSRTt2.js",
@@ -433,7 +442,7 @@
     ]
   },
   "components/health/health-day-screen.component.ts": {
-    "file": "assets/health-day-screen.component-Ck7wFsFo.js",
+    "file": "assets/health-day-screen.component-B4ugqlQR.js",
     "name": "health-day-screen.component",
     "src": "components/health/health-day-screen.component.ts",
     "isDynamicEntry": true,
@@ -674,7 +683,7 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-kMmNtoVp.js",
+    "file": "assets/app-DtuVLREz.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,

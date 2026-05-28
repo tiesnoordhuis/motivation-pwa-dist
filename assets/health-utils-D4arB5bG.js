@@ -1,2 +1,0 @@
-function e(e){switch(e){case`running`:return`🏃`;case`cycling`:return`🚴`;case`swimming`:return`🏊`;case`walking`:return`🚶`;case`hiking`:return`🥾`;case`tennis`:return`🎾`;case`ice_skate`:return`⛸️`;case`alpine_ski`:return`⛷️`;case`hiit`:return`🔥`;case`weight_training`:return`🏋️`;case`gym`:return`🏋️`;case`ice-skating`:return`⛸️`;default:return`💪`}}function t(){let e=Temporal.Now.plainTimeISO().hour;return e<11?`Breakfast`:e<15?`Lunch`:e<21?`Dinner`:`Snacks`}export{t as n,e as t};
-//# sourceMappingURL=health-utils-D4arB5bG.js.map

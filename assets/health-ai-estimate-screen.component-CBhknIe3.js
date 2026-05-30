@@ -1,0 +1,72 @@
+import{a as e}from"./health-DmcTDljc.js";import{r as t}from"./app-timezone.service-CYqGd3zT.js";import{t as n}from"./component-logger-vUiJPJw3.js";import{n as r,r as i}from"./router-GiPH-W_5.js";import{t as a}from"./section-page.utils-C-zZVD0e.js";import{t as o}from"./css-Dp6z7v3R.js";import{t as s}from"./safe-exec-Dmzeppa3.js";import{t as c}from"./health.service-CxDn-Zj2.js";import{t as l}from"./files.service-DwmQ1xd_.js";import{n as u}from"./health-utils-D1rT2byh.js";import{n as d}from"./food-serving-form.component-CzVIYwKT.js";import{l as f,p,t as m}from"./health-events-BYvG7N2S.js";var h=o(`:host{display:block}.ai-estimate-container{max-width:600px;margin:0 auto;padding:16px}.input-section{flex-direction:column;gap:16px;display:flex}.input-section h3{color:var(--text-primary,#fff);margin:0;font-size:1.1rem}.description-input{border:1px solid var(--border-color,#444);background:var(--surface-color,#1e1e1e);width:100%;min-height:80px;color:var(--text-primary,#fff);resize:vertical;box-sizing:border-box;border-radius:8px;padding:12px;font-family:inherit;font-size:1rem}.description-input::placeholder{color:var(--text-secondary,#888)}.photo-section{flex-direction:column;gap:8px;display:flex}.photo-label{color:var(--text-secondary,#aaa);font-size:.85rem}.photo-row{align-items:center;gap:8px;display:flex}.btn-photo{border:1px dashed var(--border-color,#444);color:var(--text-primary,#fff);cursor:pointer;background:0 0;border-radius:8px;padding:8px 16px;font-size:.9rem}.btn-photo:hover{border-color:var(--accent-color,#d4a017)}.photo-preview{object-fit:cover;border-radius:8px;width:64px;height:64px}.btn-remove-photo{color:var(--text-secondary,#888);cursor:pointer;background:0 0;border:none;padding:4px 8px;font-size:1.2rem}.btn-estimate{background:var(--accent-color,#d4a017);color:#000;cursor:pointer;border:none;border-radius:8px;width:100%;padding:14px;font-size:1rem;font-weight:600;transition:opacity .2s}.btn-estimate:hover{opacity:.9}.btn-estimate:disabled{opacity:.5;cursor:not-allowed}.loading-view{text-align:center;padding:48px 16px}.loading-spinner{border:3px solid var(--border-color,#444);border-top-color:var(--accent-color,#d4a017);border-radius:50%;width:48px;height:48px;margin:0 auto 16px;animation:1s linear infinite spin}@keyframes spin{to{transform:rotate(360deg)}}.loading-text{color:var(--text-secondary,#aaa);font-size:.9rem}.result-view{flex-direction:column;gap:16px}.result-image{object-fit:cover;background:var(--surface-2,#1e1e1e);border-radius:12px;width:100%;max-height:320px}.ai-badge{color:var(--accent-color,#d4a017);background:#d4a01726;border-radius:12px;align-items:center;gap:6px;width:fit-content;padding:4px 10px;font-size:.8rem;font-weight:500;display:inline-flex}.confidence-badge{text-transform:uppercase;border-radius:8px;padding:2px 8px;font-size:.75rem;font-weight:600}.confidence-high{color:#4caf50;background:#4caf5033}.confidence-medium{color:#ff9800;background:#ff980033}.confidence-low{color:#f44336;background:#f4433633}.result-header{justify-content:space-between;align-items:center;display:flex}.food-name-input{border:1px solid var(--border-color,#444);background:var(--surface-color,#1e1e1e);width:100%;color:var(--text-primary,#fff);box-sizing:border-box;border-radius:8px;padding:10px 12px;font-size:1.1rem;font-weight:600}.notes-text{color:var(--text-secondary,#aaa);padding:8px 0;font-size:.85rem;font-style:italic}.form-row{gap:12px;display:flex}.form-group{flex-direction:column;flex:1;gap:4px;display:flex}.form-group label{color:var(--text-secondary,#aaa);font-size:.85rem}.form-select,.form-date{border:1px solid var(--border-color,#444);background:var(--surface-color,#1e1e1e);color:var(--text-primary,#fff);border-radius:8px;padding:10px 12px;font-size:.95rem}.action-buttons{gap:8px;display:flex}.btn-retry{border:1px solid var(--border-color,#444);color:var(--text-primary,#fff);cursor:pointer;background:0 0;border-radius:8px;flex:1;padding:12px;font-size:.95rem}.btn-save{background:var(--accent-color,#d4a017);color:#000;cursor:pointer;border:none;border-radius:8px;flex:2;padding:12px;font-size:.95rem;font-weight:600}.btn-save:hover{opacity:.9}.btn-archive-estimate{border:1px solid var(--border-color,#444);color:var(--text-secondary,#aaa);cursor:pointer;background:0 0;border-radius:8px;flex:1;padding:12px;font-size:.9rem}.btn-archive-estimate:disabled{opacity:.5;cursor:not-allowed}.error-view{text-align:center;color:#f44336;padding:32px 16px}.error-view p{margin:8px 0}.btn-back{border:1px solid var(--border-color,#444);color:var(--text-primary,#fff);cursor:pointer;background:0 0;border-radius:8px;margin-top:12px;padding:10px 24px}`),g=document.createElement(`template`);g.innerHTML=`
+    <div class="ai-estimate-container">
+        <!-- Input view -->
+        <div id="input-view" class="input-section">
+            <h3>Describe your meal</h3>
+            <textarea id="description" class="description-input"
+                placeholder="e.g. 2 scrambled eggs with toast and butter, a glass of orange juice"></textarea>
+
+            <div class="photo-section">
+                <span class="photo-label">Optional: add a photo for better accuracy</span>
+                <div class="photo-row">
+                    <button id="btn-photo" class="btn-photo">📷 Add Photo</button>
+                    <input type="file" id="photo-input" class="photo-input" accept="image/jpeg,image/png,image/webp" hidden>
+                    <img id="photo-preview" class="photo-preview" alt="Preview" hidden>
+                    <button id="btn-remove-photo" class="btn-remove-photo" title="Remove photo" hidden>✕</button>
+                </div>
+            </div>
+
+            <button id="btn-estimate" class="btn-estimate">✨ Estimate Nutrition</button>
+        </div>
+
+        <!-- Loading view -->
+        <div id="loading-view" class="loading-view" hidden>
+            <div class="loading-spinner"></div>
+            <div class="loading-text" id="loading-text">Analyzing your meal…</div>
+        </div>
+
+        <!-- Result view -->
+        <div id="result-view" class="result-view" hidden>
+            <img id="result-image" class="result-image" alt="Your meal" hidden loading="eager" decoding="async">
+
+            <div class="result-header">
+                <div class="ai-badge">🤖 AI Estimate</div>
+                <span id="confidence-badge" class="confidence-badge"></span>
+            </div>
+
+            <input type="text" id="food-name" class="food-name-input">
+
+            <food-serving-form id="serving-form" editable></food-serving-form>
+
+            <div id="notes-text" class="notes-text"></div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="meal-type">Meal</label>
+                    <select id="meal-type" class="form-select">
+                        ${e.map(e=>`<option value="${e}">${e}</option>`).join(`
+                        `)}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="log-date">Date</label>
+                    <input type="date" id="log-date" class="form-date">
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button id="btn-retry" class="btn-retry">↻ Re-estimate</button>
+                <button id="btn-archive" class="btn-archive-estimate" type="button">🗑 Archive estimate</button>
+                <button id="btn-save" class="btn-save">Save to Log</button>
+            </div>
+        </div>
+
+        <!-- Error view -->
+        <div id="error-view" class="error-view" hidden>
+            <p>⚠️</p>
+            <p id="error-text"></p>
+            <button id="btn-error-back" class="btn-back">Try Again</button>
+        </div>
+    </div>
+`;var _=class extends HTMLElement{_imageFile=null;_previewUrl=null;_imagePath=null;_model=``;_foodItemId=null;_defaultDate=null;_defaultMealType=null;constructor(){super();let e=this.attachShadow({mode:`open`});e.adoptedStyleSheets=[h],e.appendChild(g.content.cloneNode(!0))}connectedCallback(){let e=this.shadowRoot;e.getElementById(`btn-photo`).addEventListener(`click`,()=>{e.getElementById(`photo-input`).click()}),e.getElementById(`photo-input`).addEventListener(`change`,e=>{let t=e.target;t.files?.[0]&&this.loadImage(t.files[0])}),e.getElementById(`btn-remove-photo`).addEventListener(`click`,()=>{this.clearImage()}),e.getElementById(`btn-estimate`).addEventListener(`click`,()=>{this.doEstimate()}),e.getElementById(`btn-retry`).addEventListener(`click`,()=>{this.showInputView()}),e.getElementById(`btn-save`).addEventListener(`click`,()=>{this.doSave()}),e.getElementById(`btn-archive`).addEventListener(`click`,()=>{this.doArchive()}),e.getElementById(`btn-error-back`).addEventListener(`click`,()=>{this.showInputView()}),this.applyDefaults()}set defaultDate(e){this._defaultDate=e&&e.trim()?e:null,this.applyDefaults()}set defaultMealType(t){if(!t||!e.includes(t)){this._defaultMealType=null,this.applyDefaults();return}this._defaultMealType=t,this.applyDefaults()}loadImage(e){let t=this.shadowRoot;this._imageFile=e,this._imagePath=null,this._previewUrl&&URL.revokeObjectURL(this._previewUrl),this._previewUrl=URL.createObjectURL(e);let n=t.getElementById(`photo-preview`);n.src=this._previewUrl,n.alt=`Selected meal photo`,n.hidden=!1,t.getElementById(`btn-remove-photo`).hidden=!1}clearImage(){let e=this.shadowRoot;this._imageFile=null,this._imagePath=null,this._previewUrl&&=(URL.revokeObjectURL(this._previewUrl),null);let t=e.getElementById(`photo-preview`);t.hidden=!0,t.src=``,e.getElementById(`btn-remove-photo`).hidden=!0,e.getElementById(`photo-input`).value=``}showInputView(){let e=this.shadowRoot;e.getElementById(`input-view`).hidden=!1,e.getElementById(`loading-view`).hidden=!0,e.getElementById(`result-view`).hidden=!0,e.getElementById(`error-view`).hidden=!0}async doEstimate(){let e=this.shadowRoot,t=e.getElementById(`description`).value.trim();if(!t&&!this._imageFile){e.getElementById(`description`).focus();return}e.getElementById(`input-view`).hidden=!0,e.getElementById(`loading-view`).hidden=!1;let n=e.getElementById(`loading-text`);n.textContent=`Analyzing your meal…`;let r=setTimeout(()=>{n.textContent=`Starting AI engine… this may take a moment`},5e3);try{if(this._imageFile&&!this._imagePath){let e=await l.uploadImageOrQueue(`ai`,this._imageFile,this._imageFile.name||`meal.jpg`);if(e.status===`uploaded`)this._imagePath=e.image_path;else{clearTimeout(r),this.showError(`Your photo is queued for upload (offline or server unreachable). Try the estimate again once it has uploaded.`);return}}let e=await this.requestEstimate(t||`meal in photo`,this._imagePath??void 0);clearTimeout(r),this._model=e.ai_estimation.model_name,this._foodItemId=e.food_item.id,this._imagePath=e.food_item.image_path??this._imagePath,this.showResult(e.estimate)}catch(e){clearTimeout(r);let t=e instanceof Error?e.message:`Unknown error`;this.showError(t)}}showResult(e){let t=this.shadowRoot;t.getElementById(`loading-view`).hidden=!0,t.getElementById(`result-view`).hidden=!1;let n=t.getElementById(`result-image`);this._imagePath?(n.src=l.variantUrl(this._imagePath,`display.jpg`),n.hidden=!1):(n.hidden=!0,n.removeAttribute(`src`)),t.getElementById(`food-name`).value=e.display_name,t.getElementById(`serving-form`).data=d(e);let r=t.getElementById(`confidence-badge`),i=e.confidence_score>=.75?`high`:e.confidence_score>=.5?`medium`:`low`;r.textContent=i,r.className=`confidence-badge confidence-${i}`;let a=t.getElementById(`notes-text`);a.textContent=e.notes||``,a.hidden=!e.notes}showError(e){let t=this.shadowRoot;t.getElementById(`loading-view`).hidden=!0,t.getElementById(`error-view`).hidden=!1,t.getElementById(`error-text`).textContent=e}async doArchive(){if(!this._foodItemId)return;let e=this.shadowRoot.getElementById(`btn-archive`);e.disabled=!0;try{await c.updateFoodItem(this._foodItemId,{archived_at:Temporal.Now.instant().toString()}),this.reset()}finally{e.disabled=!1}}doSave(){let e=this.shadowRoot,t=e.getElementById(`food-name`).value.trim(),n=e.getElementById(`meal-type`).value,r=e.getElementById(`log-date`).value;if(!t||!this._foodItemId)return;let{servingAmount:i,serving:a}=e.getElementById(`serving-form`).getCurrentValues();this.dispatchEvent(p({food_item_id:this._foodItemId,amount:i,meal_type:n,date:r,calories:a.calories,protein_g:a.protein_g,carbs_g:a.carbs_g,fat_g:a.fat_g,fiber_g:a.fiber_g,sugar_g:a.sugar_g}))}async requestEstimate(e,t){let n=f({description:e,image_path:t,respondWith:null});if(this.dispatchEvent(n),!n.detail.respondWith)throw Error(`Estimate handler not set`);return await n.detail.respondWith}reset(){this.showInputView();let e=this.shadowRoot;e.getElementById(`description`).value=``,this.clearImage();let t=e.getElementById(`photo-preview`);t.hidden=!0,t.src=``,t.alt=`Preview`,this.applyDefaults()}applyDefaults(){let e=this.shadowRoot;if(!e)return;let n=e.getElementById(`log-date`);n&&(n.value=this._defaultDate??t());let r=e.getElementById(`meal-type`);r&&(r.value=this._defaultMealType??u())}};customElements.define(`ai-estimate`,_);var v=class extends HTMLElement{initialized=!1;dateValue=null;mealValue=null;returnPath=null;log=n(`health-ai-estimate-screen`);setLoading(){}setError(e){}clearStatus(){}async returnToOrigin(){await i([`/health/food-entry`,`/health/scanner`,`/health/ai-estimate`],this.dateValue?`/health/day/${encodeURIComponent(this.dateValue)}`:`/health`)}set date(e){this.dateValue=e}set meal(e){this.mealValue=e}set query(e){this.returnPath=e?.get(`return`)??null}connectedCallback(){if(this.initialized)return;this.initialized=!0;let e=a(this,`Health`,`health`,`/health`),t=document.createElement(`ai-estimate`);t.defaultDate=this.dateValue,t.defaultMealType=this.mealValue,t.addEventListener(m.ESTIMATE_NUTRITION,e=>{e.detail.respondWith=c.estimateNutrition(e.detail.description,e.detail.image_path)}),t.addEventListener(m.LOG_AI_ESTIMATE,async e=>{let t=e.detail;return s(this,this.log,async()=>{if(this.returnPath){r(`${this.returnPath}${this.returnPath.includes(`?`)?`&`:`?`}addIngredientFoodId=${encodeURIComponent(t.food_item_id)}`,{history:`replace`});return}await c.createConsumptionEntry(t),await this.returnToOrigin()})}),e.content.appendChild(t)}};customElements.define(`health-ai-estimate-screen`,v);export{v as HealthAiEstimateScreen};
+//# sourceMappingURL=health-ai-estimate-screen.component-CBhknIe3.js.map

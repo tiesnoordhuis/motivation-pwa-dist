@@ -261,7 +261,7 @@
     ]
   },
   "app.ts": {
-    "file": "assets/app-Cqh_vT-g.js",
+    "file": "assets/app-DJeMyQvi.js",
     "name": "app",
     "src": "app.ts",
     "isDynamicEntry": true,
@@ -382,7 +382,7 @@
     ]
   },
   "components/health/health-activity-edit-screen.component.ts": {
-    "file": "assets/health-activity-edit-screen.component-Csk9oXKG.js",
+    "file": "assets/health-activity-edit-screen.component-CFGWnVx0.js",
     "name": "health-activity-edit-screen.component",
     "src": "components/health/health-activity-edit-screen.component.ts",
     "isDynamicEntry": true,
@@ -586,11 +586,12 @@
     ]
   },
   "components/health/strength-logging-screen.component.ts": {
-    "file": "assets/strength-logging-screen.component-CW2Croup.js",
+    "file": "assets/strength-logging-screen.component-BfSCDLXS.js",
     "name": "strength-logging-screen.component",
     "src": "components/health/strength-logging-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
+      "_health-DmcTDljc.js",
       "_screen-status-Bh8yMGWy.js",
       "_exercise-create-form.component-myw9U-5b.js",
       "_health-events-BYvG7N2S.js",
@@ -726,7 +727,7 @@
     ]
   },
   "index.html": {
-    "file": "assets/app--8GYH6-3.js",
+    "file": "assets/app-aSoMUUo7.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,

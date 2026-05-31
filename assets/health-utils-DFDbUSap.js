@@ -1,0 +1,2 @@
+import{i as e,o as t}from"./app-timezone.service-BRxmPiyo.js";function n(e){switch(e){case`running`:return`🏃`;case`cycling`:return`🚴`;case`swimming`:return`🏊`;case`walking`:return`🚶`;case`hiking`:return`🥾`;case`tennis`:return`🎾`;case`ice_skate`:return`⛸️`;case`alpine_ski`:return`⛷️`;case`hiit`:return`🔥`;case`weight_training`:return`🏋️`;case`gym`:return`🏋️`;case`ice-skating`:return`⛸️`;default:return`💪`}}function r(n=t(e()).hour){return n<11?`Breakfast`:n<15?`Lunch`:n<21?`Dinner`:`Snacks`}export{r as n,n as t};
+//# sourceMappingURL=health-utils-DFDbUSap.js.map

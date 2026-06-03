@@ -753,13 +753,14 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-B7nIplbm.js",
+    "file": "assets/app-DYYiBHN5.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,
     "imports": [
       "_preload-helper-zJ_50EbN.js",
-      "_client-log-buffer-DshRaVpI.js"
+      "_client-log-buffer-DshRaVpI.js",
+      "_component-logger-vUiJPJw3.js"
     ],
     "dynamicImports": [
       "app.ts"

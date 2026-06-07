@@ -1,2 +1,0 @@
-import{i as e}from"./app-timezone.service-DZQ0iFQK.js";function t(t,n){if(!t)return``;try{let r=Temporal.Instant.from(t).toZonedDateTimeISO(e()),i=r.toPlainDate().toString();return i===n?`Generated today at ${r.toPlainTime().toString({smallestUnit:`minute`})}`:`Generated on ${i}`}catch{return`Generated at ${t}`}}export{t};
-//# sourceMappingURL=coaching-format-CoyJg-5r.js.map

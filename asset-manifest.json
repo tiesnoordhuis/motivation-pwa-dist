@@ -275,7 +275,7 @@
     ]
   },
   "app.ts": {
-    "file": "assets/app-BUh58PKH.js",
+    "file": "assets/app-BIs3VyR1.js",
     "name": "app",
     "src": "app.ts",
     "isDynamicEntry": true,
@@ -362,7 +362,7 @@
     ]
   },
   "components/extra/notification-settings-screen.component.ts": {
-    "file": "assets/notification-settings-screen.component-44ZRafA7.js",
+    "file": "assets/notification-settings-screen.component-Cfswxafd.js",
     "name": "notification-settings-screen.component",
     "src": "components/extra/notification-settings-screen.component.ts",
     "isDynamicEntry": true,
@@ -760,7 +760,7 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-D40Tg7ou.js",
+    "file": "assets/app-oFddnin0.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,

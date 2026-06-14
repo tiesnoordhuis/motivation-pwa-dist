@@ -55,8 +55,8 @@
     "file": "assets/config-D5LjFT38.js",
     "name": "config"
   },
-  "_consumption-entries.repository-B8ortxz_.js": {
-    "file": "assets/consumption-entries.repository-B8ortxz_.js",
+  "_consumption-entries.repository-D1JAS1nG.js": {
+    "file": "assets/consumption-entries.repository-D1JAS1nG.js",
     "name": "consumption-entries.repository",
     "imports": [
       "_logger-D1g42DRq.js",
@@ -279,13 +279,13 @@
     ]
   },
   "app.ts": {
-    "file": "assets/app-Dpl9lfnZ.js",
+    "file": "assets/app-BOOfmObl.js",
     "name": "app",
     "src": "app.ts",
     "isDynamicEntry": true,
     "imports": [
       "_preload-helper-zJ_50EbN.js",
-      "_consumption-entries.repository-B8ortxz_.js",
+      "_consumption-entries.repository-D1JAS1nG.js",
       "_snapshot-refresh.service-C1GQAY_Q.js",
       "_db.service-DQUuIPGg.js",
       "_health-DmcTDljc.js",
@@ -531,12 +531,12 @@
     ]
   },
   "components/health/health-food-entry-screen.component.ts": {
-    "file": "assets/health-food-entry-screen.component-B0eOXUtm.js",
+    "file": "assets/health-food-entry-screen.component-DXlaPVvm.js",
     "name": "health-food-entry-screen.component",
     "src": "components/health/health-food-entry-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
-      "_consumption-entries.repository-B8ortxz_.js",
+      "_consumption-entries.repository-D1JAS1nG.js",
       "_health-DmcTDljc.js",
       "_app-timezone.service-BJpTewse.js",
       "_screen-status-Bh8yMGWy.js",
@@ -557,12 +557,12 @@
     ]
   },
   "components/health/health-meals-screen/health-meals-screen.component.ts": {
-    "file": "assets/health-meals-screen.component-D902YuJj.js",
+    "file": "assets/health-meals-screen.component-BX_lGHuc.js",
     "name": "health-meals-screen.component",
     "src": "components/health/health-meals-screen/health-meals-screen.component.ts",
     "isDynamicEntry": true,
     "imports": [
-      "_consumption-entries.repository-B8ortxz_.js",
+      "_consumption-entries.repository-D1JAS1nG.js",
       "_uuid-BofLEMA4.js",
       "_screen-status-Bh8yMGWy.js",
       "_food-log-detail.component-DmfxFtcq.js",
@@ -785,7 +785,7 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-BjXHtrYe.js",
+    "file": "assets/app-B6JpJ7WR.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,

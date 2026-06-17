@@ -279,7 +279,7 @@
     ]
   },
   "app.ts": {
-    "file": "assets/app-BOOfmObl.js",
+    "file": "assets/app-CcnQm5wH.js",
     "name": "app",
     "src": "app.ts",
     "isDynamicEntry": true,
@@ -347,7 +347,7 @@
     ]
   },
   "components/extra/debug-screen/debug-screen.component.ts": {
-    "file": "assets/debug-screen.component-GpWNn-u2.js",
+    "file": "assets/debug-screen.component-mOPqAITj.js",
     "name": "debug-screen.component",
     "src": "components/extra/debug-screen/debug-screen.component.ts",
     "isDynamicEntry": true,
@@ -785,7 +785,7 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-B6JpJ7WR.js",
+    "file": "assets/app-DPF60Y0d.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,
@@ -798,7 +798,7 @@
       "app.ts"
     ],
     "css": [
-      "assets/app-BwStCCSP.css"
+      "assets/app-Dx5zpbYD.css"
     ]
   },
   "service-worker.ts": {

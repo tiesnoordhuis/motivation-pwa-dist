@@ -1,0 +1,2 @@
+import{n as e}from"./router-GiPH-W_5.js";import{t}from"./health.service-D58iRAof.js";async function n(n){let r=await t.createActivity(n);return e(`/health/activity/${encodeURIComponent(r.id)}`),r}export{n as t};
+//# sourceMappingURL=activity-create-BHQGhm18.js.map

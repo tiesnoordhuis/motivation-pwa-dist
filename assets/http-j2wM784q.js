@@ -1,0 +1,2 @@
+async function e(e,n){let r=await t(e),i=typeof e.status==`number`?String(e.status):``;return Error([`${n}:`,i,r].filter(Boolean).join(` `))}async function t(e){let t;try{t=await e.text()}catch{return``}if(!t)return``;try{let e=JSON.parse(t);if(typeof e==`object`&&e&&typeof e.error==`string`)return e.error}catch{}return t}export{e as t};
+//# sourceMappingURL=http-j2wM784q.js.map

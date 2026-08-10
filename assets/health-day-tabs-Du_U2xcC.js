@@ -1,0 +1,2 @@
+var e=[`activity`,`nutrition`],t=`nutrition`;function n(t){return e.includes(t)}function r(r){if(r===null)return t;if(!n(r))throw Error(`Unknown day tab "${r}" — expected one of: ${e.join(`, `)}`);return r}export{r as n,t};
+//# sourceMappingURL=health-day-tabs-Du_U2xcC.js.map

@@ -1,0 +1,2 @@
+var e=`cal_`;function t(t){return t.source===`calendar`&&t.id.startsWith(e)}function n(e){return e.source===`manual`||e.source===`calendar`}export{n,t};
+//# sourceMappingURL=calendar-activity-BvCqpOti.js.map

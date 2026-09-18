@@ -1,0 +1,2 @@
+function e(e){return e.source===`calendar`&&e.id.startsWith(`cal_`)}function t(e){return e.source===`manual`||e.source===`calendar`}export{t as n,e as t};
+//# sourceMappingURL=calendar-activity-xfts06ry.js.map

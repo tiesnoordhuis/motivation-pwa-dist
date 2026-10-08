@@ -16,23 +16,23 @@
   <script>window.__BOOT_SERVED_AS = 'index';</script>
   <script>
     (function () {
-      var KEY = 'boot_breadcrumbs';
-      var MAX = 30;
+      const KEY = 'boot_breadcrumbs';
+      const MAX = 30;
       function append(extra) {
         try {
-          var buf;
+          let buf;
           try { buf = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { buf = []; }
           if (!Array.isArray(buf)) buf = [];
-          var t = '';
+          let t = '';
           try { t = Temporal.Now.instant().toString(); } catch (e) { t = ''; }
-          var crumb = { t: t, href: location.href, servedAs: window.__BOOT_SERVED_AS || 'index' };
-          for (var k in extra) { if (Object.prototype.hasOwnProperty.call(extra, k)) crumb[k] = extra[k]; }
+          let crumb = { t: t, href: location.href, servedAs: window.__BOOT_SERVED_AS || 'index' };
+          for (let k in extra) { if (Object.prototype.hasOwnProperty.call(extra, k)) crumb[k] = extra[k]; }
           buf.push(crumb);
           if (buf.length > MAX) buf = buf.slice(buf.length - MAX);
           localStorage.setItem(KEY, JSON.stringify(buf));
         } catch (e) { /* never let telemetry break boot */ }
       }
-      var nav = null;
+      let nav = null;
       try { nav = performance.getEntriesByType('navigation')[0] || null; } catch (e) { nav = null; }
       append({
         kind: 'load',
@@ -44,7 +44,7 @@
       // Resource/script load failures (e.g. the app module 404ing) fire 'error'
       // on the element and do NOT bubble — the capture phase is required.
       window.addEventListener('error', function (ev) {
-        var target = ev && ev.target;
+        const target = ev && ev.target;
         if (target && target.tagName) {
           append({ kind: 'resource-error', tag: target.tagName, url: target.src || target.href || '' });
         }
@@ -59,12 +59,12 @@
        is served. -->
   <!-- Story 277: one fixed dark style, so one theme-color. -->
   <meta name="theme-color" content="#1a1a1a">
-  <script type="module" crossorigin src="/assets/app-Coj5nakN.js"></script>
+  <script type="module" crossorigin src="/assets/app-PSLRhSU9.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/uuid-BQQzAWyj.js">
   <link rel="modulepreload" crossorigin href="/assets/client-log-store-BZkHbsTb.js">
   <link rel="modulepreload" crossorigin href="/assets/component-logger-vUiJPJw3.js">
   <link rel="modulepreload" crossorigin href="/assets/preload-helper-BZ1Pz5am.js">
-  <link rel="modulepreload" crossorigin href="/assets/client-log-buffer-CSIRCTXR.js">
+  <link rel="modulepreload" crossorigin href="/assets/client-log-buffer-DRQArq7w.js">
   <link rel="stylesheet" crossorigin href="/assets/app-BwKlFZQw.css">
 </head>
 

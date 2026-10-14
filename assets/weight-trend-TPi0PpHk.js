@@ -1,0 +1,2 @@
+function e(e){let t=new Map;for(let n of e){let e=t.get(n.date)??{sum:0,count:0};e.sum+=n.weight_kg,e.count+=1,t.set(n.date,e)}return[...t.entries()].map(([e,{sum:t,count:n}])=>({date:e,weight_kg:t/n})).sort((e,t)=>e.date.localeCompare(t.date))}function t(e,t){if(t<1)throw Error(`movingAverage: window must be >= 1`);let n=[];for(let r=0;r<e.length;r++){let i=Math.max(0,r-t+1),a=e.slice(i,r+1);n.push(a.reduce((e,t)=>e+t,0)/a.length)}return n}export{t as n,e as t};
+//# sourceMappingURL=weight-trend-TPi0PpHk.js.map

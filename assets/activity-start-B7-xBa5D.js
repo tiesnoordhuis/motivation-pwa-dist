@@ -1,0 +1,2 @@
+function e(e){if(!e)return null;let t;try{t=JSON.parse(e).start}catch{return null}if(typeof t!=`string`)return null;try{return Temporal.Instant.from(t)}catch{return null}}function t(t,n){let r=e(t)?.toZonedDateTimeISO(n);return r?`${String(r.hour).padStart(2,`0`)}:${String(r.minute).padStart(2,`0`)}`:``}function n(t,n){return e(t)?.toZonedDateTimeISO(n).toPlainDate().toString()??null}export{n,t as r,e as t};
+//# sourceMappingURL=activity-start-B7-xBa5D.js.map

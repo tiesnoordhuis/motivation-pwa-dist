@@ -1,0 +1,2 @@
+async function e(e,t){if(!e.disabled){e.disabled=!0;try{await t()}finally{e.disabled=!1}}}async function t(e,t){e.dispatchEvent(t),await t.detail.respondWith}export{e as n,t};
+//# sourceMappingURL=in-flight-MN4R1mHL.js.map

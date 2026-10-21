@@ -1,3 +1,0 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/image-upload-store-wH8Hb3hP.js","assets/image-upload-store-CoSFnDh-.js","assets/uuid-LGB_gwMS.js","assets/src-CC9BDoUC.js"])))=>i.map(i=>d[i]);
-import{t as e}from"./preload-helper-BZ1Pz5am.js";async function t(t,n){try{let{deleteUpload:n}=await e(async()=>{let{deleteUpload:e}=await import(`./image-upload-store-wH8Hb3hP.js`);return{deleteUpload:e}},__vite__mapDeps([0,1,2,3]));await n(t)}catch(e){n.error(`could not cancel the queued photo upload`,{queueId:t,err:e})}}export{t};
-//# sourceMappingURL=cancel-queued-upload-Bmwq-Voa.js.map

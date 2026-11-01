@@ -1,0 +1,2 @@
+import{t as e}from"./config-D6mK16py.js";import{n as t}from"./http-Pw2nDIHT.js";var n=t(`${e}/api/ai`),r=class{static async getLocalAi(){return n.get(`/local-ai`)}static async setLocalAi(e){return n.put(`/local-ai`,{mode:e})}};function i(e,t){if(e.mode===`kept`)return`Kept on`;if(e.mode===`off`||e.until===null)return`Off`;let n=Temporal.Instant.from(e.until).epochMilliseconds-t.epochMilliseconds;return n<=0?`Off`:`On · ${Math.ceil(n/6e4)} min left`}export{r as n,i as t};
+//# sourceMappingURL=local-ai-label-BGoVJezx.js.map

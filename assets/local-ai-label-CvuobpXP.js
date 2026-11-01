@@ -1,0 +1,2 @@
+var e={app:`App (vision, 32k)`,text:`Text-only (84k)`};function t(t,n){let r=t.setup?` · ${e[t.setup]}`:``;if(t.mode===`kept`)return`Kept on${r}`;if(t.mode===`off`||t.until===null)return`Off`;let i=Temporal.Instant.from(t.until).epochMilliseconds-n.epochMilliseconds;return i<=0?`Off`:`On · ${Math.ceil(i/6e4)} min left${r}`}export{t as n,e as t};
+//# sourceMappingURL=local-ai-label-CvuobpXP.js.map

@@ -1,0 +1,2 @@
+function e(e){if(e==null||!Number.isFinite(e))return`?`;if(e===0)return`0`;let t=Math.abs(e);if(t>=100)return String(Math.round(e));let n=t>=10?1:2;return Number(e.toFixed(n)).toString()}function t(e){return e.split(` · `).flatMap((e,t)=>{let n=document.createElement(`span`);return n.style.whiteSpace=`nowrap`,n.textContent=e,t===0?[n]:[document.createTextNode(` · `),n]})}export{t as n,e as t};
+//# sourceMappingURL=format-macro-BP4oZVf8.js.map

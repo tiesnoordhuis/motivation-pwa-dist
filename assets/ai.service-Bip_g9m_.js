@@ -1,0 +1,2 @@
+import{t as e}from"./config-CksuVyn3.js";import{n as t}from"./http-Pw2nDIHT.js";var n=t(`${e}/api/ai`),r=class{static async getLocalAi(){return n.get(`/local-ai`)}static async setLocalAi(e,t=`app`){return n.put(`/local-ai`,{mode:e,setup:t})}static chatUrl(){return`${e}/llama/`}};export{r as t};
+//# sourceMappingURL=ai.service-Bip_g9m_.js.map

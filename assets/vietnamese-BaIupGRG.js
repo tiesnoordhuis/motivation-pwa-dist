@@ -1,0 +1,2 @@
+var e=[`new`,`learning`,`review`,`relearning`],t=[1,2,3,4],n=[`ngang`,`huyền`,`sắc`,`hỏi`,`nặng`];function r(e){return e===`ngã`?`hỏi`:e}export{r as i,e as n,n as r,t};
+//# sourceMappingURL=vietnamese-BaIupGRG.js.map

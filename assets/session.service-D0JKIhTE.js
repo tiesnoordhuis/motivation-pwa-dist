@@ -1,0 +1,2 @@
+import{t as e}from"./config-C6vA0bf2.js";import{n as t}from"./http-Pw2nDIHT.js";var n=t(`${e}/api`),r=new class{required=!1;listeners=new Set;async signIn(e){let t=await n.post(`/session`,{token:e.trim()});return this.set(!1),t}markRequired(){this.set(!0)}isRequired(){return this.required}subscribe(e){return this.listeners.add(e),()=>this.listeners.delete(e)}set(e){if(this.required!==e){this.required=e;for(let t of this.listeners)t(e)}}};export{r as t};
+//# sourceMappingURL=session.service-D0JKIhTE.js.map
